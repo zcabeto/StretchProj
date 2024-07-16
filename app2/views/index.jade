@@ -1,0 +1,65 @@
+doctype html
+html
+  head
+    title= title
+    block stylesheets
+      link(rel='stylesheet', href='/stylesheets/style.css')
+      style.
+        .markdown h2 { font-size: 24px; font-weight: bold; margin-top: 20px; }
+        .markdown h3 { font-size: 20px; font-weight: bold; margin-top: 15px; }
+        .markdown p { margin-top: 10px; }
+        .markdown ul { list-style-type: none; }
+        .markdown li { margin-top: 5px; }
+        .markdown li:before { content: "- "; }
+        .markdown code { background-color: #f5f5f5; padding: 2px 4px; border-radius: 4px; font-family: monospace; }
+  body
+    .menu
+      h1= title
+      .menu-content
+        p: #[a(href='/') Home] #[a(href='/films') Films] #[a(href='/genres') Genres] #[a(href='/predict') Predict]
+    
+    .markdown
+      p This platform provides an interactive web interface for exploring and analyzing the MovieLens dataset, which includes detailed information on all the movies contained in the dataset.
+      p The website is divided into three main sections:
+
+      h3 Movies
+
+      ul
+        li Overview: Displays a paginated list of movies, including title, crew information, and release date. Each page shows 30 movies.          
+        li Customization: Users can toggle the visibility of columns to customize the display of movie information.
+        li Detailed View: Clicking on a movie reveals additional details, such as the movieId, average rating, genres, and a distribution graph of its ratings. All ratings are displayed, including user ID, rating, and rating date.
+
+      h3 Genres
+
+      ul
+        li Overview: Shows all genres available in the database along with their average ratings.
+        li Analytics: Features a graph displaying the frequency of movies per genre and their rating distribution. Users can filter the graph by toggling genres on and off.
+        li Detailed View: Selecting a genre displays a list of movies belonging to that genre, similar to the Movies tab, allowing for in-depth exploration of genre-specific content.
+
+      h3 Predict Performance
+
+      ul
+        li Functionality: This feature calculates and predicts a movie's expected rating based on the tags associated with it and its preview ratings.
+
+      script.
+        function logIn() {
+          document.cookie = 'login=true;path=/;';
+        }
+        function logOut() {
+          document.cookie = 'login=false;path=/;';
+        }
+
+        function encryptData() {
+          var username = caesarCipher(document.getElementById("username").value, 3);
+          var password = caesarCipher(document.getElementById("password").value, 3);
+          window.location.href = '/login/'+username+'/'+password;
+        }
+
+        function caesarCipher(plaintext, shift) {
+          let ciphertext = '';
+          for(var i=0; i<plaintext.length; i++){
+            ciphertext += String.fromCharCode(plaintext.charCodeAt(i)+shift);
+          }
+          return ciphertext;
+        }
+        
