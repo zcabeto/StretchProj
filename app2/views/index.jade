@@ -47,12 +47,10 @@ html
           li Functionality: This feature calculates and predicts a movie's expected rating based on the tags associated with it and its preview ratings.
 
       script.
-        function logIn() {
-          document.cookie = 'login=true;path=/;';
-        }
-        function logOut() {
-          document.cookie = 'login=false;path=/;';
-        }
+        window.onload = function() {
+          var ACCEPT = #{ACCEPT};
+          document.cookie = 'login=' + ACCEPT + ';path=/;';
+        };
 
         function encryptData() {
           var username = caesarCipher(document.getElementById("username").value, 3);
