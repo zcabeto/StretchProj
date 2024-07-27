@@ -10,7 +10,8 @@ If one wishes to run this locally to their own device, from the root folder (whe
 
 
 ### TODO Planning
-- w/c 22/07: finish website basis with login to view data/logout blanks it. Update login with new DB full of user-accounts to check against.
+- w/c 22/07: finish website basis with login to view data/logout blanks it. Update login with new DB full of user-accounts.
 - w/c 29/07: add the on/off buttons to add protections at a time. SQL Injection, Hash/non-Hashed.
-- w/c 05/08: XSS
-- w/c 12/08: CSRF, CORS?
+- w/c 05/08: XSS.
+- w/c 12/08: CSRF, CORS? start presentation.
+- w/c 19/08: complete presentation for the project.
