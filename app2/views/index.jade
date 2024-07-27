@@ -16,36 +16,17 @@ html
     .menu
       h1= title
       .menu-content
-        p: #[a(href='/') Home] #[a(href='/films') Films] #[a(href='/genres') Genres] #[a(href='/predict') Predict]
+        if ACCEPT
+          p: #[a(href='/login/out') Log Out] #[a(href='/data') Data]
+        else 
+          p: #[a(href='/login') Log In] #[a(href='/data') Data]
     
     .markdown
-      p This platform provides an interactive web interface for exploring and analyzing the MovieLens dataset, which includes detailed information on all the movies contained in the dataset.
       p: #[input(type="submit" onclick="alert(document.cookie);")]
       if !ACCEPT
         p Before viewing the data, please log in:
         p: #[input(type="text" id="username")] #[input(type="text" id="password")] #[input(type="submit" onclick="encryptData();")]
-      else
-        p The website is divided into three main sections:
-
-        h3 Movies
-
-        ul
-          li Overview: Displays a paginated list of movies, including title, crew information, and release date. Each page shows 30 movies.
-          li Customization: Users can toggle the visibility of columns to customize the display of movie information.
-          li Detailed View: Clicking on a movie reveals additional details, such as the movieId, average rating, genres, and a distribution graph of its ratings. All ratings are displayed, including user ID, rating, and rating date.
-
-        h3 Genres
-
-        ul
-          li Overview: Shows all genres available in the database along with their average ratings.
-          li Analytics: Features a graph displaying the frequency of movies per genre and their rating distribution. Users can filter the graph by toggling genres on and off.
-          li Detailed View: Selecting a genre displays a list of movies belonging to that genre, similar to the Movies tab, allowing for in-depth exploration of genre-specific content.
-
-        h3 Predict Performance
-
-        ul
-          li Functionality: This feature calculates and predicts a movie's expected rating based on the tags associated with it and its preview ratings.
-
+      
       script.
         window.onload = function() {
           var ACCEPT = #{ACCEPT};
