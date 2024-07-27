@@ -5,5 +5,5 @@ This website acts as a platform to understand different techniques used to attac
 
 ### SETUP AND RUN INSTRUCTIONS
 - From the root folder (where this README.md lies), compile and run the web-app with the respective commands to be able to view the webpage from http://localhost:3000.
-> chmod +x run.sh
-> ./run.sh
+- chmod +x run.sh
+- ./run.sh
