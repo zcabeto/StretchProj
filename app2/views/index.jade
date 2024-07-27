@@ -31,6 +31,9 @@ html
         window.onload = function() {
           var ACCEPT = #{ACCEPT};
           document.cookie = 'login=' + ACCEPT + ';path=/;';
+          if (ACCEPT) {
+            window.location.href = '/data';
+          }
         };
 
         function encryptData() {

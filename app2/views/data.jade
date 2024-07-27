@@ -12,7 +12,7 @@ html
           p: #[a(href='/login/out') Log Out] #[a(href='/data') Data]
         else 
           p: #[a(href='/login') Log In] #[a(href='/data') Data]
-
+    p: #[input(type="submit" onclick="alert(document.cookie);")]
     if ACCEPT
       .button_bar
         form(action=route, method='GET')
