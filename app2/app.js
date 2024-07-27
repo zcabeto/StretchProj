@@ -5,12 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var filmRouter = require('./routes/films');
-var filmInfoRouter = require('./routes/filmInfo');
-var genreListRouter = require('./routes/genres');
-var userInfoRouter = require('./routes/userInfo');
-var predictRouter = require('./routes/predict');
-var correlateRouter = require('./routes/personality_genre');
+var dataRouter = require('./routes/data');
 
 
 var app = express();
@@ -26,16 +21,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('indexFolder'))
 
-app.use('/', indexRouter);
-app.use('/films', filmRouter);
-app.use('/filmInfo', filmInfoRouter);
-app.use('/genres', genreListRouter);
-app.use('/userInfo', userInfoRouter);
-app.use('/predict', predictRouter);
-app.use('/correlate', correlateRouter);
+app.use('/login', indexRouter);
+app.use('/data', dataRouter);
 
 app.get('*', function(req, res) {
-  res.redirect('/');
+  res.redirect('/login');
 });
 
 
