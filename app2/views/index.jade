@@ -15,11 +15,6 @@ html
   body
     .menu
       h1= title
-      .menu-content
-        if ACCEPT
-          p: #[a(href='/login/out') Log Out] #[a(href='/data') Data]
-        else 
-          p: #[a(href='/login') Log In] #[a(href='/data') Data]
     
     .markdown
       p: #[input(type="submit" onclick="alert(document.cookie);")]
