@@ -1,0 +1,130 @@
+doctype html
+html
+  head
+    title= title
+    block stylesheets
+      link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    .menu
+      h1= title
+      .menu-content
+        if ACCEPT
+          p: #[a(href='/login/out') Log Out] #[a(href='/data') Data]
+        else 
+          p: #[a(href='/login') Log In] #[a(href='/data') Data]
+
+    if ACCEPT
+      .button_bar
+        form(action=route, method='GET')
+          label(for='searchQuery')
+          if searchQuery == '%'
+            input(type='text', name='searchQuery', id='searchQuery', placeholder='search keywords')
+          else
+            input(type='text', name='searchQuery', id='searchQuery', placeholder=searchQuery)
+          input(type='hidden', name='genreId', id='genreId', value=genreShown)
+          button(type='submit') Search
+
+      .button_bar
+        form(action=route, method='GET')
+          input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
+          input(type='hidden', name='itemNum', id='itemNum', value=itemNum-30)
+          input(type='hidden', name='genreId', id='genreId', value=genreShown)
+          button(type='submit') Previous Page
+
+      .button_bar
+        form(action=route, method='GET')
+          input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
+          input(type='hidden', name='itemNum', id='itemNum', value=itemNum+30)
+          input(type='hidden', name='genreId', id='genreId', value=genreShown)
+          button(type='submit') Next Page
+      
+      .button_bar
+        .dropdown
+          if genreShown != 0
+            .dropdown-header(onclick='toggleDropdown(this)') #{genres[genreShown-1].name}
+          else 
+            .dropdown-header(onclick='toggleDropdown(this)') Choose Genre
+          .dropdown-content
+            form(action=route, method='GET')
+              input(type='hidden', name='genreId', id='genreId', value=0)
+              input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
+              button(type='submit') All Genres
+            each genre in genres
+              form(action=route, method='GET')
+                input(type='hidden', name='genreId', id='genreId', value=genre.genreId)
+                input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
+                button(type='submit') #{genre.name}
+
+      table
+        thead
+          tr
+            each title in allCols
+              if title != 'movieId'
+                th= title
+        tbody
+          each row in data
+            tr(class='row-link', data-url=`/filmInfo/${row.movieId}`)
+              each title in allCols
+                if title != 'movieId'
+                  if title == 'TopTwoActors'
+                    td #{row.TopTwoActors.slice(1,row.TopTwoActors.length-1).split(', ').map(actor => actor.slice(1,actor.length-1))}
+                  else if title == 'rating'
+                    td #{parseFloat(row.rating).toPrecision(3)}
+                  else
+                    td= row[title]
+      
+      .button_bar
+        form(action=route, method='GET')
+          input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
+          input(type='hidden', name='itemNum', id='itemNum', value=itemNum-30)
+          input(type='hidden', name='genreId', id='genreId', value=genreShown)
+          button(type='submit') Previous Page
+
+      .button_bar
+        form(action=route, method='GET')
+          input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
+          input(type='hidden', name='itemNum', id='itemNum', value=itemNum+30)
+          input(type='hidden', name='genreId', id='genreId', value=genreShown)
+          button(type='submit') Next Page
+
+    script.
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.row-link').forEach(function(element) {
+          element.addEventListener('click', function() {
+            const url = this.dataset.url;
+            window.location.href = url;
+          });
+        });
+      });
+      document.addEventListener('DOMContentLoaded', function() {
+        if (getCookie('login') == 'true') {
+          document.querySelector('.login-visibility').style.display = 'block';
+        } else {
+          document.querySelector('.login-visibility').style.display = 'none';
+        }
+      });
+
+      function toggleDropdown(element) {
+        var content = element.nextElementSibling;
+        if (content.style.display === 'block') {
+          content.style.display = 'none';
+        } else {
+          content.style.display = 'block';
+        }
+      }
+
+      function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
