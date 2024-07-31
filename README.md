@@ -1,5 +1,5 @@
 ### STRETCH PROJECT
-This website acts as a platform to understand different techniques used to attack websites and how we can guard against them. Using several buttons at the top of the page, one can turn off protections against a certain attack - allowing them to see how the attack can damage the system, then turn the protections back on to see how we might prevent it. Attack's include:
+This website acts as a platform to understand different techniques used to attack websites and how we can guard against them. Using several buttons at the top of the page, one can turn on and off protections against an array of attacks. When off, one can see how the attack can damage the system, when on they see how we might prevent it. Attack's include:
 - SQL Injection (login & film data, freq analysis on login)
 - Login Data Hashing (&salt?) (freq analysis still doable, can't see u-p link)
 - XSS (backend inject external script)
