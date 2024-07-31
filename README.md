@@ -7,7 +7,7 @@ This website acts as a platform to understand different techniques used to attac
 - CORS?
 
 ### TODO Planning
-- w/c 29/07: add the on/off buttons to add protections at a time. Start with SQL Injection only.
+- w/c 29/07: add the on/off buttons to add protections at a time. Start with SQL Injection only. Random passwords in DB.
 - w/c 05/08: Hashing data protection. Explanations & Instructions of use with different combinations of protection.
 - 12-19/08: presentation for the project, updated with further progress.
 - 12-29/08: XSS, CSRF, CORS, etc.
