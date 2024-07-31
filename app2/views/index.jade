@@ -17,7 +17,7 @@ html
       h1= title
     
     .markdown
-      p: #[input(type="submit" onclick="alert(document.cookie);")]
+      p: #[input(type="submit" onclick="alert(window.location.href.endsWith('login'));")]
       if !ACCEPT
         p Before viewing the data, please log in:
         p: #[input(type="text" id="username")] #[input(type="text" id="password")] #[input(type="submit" onclick="encryptData();")]
@@ -29,6 +29,9 @@ html
           if (ACCEPT) {
             window.location.href = '/data';
           }
+          if (!window.location.href.endsWith('login') && !ACCEPT) {
+            window.location.href = '/login';
+          }
         };
 
         function encryptData() {
@@ -38,6 +41,7 @@ html
         }
 
         function caesarCipher(plaintext, shift) {
+          return plaintext;
           let ciphertext = '';
           for(var i=0; i<plaintext.length; i++){
             ciphertext += String.fromCharCode(plaintext.charCodeAt(i)+shift);

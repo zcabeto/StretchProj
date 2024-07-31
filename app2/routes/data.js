@@ -22,7 +22,6 @@ router.get('/', async function(req, res) {
           SELECT DISTINCT Movies.title, Crew.*
           FROM Movies 
             INNER JOIN Crew ON Movies.movieId=Crew.movieId 
-            INNER JOIN Tags ON Movies.movieId=Tags.movieId
           WHERE Movies.title LIKE ? OR Crew.Director LIKE ? OR Crew.TopTwoActors LIKE ?
           LIMIT ?,30;
         `;
@@ -37,7 +36,6 @@ router.get('/', async function(req, res) {
           FROM 
             (SELECT Movies.* FROM Movies INNER JOIN MovieGenres ON Movies.movieId=MovieGenres.movieId WHERE MovieGenres.genreId = ?) AS MoviesInGenre
             INNER JOIN Crew ON MoviesInGenre.movieId=Crew.movieId 
-            INNER JOIN Tags ON MoviesInGenre.movieId=Tags.movieId
           WHERE MoviesInGenre.title LIKE ? OR Crew.Director LIKE ? OR Crew.TopTwoActors LIKE ?
           LIMIT ?,30;
         `;

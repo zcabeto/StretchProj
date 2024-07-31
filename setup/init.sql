@@ -1,3 +1,4 @@
+DROP DATABASE MovieLens;
 CREATE DATABASE IF NOT EXISTS MovieLens;
 
 USE MovieLens;
@@ -27,6 +28,13 @@ CREATE TABLE IF NOT EXISTS Crew (
     releaseDate DATE ,
     FOREIGN KEY (movieId) REFERENCES Movies(movieId)
 );
+
+CREATE TABLE IF NOT EXISTS Users (
+    user VARCHAR(100) PRIMARY KEY,
+    pass VARCHAR(100)
+);
+
+INSERT INTO Users(user, pass) VALUES ("u1", "p1");
 
 LOAD DATA INFILE '/var/lib/mysql-files/cleaned_movies.csv'
 INTO TABLE Movies

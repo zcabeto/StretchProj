@@ -10,7 +10,12 @@ router.get('/', async function(req, res) {
 });
 
 router.get('/:username/:password', async function(req, res) {
-  LoginProcessor.login(req.params.username, req.params.password);
+  if (req.params.username && req.params.password) {
+    let username = InputSanitizer.sanitizeString(req.params.username);
+    let password = InputSanitizer.sanitizeString(req.params.password);
+    await LoginProcessor.login(username, password);
+  }
+  console.log(`ACCEPT: ${LoginProcessor.ACCEPT}`);
   res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT });
 });
 
