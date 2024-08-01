@@ -2,6 +2,7 @@
 This website acts as a platform to understand different techniques used to attack websites and how we can guard against them. Using several buttons at the top of the page, one can turn on and off protections against an array of attacks. When off, one can see how the attack can damage the system, when on they see how we might prevent it. Attack's include:
 - SQL Injection (login & film data, freq analysis on login)
 - Login Data Hashing (&salt?) (freq analysis still doable, can't see u-p link)
+- Page Source Viewing?
 - XSS (backend inject external script)
 - CSRF (frontend inject change cookies use secret tokens)
 - CORS?
