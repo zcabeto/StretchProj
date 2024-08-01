@@ -1,7 +1,7 @@
 'use strict'
 var express = require('express');
 var router = express.Router();
-var pool = require('./db');     // retrieve pool from db.js
+var pool = require('./db');
 var InputSanitizer = require('./inputsanitizer');
 var LoginProcessor = require('./login');
 

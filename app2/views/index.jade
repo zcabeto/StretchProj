@@ -4,48 +4,60 @@ html
     title= title
     block stylesheets
       link(rel='stylesheet', href='/stylesheets/style.css')
-      style.
-        .markdown h2 { font-size: 24px; font-weight: bold; margin-top: 20px; }
-        .markdown h3 { font-size: 20px; font-weight: bold; margin-top: 15px; }
-        .markdown p { margin-top: 10px; }
-        .markdown ul { list-style-type: none; }
-        .markdown li { margin-top: 5px; }
-        .markdown li:before { content: "- "; }
-        .markdown code { background-color: #f5f5f5; padding: 2px 4px; border-radius: 4px; font-family: monospace; }
   body
     .menu
       h1= title
     
-    .markdown
-      p: #[input(type="submit" onclick="alert(window.location.href.endsWith('login'));")]
-      if !ACCEPT
-        p Before viewing the data, please log in:
-        p: #[input(type="text" id="username")] #[input(type="text" id="password")] #[input(type="submit" onclick="encryptData();")]
+    div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
+      div
+      div(style='text-align: center; width: 100px;')
+        label.switch
+          input(type="checkbox" onclick="alert('encrypt');")
+          span.slider.round
+        div Hashing
+      div(style='text-align: center; width: 100px;')
+        label.switch
+          input(type="checkbox" onclick="alert('SQL Sanitise');")
+          span.slider.round
+        div SQL Protect
+      div(style='text-align: center; width: 100px;')
+        label.switch
+          input(type="checkbox" onclick="alert('Stop injection');")
+          span.slider.round
+        div XSS Protect
+      div
+
+    if !ACCEPT
+      p Before viewing the data, please log in:
+      p: #[input(type="text" id="username")] #[input(type="text" id="password")] #[input(type="submit" onclick="encryptData();")]
       
-      script.
-        window.onload = function() {
-          var ACCEPT = #{ACCEPT};
-          document.cookie = 'login=' + ACCEPT + ';path=/;';
-          if (ACCEPT) {
-            window.location.href = '/data';
-          }
-          if (!window.location.href.endsWith('login') && !ACCEPT) {
-            window.location.href = '/login';
-          }
-        };
 
-        function encryptData() {
-          var username = caesarCipher(document.getElementById("username").value, 3);
-          var password = caesarCipher(document.getElementById("password").value, 3);
-          window.location.href = '/login/'+username+'/'+password;
+    script.
+      window.onload = function() {
+        var ACCEPT = #{ACCEPT};
+        document.cookie = 'login=' + ACCEPT + ';path=/;';
+        if (ACCEPT) {
+          window.location.href = '/data';
         }
+        if (!window.location.href.endsWith('login') && !ACCEPT) {
+          window.location.href = '/login';
+        }
+      };
 
-        function caesarCipher(plaintext, shift) {
-          return plaintext;
+      function encryptData() {
+        var username = hash(document.getElementById("username").value, 3);
+        var password = hash(document.getElementById("password").value, 3);
+        window.location.href = '/login/'+username+'/'+password;
+      }
+
+      function hash(plaintext, shift) {
+        return plaintext;
+        /*
           let ciphertext = '';
           for(var i=0; i<plaintext.length; i++){
             ciphertext += String.fromCharCode(plaintext.charCodeAt(i)+shift);
           }
           return ciphertext;
-        }
+          */
+      }
         

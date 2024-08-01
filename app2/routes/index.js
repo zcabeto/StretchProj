@@ -15,7 +15,6 @@ router.get('/:username/:password', async function(req, res) {
     let password = InputSanitizer.sanitizeString(req.params.password);
     await LoginProcessor.login(username, password);
   }
-  console.log(`ACCEPT: ${LoginProcessor.ACCEPT}`);
   res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT });
 });
 

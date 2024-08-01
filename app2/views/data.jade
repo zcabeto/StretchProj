@@ -7,14 +7,31 @@ html
   body
     .menu
       h1= title
-      .menu-content
-        if ACCEPT
-          p: #[a(href='/login/out') Log Out]
 
-    p: #[input(type="submit" onclick="alert(document.cookie);")] 
+    div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
+      div
+      div(style='text-align: center; width: 100px;')
+        label.switch
+          input(type="checkbox" onclick="alert('encrypt');")
+          span.slider.round
+        div Hashing
+      div(style='text-align: center; width: 100px;')
+        label.switch
+          input(type="checkbox" onclick="alert('SQL Sanitise');")
+          span.slider.round
+        div SQL Protect
+      div(style='text-align: center; width: 100px;')
+        label.switch
+          input(type="checkbox" onclick="alert('Stop injection');")
+          span.slider.round
+        div XSS Protect
+      div
+    
+    p Now logged in you can see the data. To return, #[a(href='/login/out') Log Out]
+
     if ACCEPT
       .button_bar
-        form(action=route, method='GET')
+        form(action='/data', method='GET')
           label(for='searchQuery')
           if searchQuery == '%'
             input(type='text', name='searchQuery', id='searchQuery', placeholder='search keywords')
@@ -24,14 +41,14 @@ html
           button(type='submit') Search
 
       .button_bar
-        form(action=route, method='GET')
+        form(action='/data', method='GET')
           input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
           input(type='hidden', name='itemNum', id='itemNum', value=itemNum-30)
           input(type='hidden', name='genreId', id='genreId', value=genreShown)
           button(type='submit') Previous Page
 
       .button_bar
-        form(action=route, method='GET')
+        form(action='/data', method='GET')
           input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
           input(type='hidden', name='itemNum', id='itemNum', value=itemNum+30)
           input(type='hidden', name='genreId', id='genreId', value=genreShown)
@@ -44,12 +61,12 @@ html
           else 
             .dropdown-header(onclick='toggleDropdown(this)') Choose Genre
           .dropdown-content
-            form(action=route, method='GET')
+            form(action='/data', method='GET')
               input(type='hidden', name='genreId', id='genreId', value=0)
               input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
               button(type='submit') All Genres
             each genre in genres
-              form(action=route, method='GET')
+              form(action='/data', method='GET')
                 input(type='hidden', name='genreId', id='genreId', value=genre.genreId)
                 input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
                 button(type='submit') #{genre.name}
@@ -62,7 +79,7 @@ html
                 th= title
         tbody
           each row in data
-            tr(class='row-link', data-url=`/filmInfo/${row.movieId}`)
+            tr
               each title in allCols
                 if title != 'movieId'
                   if title == 'TopTwoActors'
@@ -73,14 +90,14 @@ html
                     td= row[title]
       
       .button_bar
-        form(action=route, method='GET')
+        form(action='/data', method='GET')
           input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
           input(type='hidden', name='itemNum', id='itemNum', value=itemNum-30)
           input(type='hidden', name='genreId', id='genreId', value=genreShown)
           button(type='submit') Previous Page
 
       .button_bar
-        form(action=route, method='GET')
+        form(action='/data', method='GET')
           input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
           input(type='hidden', name='itemNum', id='itemNum', value=itemNum+30)
           input(type='hidden', name='genreId', id='genreId', value=genreShown)
