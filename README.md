@@ -8,7 +8,6 @@ This website acts as a platform to understand different techniques used to attac
 - CORS?
 
 ### TODO Planning
-- w/c 29/07: add the on/off buttons to add protections at a time. Start with SQL Injection only. Random passwords in DB.
 - w/c 05/08: Hashing data protection. Explanations & Instructions of use with different combinations of protection.
 - 12-19/08: presentation for the project, updated with further progress.
 - 12-29/08: XSS, CSRF, CORS, etc.
@@ -19,3 +18,10 @@ This website acts as a platform to understand different techniques used to attac
 If one wishes to run this locally to their own device, from the root folder (where this README.md lies) run with the following commands. View from http://localhost:3000.
 - chmod +x run.sh
 - ./run.sh
+
+05/08 - button frontend, on reload send to backend. SQL button activate sanitise
+06/08 - hashing function
+07/08 - fill DB with sample users & passwords
+08/08 - two DBs made on launch one hashed one not. Use different DB depending on button.
+09/08 - improve SQL Sanitisation
+10/08 - explanations for two switches
