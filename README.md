@@ -19,9 +19,9 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - chmod +x run.sh
 - ./run.sh
 
-05/08 - button frontend, on reload send to backend. SQL button activate sanitise
-06/08 - hashing function
-07/08 - fill DB with sample users & passwords
-08/08 - two DBs made on launch one hashed one not. Use different DB depending on button.
-09/08 - improve SQL Sanitisation
-10/08 - explanations for two switches
+### CLOSEUP TODO
+- 06/08 - Finish all query sending. Configure to SQL Sanitisation.
+- 07/08 - Nicer queries sent. Hash Function. Fill DB with sample users & passwords.
+- 08/08 - Two DBs made on launch one hashed one not. 
+- 09/08 - Use different DB depending on button. Improve SQL Sanitisation.
+- 10/08 - Explanations for two switches.
