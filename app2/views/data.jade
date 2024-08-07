@@ -17,12 +17,15 @@ html
         div Hashing
       div(style='text-align: center; width: 100px;')
         label.switch
-          input(type="checkbox" onclick="alert('SQL Sanitise');")
+          if SQLI=='true'
+            input(type="checkbox" checked onclick="flip_SQLI();")
+          else 
+            input(type="checkbox" onclick="flip_SQLI();")
           span.slider.round
         div SQL Protect
       div(style='text-align: center; width: 100px;')
         label.switch
-          input(type="checkbox" onclick="alert('Stop injection');")
+          input(type="checkbox" onclick="alert(SQLI);")
           span.slider.round
         div XSS Protect
       div
@@ -30,29 +33,12 @@ html
     p Now logged in you can see the data. To return, #[a(href='/login/out') Log Out]
 
     if ACCEPT
-      .button_bar
-        form(action='/data', method='GET')
-          label(for='searchQuery')
-          if searchQuery == '%'
-            input(type='text', name='searchQuery', id='searchQuery', placeholder='search keywords')
-          else
-            input(type='text', name='searchQuery', id='searchQuery', placeholder=searchQuery)
-          input(type='hidden', name='genreId', id='genreId', value=genreShown)
-          button(type='submit') Search
-
-      .button_bar
-        form(action='/data', method='GET')
-          input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
-          input(type='hidden', name='itemNum', id='itemNum', value=itemNum-30)
-          input(type='hidden', name='genreId', id='genreId', value=genreShown)
-          button(type='submit') Previous Page
-
-      .button_bar
-        form(action='/data', method='GET')
-          input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
-          input(type='hidden', name='itemNum', id='itemNum', value=itemNum+30)
-          input(type='hidden', name='genreId', id='genreId', value=genreShown)
-          button(type='submit') Next Page
+      if searchQuery=='%'
+        #[input(type="text" id="search" placeholder='search keywords')] #[button(type="submit" onclick="link(0,"+genreShown+");") Search]
+      else
+        #[input(type="text" id="search" value=searchQuery)] #[button(type="submit" onclick="link(0,"+genreShown+");") Search]
+      #[input(type="hidden" id="item", value=itemNum)] #[button(type="submit" onclick="link(-30,"+genreShown+");") Previous Page]
+      #[input(type="hidden" id="item", value=itemNum)] #[button(type="submit" onclick="link(30,"+genreShown+");") Next Page]
       
       .button_bar
         .dropdown
@@ -61,15 +47,9 @@ html
           else 
             .dropdown-header(onclick='toggleDropdown(this)') Choose Genre
           .dropdown-content
-            form(action='/data', method='GET')
-              input(type='hidden', name='genreId', id='genreId', value=0)
-              input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
-              button(type='submit') All Genres
+            #[input(type="hidden" id="gId", value=0)] #[button(type="submit" onclick="link(0,0);") All Genres]
             each genre in genres
-              form(action='/data', method='GET')
-                input(type='hidden', name='genreId', id='genreId', value=genre.genreId)
-                input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
-                button(type='submit') #{genre.name}
+              #[input(type="hidden" id="gId", value=genre.genreId)] #[button(type="submit" onclick="link(0,"+genre.genreId+");") #{genre.name}]
 
       table
         thead
@@ -88,66 +68,38 @@ html
                     td #{parseFloat(row.rating).toPrecision(3)}
                   else
                     td= row[title]
-      
-      .button_bar
-        form(action='/data', method='GET')
-          input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
-          input(type='hidden', name='itemNum', id='itemNum', value=itemNum-30)
-          input(type='hidden', name='genreId', id='genreId', value=genreShown)
-          button(type='submit') Previous Page
 
-      .button_bar
-        form(action='/data', method='GET')
-          input(type='hidden', name='searchQuery', id='searchQuery', value=searchQuery)
-          input(type='hidden', name='itemNum', id='itemNum', value=itemNum+30)
-          input(type='hidden', name='genreId', id='genreId', value=genreShown)
-          button(type='submit') Next Page
+      #[input(type="hidden" id="item", value=itemNum)] #[button(type="submit" onclick="link(-30,"+genreShown+");") Previous Page]
+      #[input(type="hidden" id="item", value=itemNum)] #[button(type="submit" onclick="link(30,"+genreShown+");") Next Page]
 
     script.
+      var SQLI;
       window.onload = function() {
+        SQLI = #{SQLI};
+        refreshProtections();
         var ACCEPT = #{ACCEPT};
         if (!ACCEPT) {
           window.location.href = '/login';
         }
       };
 
-      document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.row-link').forEach(function(element) {
-          element.addEventListener('click', function() {
-            const url = this.dataset.url;
-            window.location.href = url;
-          });
-        });
-      });
-      document.addEventListener('DOMContentLoaded', function() {
-        if (getCookie('login') == 'true') {
-          document.querySelector('.login-visibility').style.display = 'block';
-        } else {
-          document.querySelector('.login-visibility').style.display = 'none';
+      function link(plusItem, gId) {
+        var search = document.getElementById("search").value || '%';
+        var item = 0;
+        if (plusItem != 0) {
+          item = parseInt(document.getElementById('item').value || '0') + parseInt(plusItem);
         }
-      });
-
-      function toggleDropdown(element) {
-        var content = element.nextElementSibling;
-        if (content.style.display === 'block') {
-          content.style.display = 'none';
-        } else {
-          content.style.display = 'block';
-        }
+        window.location.href = '/data?SQLI='+SQLI+'&searchQuery='+search+'&itemNum='+item+'&genreId='+gId;
       }
 
-      function getCookie(cname) {
-        let name = cname + "=";
-        let decodedCookie = decodeURIComponent(document.cookie);
-        let ca = decodedCookie.split(';');
-        for(let i = 0; i <ca.length; i++) {
-          let c = ca[i];
-          while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-          }
-          if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-          }
-        }
-        return "";
+      function flip_SQLI() {
+        SQLI = !SQLI;
+        refreshProtections();
+      }
+
+      function refreshProtections() {
+        document.cookie = 'SQLI=' + SQLI + ';path=/;';
+      }
+      function getQueries() {
+        return '?SQLI='+SQLI;
       }
