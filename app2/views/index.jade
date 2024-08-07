@@ -4,6 +4,8 @@ html
     title= title
     block stylesheets
       link(rel='stylesheet', href='/stylesheets/style.css')
+      script(src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js")
+
   body
     .menu
       h1= title
@@ -59,14 +61,11 @@ html
       }
 
       function hash(plaintext) {
-        return plaintext;
-        /*
-          let ciphertext = '';
-          for(var i=0; i<plaintext.length; i++){
-            ciphertext += String.fromCharCode(plaintext.charCodeAt(i)+shift);
-          }
-          return ciphertext;
-          */
+        if (Hash) {
+          return CryptoJS.SHA256(plaintext).toString();
+        } else {
+          return plaintext;
+        }
       }
 
       function flip_Hash() {

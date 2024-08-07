@@ -24,7 +24,7 @@ router.get('/:username/:password', async function(req, res) {
       username = req.params.username;
       password = req.params.password;
     }
-    await LoginProcessor.login(username, password);
+    await LoginProcessor.login(username, password, Hash);
   }
   res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT, p: Hash.toString()+SQLI.toString() });
 });
