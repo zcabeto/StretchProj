@@ -6,12 +6,14 @@ var InputSanitizer = require('./inputsanitizer');
 var LoginProcessor = require('./login');
 
 router.get('/', async function(req, res) {
-  let SQLI = req.query.SQLI || false;
-  res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT, SQLI: SQLI });
+  let Hash = parseInt((req.query.p || '00').charAt(0));
+  let SQLI = parseInt((req.query.p || '00').charAt(1));
+  res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT, p: Hash.toString()+SQLI.toString() });
 });
 
 router.get('/:username/:password', async function(req, res) {
-  let SQLI = req.query.SQLI || false;
+  let Hash = parseInt((req.query.p || '00').charAt(0));
+  let SQLI = parseInt((req.query.p || '00').charAt(1));
   if (req.params.username && req.params.password) {
     let username;
     let password;
@@ -24,13 +26,14 @@ router.get('/:username/:password', async function(req, res) {
     }
     await LoginProcessor.login(username, password);
   }
-  res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT, SQLI: SQLI });
+  res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT, p: Hash.toString()+SQLI.toString() });
 });
 
 router.get('/out', async function(req, res) {
-  let SQLI = req.query.SQLI || false;
+  let Hash = parseInt((req.query.p || '00').charAt(0));
+  let SQLI = parseInt((req.query.p || '00').charAt(1));
   LoginProcessor.logout();
-  res.render('index', { title: 'Stretch Project', ACCEPT: false, SQLI: SQLI });
+  res.render('index', { title: 'Stretch Project', ACCEPT: false, p: Hash.toString()+SQLI.toString() });
 });
 
 module.exports = router;

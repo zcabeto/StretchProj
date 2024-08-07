@@ -12,12 +12,15 @@ html
       div
       div(style='text-align: center; width: 100px;')
         label.switch
-          input(type="checkbox" onclick="alert(document.cookie);")
+          if p=='10' || p=='11'
+            input(type="checkbox" checked onclick="flip_Hash();")
+          else 
+            input(type="checkbox" onclick="flip_Hash();")
           span.slider.round
         div Hashing
       div(style='text-align: center; width: 100px;')
         label.switch
-          if SQLI=='true'
+          if p=='01' || p=='11'
             input(type="checkbox" checked onclick="flip_SQLI();")
           else 
             input(type="checkbox" onclick="flip_SQLI();")
@@ -37,7 +40,8 @@ html
     script.
       var SQLI;
       window.onload = function() {
-        SQLI = #{SQLI};
+        Hash = parseInt(#{p.charAt(0)});
+        SQLI = parseInt(#{p.charAt(1)});
         refreshProtections();
         var ACCEPT = #{ACCEPT};
         if (ACCEPT) {
@@ -65,15 +69,19 @@ html
           */
       }
 
+      function flip_Hash() {
+        Hash = 1-Hash;
+        refreshProtections();
+      }
       function flip_SQLI() {
-        SQLI = !SQLI;
+        SQLI = 1-SQLI;
         refreshProtections();
       }
 
       function refreshProtections() {
-        document.cookie = 'SQLI=' + SQLI + ';path=/;';
+        document.cookie = 'Hash=' + Hash +'SQLI=' + SQLI + ';path=/;';
       }
       function getQueries() {
-        return '?SQLI='+SQLI;
+        return '?p='+Hash.toString() + SQLI.toString();
       }
         

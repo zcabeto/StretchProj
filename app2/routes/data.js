@@ -7,7 +7,8 @@ var InputSanitizer = require('./inputsanitizer');
 var LoginProcessor = require('./login');
 
 router.get('/', async function(req, res) {
-  let SQLI = req.query.SQLI || false;
+  let Hash = parseInt((req.query.p || '00').charAt(0));
+  let SQLI = parseInt((req.query.p || '00').charAt(1));
   let connection;
   try {
     if (LoginProcessor.ACCEPT) {
@@ -15,13 +16,13 @@ router.get('/', async function(req, res) {
 
       let searchQuery; let genreId; let itemNum;
       if (SQLI) {
-        searchQuery = InputSanitizer.sanitizeString(req.query.searchQuery || '%');
-        genreId = parseInt(InputSanitizer.sanitizeString(req.query.genreId || '0'));
-        itemNum = parseInt(InputSanitizer.sanitizeString(req.query.itemNum || '0'));
+        searchQuery = InputSanitizer.sanitizeString(req.query.s || '%');
+        genreId = parseInt(InputSanitizer.sanitizeString(req.query.g || '0'));
+        itemNum = parseInt(InputSanitizer.sanitizeString(req.query.i || '0'));
       } else {
-        searchQuery = req.query.searchQuery || '%';
-        genreId = parseInt(req.query.genreId || '0');
-        itemNum = parseInt(req.query.itemNum || '0');
+        searchQuery = req.query.s || '%';
+        genreId = parseInt(req.query.g || '0');
+        itemNum = parseInt(req.query.i || '0');
       }
       if (itemNum < 0) itemNum = 0;
       
@@ -75,9 +76,9 @@ router.get('/', async function(req, res) {
         data: movies, genres: genres, genreShown: genreId,
         allCols: fields.map(field => field.name),
         searchQuery: searchQuery, itemNum: itemNum, 
-        ACCEPT: true, SQLI: SQLI });
+        ACCEPT: true, p: Hash.toString()+SQLI.toString() });
     } else {
-      res.render('data', { title: 'Film Table Data', ACCEPT: false, SQLI: SQLI });
+      res.render('data', { title: 'Film Table Data', ACCEPT: false, p: Hash.toString()+SQLI.toString() });
     }
   } catch (err) {
     console.error('Error from data/', err);
