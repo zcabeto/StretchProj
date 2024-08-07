@@ -20,7 +20,5 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### CLOSEUP TODO
-- 07/08 - Hash Function. Fill DB with sample users & passwords.
-- 08/08 - Two DBs made on launch one hashed one not. 
-- 09/08 - Use different DB depending on button. Improve SQL Sanitisation.
-- 10/08 - Explanations for two switches.
+- 09/08 - Fill DB with sample users & passwords. Two DBs made on launch one hashed one not. 
+- 10/08 - Improve SQL Sanitisation. Explanations for two switches.
