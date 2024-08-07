@@ -12,17 +12,20 @@ html
       div
       div(style='text-align: center; width: 100px;')
         label.switch
-          input(type="checkbox" onclick="alert('encrypt');")
+          input(type="checkbox" onclick="alert(document.cookie);")
           span.slider.round
         div Hashing
       div(style='text-align: center; width: 100px;')
         label.switch
-          input(type="checkbox" onclick="alert('SQL Sanitise');")
+          if SQLI=='true'
+            input(type="checkbox" checked onclick="flip_SQLI();")
+          else 
+            input(type="checkbox" onclick="flip_SQLI();")
           span.slider.round
         div SQL Protect
       div(style='text-align: center; width: 100px;')
         label.switch
-          input(type="checkbox" onclick="alert('Stop injection');")
+          input(type="checkbox" onclick="alert(SQLI);")
           span.slider.round
         div XSS Protect
       div
@@ -30,27 +33,28 @@ html
     if !ACCEPT
       p Before viewing the data, please log in:
       p: #[input(type="text" id="username")] #[input(type="text" id="password")] #[input(type="submit" onclick="encryptData();")]
-      
 
     script.
+      var SQLI;
       window.onload = function() {
+        SQLI = #{SQLI};
+        refreshProtections();
         var ACCEPT = #{ACCEPT};
-        document.cookie = 'login=' + ACCEPT + ';path=/;';
         if (ACCEPT) {
-          window.location.href = '/data';
+          window.location.href = '/data'+getQueries();
         }
-        if (!window.location.href.endsWith('login') && !ACCEPT) {
-          window.location.href = '/login';
+        if (!window.location.href.includes('login?') && !window.location.href.endsWith('login') && !ACCEPT) {
+          window.location.href = '/login'+getQueries();
         }
       };
 
       function encryptData() {
-        var username = hash(document.getElementById("username").value, 3);
-        var password = hash(document.getElementById("password").value, 3);
-        window.location.href = '/login/'+username+'/'+password;
+        var username = hash(document.getElementById("username").value);
+        var password = hash(document.getElementById("password").value);
+        window.location.href = '/login/'+username+'/'+password+getQueries();
       }
 
-      function hash(plaintext, shift) {
+      function hash(plaintext) {
         return plaintext;
         /*
           let ciphertext = '';
@@ -59,5 +63,17 @@ html
           }
           return ciphertext;
           */
+      }
+
+      function flip_SQLI() {
+        SQLI = !SQLI;
+        refreshProtections();
+      }
+
+      function refreshProtections() {
+        document.cookie = 'SQLI=' + SQLI + ';path=/;';
+      }
+      function getQueries() {
+        return '?SQLI='+SQLI;
       }
         

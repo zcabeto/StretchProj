@@ -1,4 +1,5 @@
 'use strict'
+
 var express = require('express');
 var router = express.Router();
 var pool = require('./db');
@@ -6,14 +7,22 @@ var InputSanitizer = require('./inputsanitizer');
 var LoginProcessor = require('./login');
 
 router.get('/', async function(req, res) {
+  let SQLI = req.query.SQLI || false;
   let connection;
   try {
     if (LoginProcessor.ACCEPT) {
       connection = await pool.getConnection();
 
-      let searchQuery = InputSanitizer.sanitizeString(req.query.searchQuery || '%');
-      let genreId = parseInt(InputSanitizer.sanitizeString(req.query.genreId || '0'));
-      let itemNum = parseInt(InputSanitizer.sanitizeString(req.query.itemNum || '0'));
+      let searchQuery; let genreId; let itemNum;
+      if (SQLI) {
+        searchQuery = InputSanitizer.sanitizeString(req.query.searchQuery || '%');
+        genreId = parseInt(InputSanitizer.sanitizeString(req.query.genreId || '0'));
+        itemNum = parseInt(InputSanitizer.sanitizeString(req.query.itemNum || '0'));
+      } else {
+        searchQuery = req.query.searchQuery || '%';
+        genreId = parseInt(req.query.genreId || '0');
+        itemNum = parseInt(req.query.itemNum || '0');
+      }
       if (itemNum < 0) itemNum = 0;
       
       let movies; let fields;
@@ -65,9 +74,10 @@ router.get('/', async function(req, res) {
       res.render('data', { title: 'Film Table Data', 
         data: movies, genres: genres, genreShown: genreId,
         allCols: fields.map(field => field.name),
-        searchQuery: searchQuery, itemNum: itemNum, ACCEPT: true });
+        searchQuery: searchQuery, itemNum: itemNum, 
+        ACCEPT: true, SQLI: SQLI });
     } else {
-      res.render('data', { title: 'Film Table Data', ACCEPT: false });
+      res.render('data', { title: 'Film Table Data', ACCEPT: false, SQLI: SQLI });
     }
   } catch (err) {
     console.error('Error from data/', err);
