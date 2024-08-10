@@ -34,6 +34,15 @@ html
       div
     
     p Now logged in you can see the data. To return, #[a(href='/login/out') Log Out]
+    if p=='00' || p=='10'
+      p If protections against SQL Injection are off, we can inject additional code to force additional behaviour. If you click next/previous page you can see the #[strong i] parameter changes signifying it as an iterator of data. If this is assumed as part of a LIMIT statement in the SQL query then it is likely at the end then we know we can inject a union with the Users table there - retrieving data from that table instead. Therefore with SQLI off, try entering the following into the #[strong i] parameter in the URL.
+      p 0) UNION ALL (SELECT user AS title, '' AS Director, pass AS TopTwoActors, '' AS releaseDate, '' AS movieId FROM Users LIMIT 0
+      if p=='00'
+        p Without hashing the data we can see the raw data from Users meaning we can log in as any one of them.
+      else 
+        p With the data hashed, users have their raw data protected. However, we can still use this information to match the hash values of usernames and passwords. By plugging in different potential usernames and common passwords, we can brute force search for input required to reap those hash values, which we know collectively belong to one user.
+    else
+      p If Protection is on then SQL Injection will not work. We run a detection algorithm for any SQL keywords and if the user is potentially attempting to do injection so we stop them and return the default page instead. To use SQL Injection, turn the button off and click #[button(type='submit' onclick='window.location.href="/data"+getQueries();') here].
 
     if ACCEPT
       if searchQuery=='%'

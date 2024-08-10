@@ -38,6 +38,11 @@ html
     if !ACCEPT
       p Before viewing the data, please log in:
       p: #[input(type="text" id="username")] #[input(type="text" id="password")] #[input(type="submit" onclick="encryptData();")]
+    if p=='00' || p=='10'
+      p With protections against SQL Injection off, we can inject additional code to force additional behaviour. After some trial and error around key names and strucutre, we could guess the table columns #[strong user] and #[strong pass]. With this we can inject an OR into the SQL with clever use of quotation marks to force an additional condition into the query that allows us to pass through if there are #[i any] users with that password. Therefore, try entering the following.
+      p username: user' OR pass='p1 // password: p1
+    else
+      p If Protection is on then SQL Injection will not work. We run a detection algorithm for any SQL keywords and if the user is potentially attempting to do injection so we stop them and return the default page instead. To use SQL Injection, turn the button off and click #[button(type='submit' onclick='window.location.href="/login"+getQueries();') here].
 
     script.
       var SQLI;

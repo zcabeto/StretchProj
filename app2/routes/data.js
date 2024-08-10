@@ -7,7 +7,7 @@ var InputSanitizer = require('./inputsanitizer');
 var LoginProcessor = require('./login');
 
 router.get('/', async function(req, res) {
-  let Hash = parseInt((req.query.p || '00').charAt(0));
+  let isHashed = parseInt((req.query.p || '00').charAt(0));
   let SQLI = parseInt((req.query.p || '00').charAt(1));
   let connection;
   try {
@@ -16,43 +16,45 @@ router.get('/', async function(req, res) {
 
       let searchQuery; let genreId; let itemNum;
       if (SQLI) {
-        searchQuery = InputSanitizer.sanitizeString(req.query.s || '%');
+        searchQuery = InputSanitizer.sanitizeString(req.query.s || '');
         genreId = parseInt(InputSanitizer.sanitizeString(req.query.g || '0'));
         itemNum = parseInt(InputSanitizer.sanitizeString(req.query.i || '0'));
       } else {
-        searchQuery = req.query.s || '%';
-        genreId = parseInt(req.query.g || '0');
-        itemNum = parseInt(req.query.i || '0');
+        searchQuery = req.query.s || '';
+        genreId = req.query.g || '0';
+        itemNum = req.query.i || '0';
       }
       if (itemNum < 0) itemNum = 0;
       
       let movies; let fields;
       if (genreId == 0){
         let getMovies = `
-          SELECT DISTINCT Movies.title, Crew.*
+          (SELECT DISTINCT Movies.title, Crew.*
           FROM Movies 
             INNER JOIN Crew ON Movies.movieId=Crew.movieId 
-          WHERE Movies.title LIKE ? OR Crew.Director LIKE ? OR Crew.TopTwoActors LIKE ?
-          LIMIT ?,30;
+          WHERE Movies.title LIKE '%${searchQuery}%' OR Crew.Director LIKE '%${searchQuery}%' OR Crew.TopTwoActors LIKE '%${searchQuery}%'
+          LIMIT ${itemNum},30);
         `;
-        [movies, fields] = await connection.execute(getMovies, [`%${searchQuery}%`, `%${searchQuery}%`, `%${searchQuery}%`, `${itemNum}`]);
+        if (isHashed) { getMovies = getMovies.replace('Users', 'UsersHashed'); }
+        [movies, fields] = await connection.execute(getMovies);
         if (movies.length == 0) {
           itemNum -= 30;
-          [movies, fields] = await connection.execute(getMovies, [`%${searchQuery}%`, `%${searchQuery}%`, `%${searchQuery}%`, `${itemNum}`]);
+          [movies, fields] = await connection.execute(getMovies);
         }
       } else {
         let getMovies = `
-          SELECT DISTINCT MoviesInGenre.title, Crew.*
+          (SELECT DISTINCT MoviesInGenre.title, Crew.*
           FROM 
-            (SELECT Movies.* FROM Movies INNER JOIN MovieGenres ON Movies.movieId=MovieGenres.movieId WHERE MovieGenres.genreId = ?) AS MoviesInGenre
+            (SELECT Movies.* FROM Movies INNER JOIN MovieGenres ON Movies.movieId=MovieGenres.movieId WHERE MovieGenres.genreId=${genreId}) AS MoviesInGenre
             INNER JOIN Crew ON MoviesInGenre.movieId=Crew.movieId 
-          WHERE MoviesInGenre.title LIKE ? OR Crew.Director LIKE ? OR Crew.TopTwoActors LIKE ?
-          LIMIT ?,30;
+          WHERE MoviesInGenre.title LIKE '%${searchQuery}%' OR Crew.Director LIKE '%${searchQuery}%' OR Crew.TopTwoActors LIKE '%${searchQuery}%'
+          LIMIT ${itemNum},30);
         `;
-        [movies, fields] = await connection.execute(getMovies, [`${genreId}`,`%${searchQuery}%`, `%${searchQuery}%`, `%${searchQuery}%`, `${itemNum}`]);
+        if (isHashed) { getMovies = getMovies.replace('Users', 'UsersHashed'); }
+        [movies, fields] = await connection.execute(getMovies);
         if (movies.length == 0) {
           itemNum -= 30;
-          [movies, fields] = await connection.execute(getMovies, [`${genreId}`,`%${searchQuery}%`, `%${searchQuery}%`, `%${searchQuery}%`, `${itemNum}`]);
+          [movies, fields] = await connection.execute(getMovies);
         }
       }
 
@@ -76,9 +78,9 @@ router.get('/', async function(req, res) {
         data: movies, genres: genres, genreShown: genreId,
         allCols: fields.map(field => field.name),
         searchQuery: searchQuery, itemNum: itemNum, 
-        ACCEPT: true, p: Hash.toString()+SQLI.toString() });
+        ACCEPT: true, p: isHashed.toString()+SQLI.toString() });
     } else {
-      res.render('data', { title: 'Film Table Data', ACCEPT: false, p: Hash.toString()+SQLI.toString() });
+      res.render('data', { title: 'Film Table Data', ACCEPT: false, p: isHashed.toString()+SQLI.toString() });
     }
   } catch (err) {
     console.error('Error from data/', err);
