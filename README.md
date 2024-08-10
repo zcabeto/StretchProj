@@ -8,7 +8,6 @@ This website acts as a platform to understand different techniques used to attac
 - CORS?
 
 ### TODO Planning
-- w/c 05/08: Hashing data protection. Explanations & Instructions of use with different combinations of protection.
 - 12-19/08: presentation for the project, updated with further progress.
 - 12-29/08: XSS, CSRF, CORS, etc.
 - PRESENTATION QA 30/08
@@ -20,5 +19,4 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### CLOSEUP TODO
-- 09/08 - Fill DB with sample users & passwords. Two DBs made on launch one hashed one not. 
-- 10/08 - Improve SQL Sanitisation. Explanations for two switches.
+- 10-11/08 - Fill DB with sample users & passwords. Improve SQL Sanitisation.
