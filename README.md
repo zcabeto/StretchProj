@@ -18,4 +18,4 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### CLOSEUP TODO
-- 10-11/08 - Fill DB with sample users & passwords. Improve SQL Sanitisation.
+- 10-11/08 - Improve SQL Sanitisation.
