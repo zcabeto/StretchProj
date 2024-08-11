@@ -18,4 +18,6 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### CLOSEUP TODO
-- 10-11/08 - Improve SQL Sanitisation.
+- 12-14/08 - research XSS. Work out & use XSS on website.
+- 14-16/08 - sanitise against XSS (with SQLI one). Configure button.
+- 17-19/08 - write up about use & protection. Add information pages about techniques (same buttons).
