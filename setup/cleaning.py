@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime
+import hashlib
 
 #script is used to preprocess all the csv files as they need to be in a specific format before SQL import
 # also clean instances of repeat rows or missing data
@@ -145,10 +146,25 @@ def get_allowed_ids(personality_file, movie_genres_file):
     
     return allowed_user_ids, allowed_movie_ids
 
+def getHashedUsers(users_file, hashedUsers_file):
+    with open(users_file, newline='', mode='r', encoding='utf-8') as infile, \
+         open(hashedUsers_file, 'w', newline='\n', encoding='utf-8') as outfile:
+
+        reader = csv.DictReader(infile, fieldnames=['user','pass'])
+        writer = csv.DictWriter(outfile, fieldnames=['user','pass'])
+        writer.writeheader()
+        firstLine = True
+
+        for row in reader:
+            if firstLine:
+                firstLine = False
+                continue    # skip the field line
+            row['user'] = hashlib.sha256(row['user'].encode('utf-8')).hexdigest()
+            row['pass'] = hashlib.sha256(row['pass'].encode('utf-8')).hexdigest()
+            writer.writerow(row)
+
 
 
 preprocess_movies("../data/movies.csv")
-preprocess_personalities("../data/streamlined_personality.csv")
-preprocess_ratings("../data/ratings.csv")
 preprocess_crew("../data/links.csv", "../data/crew.csv", "../data/cleaned_crew.csv")
-clean_ratings("../data/streamlined_ratings.csv", "../data/cleaned_streamlined_ratings.csv", get_allowed_ids("../data/streamlined_personality.csv", "../data/movie_genres.csv"))
+getHashedUsers("../data/users.csv", "../data/usersHashed.csv")
