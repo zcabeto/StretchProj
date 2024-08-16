@@ -7,51 +7,68 @@ html
   body
     .menu
       h1= title
-
-    div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
-      div
-      div(style='text-align: center; width: 100px;')
-        label.switch
-          if p=='10' || p=='11'
-            input(type="checkbox" checked onclick="flip_Hash();")
-          else 
-            input(type="checkbox" onclick="flip_Hash();")
-          span.slider.round
-        div Hashing
-      div(style='text-align: center; width: 100px;')
-        label.switch
-          if p=='01' || p=='11'
-            input(type="checkbox" checked onclick="flip_SQLI();")
-          else 
-            input(type="checkbox" onclick="flip_SQLI();")
-          span.slider.round
-        div SQL Protect
-      div(style='text-align: center; width: 100px;')
-        label.switch
-          input(type="checkbox" onclick="alert(SQLI);")
-          span.slider.round
-        div XSS Protect
-      div
+    nav#side-menu-1
+      section#side-content
+        .dropdown 
+          .dropdown-header(onclick='toggleDropdown(this)') Choose Attack
+          .dropdown-content
+            #[button(type="submit" onclick="alert('atk1');") ATTACK 1]
+            #[button(type="submit" onclick="alert('atk2');") ATTACK 2]
+    nav#side-menu-2
+      section#side-content
+        .dropdown 
+          .dropdown-header(onclick='toggleDropdown(this)') Choose Defense
+          .dropdown-content
+            #[button(type="submit" onclick="alert('def1');") DEFENSE 1]
+            #[button(type="submit" onclick="alert('def2');") DEFENSE 2]
     
-    p Now logged in you can see the data. To return, #[a(href='/login/out') Log Out]
-    if p=='00' || p=='10'
-      p If protections against SQL Injection are off, we can inject additional code to force additional behaviour. If you click next/previous page you can see the #[strong i] parameter changes signifying it as an iterator of data. If this is assumed as part of a LIMIT statement in the SQL query then it is likely at the end then we know we can inject a union with the Users table there - retrieving data from that table instead. Therefore with SQLI off, try entering the following into the #[strong i] parameter in the URL.
-      p 0) UNION ALL (SELECT user AS title, '' AS Director, pass AS TopTwoActors, '' AS releaseDate, '' AS movieId FROM Users LIMIT 0
-      if p=='00'
-        p Without hashing the data we can see the raw data from Users meaning we can log in as any one of them.
+    section#main-content
+      div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
+        div 
+        div
+        div: button(type="submit" onclick="window.location.href='/login/out'+getQueries()") Log Out
+        div: button#reload Reload
+        div 
+        div
+      div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
+        button#side-menu-toggle-1 Attack
+        div(style='text-align: center; width: 100px;')
+          label.switch
+            if p.charAt(1)=='1'
+              input(type="checkbox" checked onclick="flip_Hash();")
+            else 
+              input(type="checkbox" onclick="flip_Hash();")
+            span.slider.round
+          div Unhashed Data View
+        div(style='text-align: center; width: 100px;')
+          label.switch
+            if p.charAt(2)=='1'
+              input(type="checkbox" checked onclick="flip_SQLI();")
+            else 
+              input(type="checkbox" onclick="flip_SQLI();")
+            span.slider.round
+          div SQL Injection
+        div(style='text-align: center; width: 100px;')
+          label.switch
+            if p.charAt(3)=='1'
+              input(type="checkbox" checked onclick="flip_XSS();")
+            else 
+              input(type="checkbox" onclick="flip_XSS();")
+            span.slider.round
+          div XSS
+        div
+      button#side-menu-toggle-2 Defense
+      if searchQuery!=null && searchQuery!='' && searchQuery!='%'
+        if p.charAt(3)=='0'
+          p Showing searches for !{searchQuery}
+        else 
+          p Showing searches for #{searchQuery}
       else 
-        p With the data hashed, users have their raw data protected. However, we can still use this information to match the hash values of usernames and passwords. By plugging in different potential usernames and common passwords, we can brute force search for input required to reap those hash values, which we know collectively belong to one user.
-    else
-      p If Protection is on then SQL Injection will not work. We run a detection algorithm for any SQL keywords and if the user is potentially attempting to do injection so we stop them and return the default page instead. To use SQL Injection, turn the button off and click #[button(type='submit' onclick='window.location.href="/data"+getQueries();') here].
-
-    if ACCEPT
-      if searchQuery=='%'
-        #[input(type="text" id="search" placeholder='search keywords')] #[button(type="submit" onclick="link(0,"+genreShown+");") Search]
-      else
-        #[input(type="text" id="search" value=searchQuery)] #[button(type="submit" onclick="link(0,"+genreShown+");") Search]
+        p
+      #[input(type="text" id="search" placeholder='search keywords')] #[button(type="submit" onclick="link(0,"+genreShown+");") Search]
       #[input(type="hidden" id="item", value=itemNum)] #[button(type="submit" onclick="link(-30,"+genreShown+");") Previous Page]
       #[input(type="hidden" id="item", value=itemNum)] #[button(type="submit" onclick="link(30,"+genreShown+");") Next Page]
-      
+        
       .button_bar
         .dropdown
           if genreShown != 0
@@ -85,14 +102,24 @@ html
       #[input(type="hidden" id="item", value=itemNum)] #[button(type="submit" onclick="link(30,"+genreShown+");") Next Page]
 
     script.
-      var SQLI;
       window.onload = function() {
-        Hash = parseInt(#{p.charAt(0)});
-        SQLI = parseInt(#{p.charAt(1)});
+        help = parseInt(#{p.charAt(0)});
+        Hash = parseInt(#{p.charAt(1)});
+        SQLI = parseInt(#{p.charAt(2)});
+        XSS = parseInt(#{p.charAt(3)});
         refreshProtections();
-        var ACCEPT = #{ACCEPT};
-        if (!ACCEPT) {
-          window.location.href = '/login';
+        if (help) {
+          // upon reload the help box stays open by updating it with this element
+          document.getElementById('side-menu-1').classList.add('notransition');
+          document.getElementById('side-menu-2').classList.add('notransition');
+          document.getElementById('main-content').classList.add('notransition');
+          see_help(help);
+          document.getElementById('side-menu-1').offsetHeight;
+          document.getElementById('side-menu-1').classList.remove('notransition');
+          document.getElementById('side-menu-2').offsetHeight;
+          document.getElementById('side-menu-2').classList.remove('notransition');
+          document.getElementById('main-content').offsetHeight;
+          document.getElementById('main-content').classList.remove('notransition');
         }
       };
 
@@ -105,6 +132,13 @@ html
         window.location.href = '/data'+getQueries()+'&s='+search+'&i='+item+'&g='+gId;
       }
 
+      function flip_help(h) {
+        if (help == 0 || help != h){
+          help = h;
+        } else {
+          help = 0;
+        }
+      }
       function flip_Hash() {
         Hash = 1-Hash;
         refreshProtections();
@@ -113,10 +147,51 @@ html
         SQLI = 1-SQLI;
         refreshProtections();
       }
+      function flip_XSS() {
+        XSS = 1-XSS;
+        refreshProtections();
+      }
 
       function refreshProtections() {
-        document.cookie = 'Hash=' + Hash +'SQLI=' + SQLI + ';path=/;';
+        document.cookie = 'HelpOn=' + help + 'Hash=' + Hash +'SQLI=' + SQLI + 'XSS=' + XSS + ';path=/;';
       }
       function getQueries() {
-        return '?p='+Hash.toString() + SQLI.toString();
+        return '?p='+help.toString() + Hash.toString() + SQLI.toString() + XSS.toString();
       }
+
+      function see_help() {
+        var menu1 = document.getElementById('side-menu-1');
+        var menu2 = document.getElementById('side-menu-2');
+        var mainContent = document.getElementById('main-content');
+        if (help==0) {
+          menu1.style.left = '-250px';
+          menu2.style.left = '-250px';
+          mainContent.style.marginLeft = '20px';
+          document.getElementById('side-menu-toggle-1').style.border = 'none';
+          document.getElementById('side-menu-toggle-2').style.border = 'none';
+        } else if (help==1) {
+          menu1.style.left = '0px';
+          menu2.style.left = '-250px';
+          mainContent.style.marginLeft = '270px';
+          document.getElementById('side-menu-toggle-1').style.border = 'solid';
+          document.getElementById('side-menu-toggle-2').style.border = 'none';
+        } else if (help==2) {
+          menu1.style.left = '-250px';
+          menu2.style.left = '0px';
+          mainContent.style.marginLeft = '270px';
+          document.getElementById('side-menu-toggle-1').style.border = 'none';
+          document.getElementById('side-menu-toggle-2').style.border = 'solid';
+        }
+      }
+      document.getElementById('side-menu-toggle-1').addEventListener('click', function() {
+        flip_help(1);
+        see_help();
+      });
+      document.getElementById('side-menu-toggle-2').addEventListener('click', function() {
+        flip_help(2);
+        see_help();
+      });
+
+      document.getElementById('reload').addEventListener('click', function() {
+        window.location.href="/login"+getQueries();
+      });  

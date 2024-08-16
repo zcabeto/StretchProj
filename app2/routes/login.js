@@ -12,21 +12,18 @@ class LoginProcessor {
             let connection = await pool.getConnection();
             let getUsers;
             if (isHashed) {
-                getUsers = `SELECT * FROM UsersHashed WHERE user='${username}' LIMIT 1;`;
+                getUsers = `SELECT * FROM UsersHashed WHERE user='${username}' AND pass='${password}' LIMIT 1;`;
             } else {
-                getUsers = `SELECT * FROM Users WHERE user='${username}' LIMIT 1;`;
+                getUsers = `SELECT * FROM Users WHERE user='${username}' AND pass='${password}' LIMIT 1;`;
             }
+            console.log(getUsers);
             let [users, fields] = await connection.execute(getUsers);
-            if (users.length == 1) {
-                if (users[0].pass == password) {
-                    this.ACCEPT = true;
-                } else {
-                    this.ACCEPT = false;
-                }
+            if (users.length > 0) {
+                this.ACCEPT = true;
             } else {
                 this.ACCEPT = false;
             }
-        } catch (err) {console.log(err); this.ACCEPT = false;}
+        } catch (err) { this.ACCEPT = false; return err; }
     }
 
     static logout() {
