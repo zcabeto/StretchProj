@@ -1,14 +1,17 @@
 ### STRETCH PROJECT
-This website acts as a platform to understand different techniques used to attack websites and how we can guard against them. Using several buttons at the top of the page, one can turn on and off protections against an array of attacks. When off, one can see how the attack can damage the system, when on they see how we might prevent it. Attack's include:
+This website acts as a platform to understand different techniques used to attack websites and how we can guard against them. One can try to break the website and alter method of attack based on the defenses put in place (as chosen by buttons at the top of the page). The user can read on the side bar about potential attacks for them to try out, demonstrating further why these protections are necessary. 
+
+Defenses Include
+- Data Hashing
+- SQL Sanitisation
+- HTML Encoding
+Attacks Include
 - SQL Injection
-- Login Data Hashing
-- XSS (backend inject external script)
-- CSRF (frontend inject change cookies use secret tokens)
-- CORS?
+- XSS
 
 ### TODO Planning
 - 12-19/08: presentation for the project, updated with further progress.
-- 12-29/08: XSS, CSRF, CORS, etc.
+- 19-29/08: add more attack & defense techniques
 - PRESENTATION QA 30/08
 - PRESENTATION CL 04/09
 
@@ -18,6 +21,4 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### CLOSEUP TODO
-- 12-14/08 - research XSS. Work out & use XSS on website.
-- 14-16/08 - sanitise against XSS (with SQLI one). Configure button.
-- 17-19/08 - write up about use & protection. Add information pages about techniques (same buttons).
+- 17-18/08 - add information about each attack & defense technique. Split into step-by-step pages.
