@@ -16,7 +16,6 @@ class LoginProcessor {
             } else {
                 getUsers = `SELECT * FROM Users WHERE user='${username}' AND pass='${password}' LIMIT 1;`;
             }
-            console.log(getUsers);
             let [users, fields] = await connection.execute(getUsers);
             if (users.length > 0) {
                 this.ACCEPT = true;

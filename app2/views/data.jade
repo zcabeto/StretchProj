@@ -12,29 +12,29 @@ html
         .dropdown 
           .dropdown-header(onclick='toggleDropdown(this)') Choose Attack
           .dropdown-content
-            #[button(type="submit" onclick="alert('atk1');") ATTACK 1]
-            #[button(type="submit" onclick="alert('atk2');") ATTACK 2]
+            #[button(type="submit" onclick="swapGuide(1);") ATTACK 1]
+            #[button(type="submit" onclick="swapGuide(2);") ATTACK 2]
     nav#side-menu-2
       section#side-content
         .dropdown 
           .dropdown-header(onclick='toggleDropdown(this)') Choose Defense
           .dropdown-content
-            #[button(type="submit" onclick="alert('def1');") DEFENSE 1]
-            #[button(type="submit" onclick="alert('def2');") DEFENSE 2]
+            #[button(type="submit" onclick="swapGuide(1);") DEFENSE 1]
+            #[button(type="submit" onclick="swapGuide(2);") DEFENSE 2]
     
     section#main-content
       div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
         div 
         div
-        div: button(type="submit" onclick="window.location.href='/login/out'+getQueries()") Log Out
         div: button#reload Reload
+        div: button(type="submit" onclick="window.location.href='/login/out'+getQueries()") Log Out
         div 
         div
       div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
         button#side-menu-toggle-1 Attack
         div(style='text-align: center; width: 100px;')
           label.switch
-            if p.charAt(1)=='1'
+            if p.charAt(0)=='1'
               input(type="checkbox" checked onclick="flip_Hash();")
             else 
               input(type="checkbox" onclick="flip_Hash();")
@@ -42,7 +42,7 @@ html
           div Unhashed Data View
         div(style='text-align: center; width: 100px;')
           label.switch
-            if p.charAt(2)=='1'
+            if p.charAt(1)=='1'
               input(type="checkbox" checked onclick="flip_SQLI();")
             else 
               input(type="checkbox" onclick="flip_SQLI();")
@@ -50,7 +50,7 @@ html
           div SQL Injection
         div(style='text-align: center; width: 100px;')
           label.switch
-            if p.charAt(3)=='1'
+            if p.charAt(2)=='1'
               input(type="checkbox" checked onclick="flip_XSS();")
             else 
               input(type="checkbox" onclick="flip_XSS();")
@@ -59,7 +59,7 @@ html
         div
       button#side-menu-toggle-2 Defense
       if searchQuery!=null && searchQuery!='' && searchQuery!='%'
-        if p.charAt(3)=='0'
+        if p.charAt(2)=='0'
           p Showing searches for !{searchQuery}
         else 
           p Showing searches for #{searchQuery}
@@ -103,10 +103,11 @@ html
 
     script.
       window.onload = function() {
-        help = parseInt(#{p.charAt(0)});
-        Hash = parseInt(#{p.charAt(1)});
-        SQLI = parseInt(#{p.charAt(2)});
-        XSS = parseInt(#{p.charAt(3)});
+        help = parseInt(#{h.charAt(0)});
+        module = parseInt(#{h.charAt(1)})
+        Hash = parseInt(#{p.charAt(0)});
+        SQLI = parseInt(#{p.charAt(1)});
+        XSS = parseInt(#{p.charAt(2)});
         refreshProtections();
         if (help) {
           // upon reload the help box stays open by updating it with this element
@@ -131,6 +132,10 @@ html
         }
         window.location.href = '/data'+getQueries()+'&s='+search+'&i='+item+'&g='+gId;
       }
+      function swapGuide(new_module) {
+        module = new_module;
+        window.location.href = '/login/'+getQueries();
+      }
 
       function flip_help(h) {
         if (help == 0 || help != h){
@@ -153,10 +158,10 @@ html
       }
 
       function refreshProtections() {
-        document.cookie = 'HelpOn=' + help + 'Hash=' + Hash +'SQLI=' + SQLI + 'XSS=' + XSS + ';path=/;';
+        document.cookie = 'HelpOn=' + help.toString()+module.toString() + ';Protections=' + Hash.toString()+SQLI.toString()+XSS.toString() + ';User=' + ';path=/;';
       }
       function getQueries() {
-        return '?p='+help.toString() + Hash.toString() + SQLI.toString() + XSS.toString();
+        return '?p=' + Hash.toString() + SQLI.toString() + XSS.toString() + '&h=' + help.toString() + module.toString();
       }
 
       function see_help() {
@@ -191,7 +196,9 @@ html
         flip_help(2);
         see_help();
       });
-
       document.getElementById('reload').addEventListener('click', function() {
-        window.location.href="/login"+getQueries();
-      });  
+        var sQ = !{JSON.stringify(searchQuery)};
+        var iQ = #{itemNum};
+        var gQ = #{genreShown};
+        window.location.href="/data"+getQueries()+'&s='+sQ+'&i='+iQ+'&g='+gQ;
+      }); 
