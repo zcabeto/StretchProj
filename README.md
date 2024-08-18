@@ -5,6 +5,7 @@ Defenses Include
 - Data Hashing
 - SQL Sanitisation
 - HTML Encoding
+
 Attacks Include
 - SQL Injection
 - XSS
