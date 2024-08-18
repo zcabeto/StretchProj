@@ -3,8 +3,8 @@ This website acts as a platform to understand different techniques used to attac
 
 Defenses Include
 - Data Hashing
-- SQL Sanitisation
-- HTML Encoding
+- Input Sanitisation
+- Input Encoding
 
 Attacks Include
 - SQL Injection
@@ -22,4 +22,6 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### CLOSEUP TODO
-- 17-18/08 - add information about each attack & defense technique. Split into step-by-step pages.
+- 18/08 - finish writing three defensive techniques' pages
+- 19/08 - add collected info to iterable steps shown on the site
+- 20/08 - start research on OWASP #1 & CORS
