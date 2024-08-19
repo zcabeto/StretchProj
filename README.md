@@ -22,6 +22,7 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### CLOSEUP TODO
-- 18/08 - finish writing three defensive techniques' pages
-- 19/08 - add collected info to iterable steps shown on the site
-- 20/08 - start research on OWASP #1 & CORS
+- 19/08 - finish writing three defensive techniques' pages, work application
+- 20/08 - add collected info to iterable steps shown on the site, SQLI on = send via cookies, better sanitiser, show login if successful
+- 21/08 - XSS completion to do damage
+- 22/08 - start research on OWASP #1 & CORS
