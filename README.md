@@ -13,7 +13,7 @@ Attacks Include
 ### TODO Planning
 - 19-23/08: finish and clean up details of initial functionality with 
 - 24-26/08: OWASP A01 Access Control & CORS
-- 27-30/08: another OWASP vulnerability
+- 27-30/08: another OWASP vulnerability - A02 spy on unencrypted data sent?
 - PRESENTATIONS 04-06/09
 
 ### SETUP AND RUN INSTRUCTIONS
