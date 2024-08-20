@@ -6,30 +6,26 @@ html
       link(rel='stylesheet', href='/stylesheets/style.css')
   body
     .menu
-      h1= title
+      h1 #{title} #[button(type="submit" onclick="window.location.href='/login/out'+getQueries()") Log Out]
     nav#side-menu-1
       section#side-content
         .dropdown 
           .dropdown-header(onclick='toggleDropdown(this)') Choose Attack
           .dropdown-content
-            #[button(type="submit" onclick="swapGuide(1);") ATTACK 1]
-            #[button(type="submit" onclick="swapGuide(2);") ATTACK 2]
+            #[button(type="submit" onclick="swapGuide(1);") SQL Injection]
+            #[button(type="submit" onclick="swapGuide(2);") Cross-Site Script]
+        p#attack-content Choose a potential Attack to get started.
     nav#side-menu-2
       section#side-content
         .dropdown 
           .dropdown-header(onclick='toggleDropdown(this)') Choose Defense
           .dropdown-content
-            #[button(type="submit" onclick="swapGuide(1);") DEFENSE 1]
-            #[button(type="submit" onclick="swapGuide(2);") DEFENSE 2]
+            #[button(type="submit" onclick="swapGuide(1);") Data Hashing]
+            #[button(type="submit" onclick="swapGuide(2);") Input Sanitisation]
+            #[button(type="submit" onclick="swapGuide(3);") Input Encoding]
+        p#defence-content Choose a Defensive Method to get started.
     
     section#main-content
-      div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
-        div 
-        div
-        div: button#reload Reload
-        div: button(type="submit" onclick="window.location.href='/login/out'+getQueries()") Log Out
-        div 
-        div
       div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
         button#side-menu-toggle-1 Attack
         div(style='text-align: center; width: 100px;')
@@ -68,17 +64,15 @@ html
       #[input(type="text" id="search" placeholder='search keywords')] #[button(type="submit" onclick="link(0,"+genreShown+");") Search]
       #[input(type="hidden" id="item", value=itemNum)] #[button(type="submit" onclick="link(-30,"+genreShown+");") Previous Page]
       #[input(type="hidden" id="item", value=itemNum)] #[button(type="submit" onclick="link(30,"+genreShown+");") Next Page]
-        
-      .button_bar
-        .dropdown
-          if genreShown != 0
-            .dropdown-header(onclick='toggleDropdown(this)') #{genres[genreShown-1].name}
-          else 
-            .dropdown-header(onclick='toggleDropdown(this)') Choose Genre
-          .dropdown-content
-            #[input(type="hidden" id="gId", value=0)] #[button(type="submit" onclick="link(0,0);") All Genres]
-            each genre in genres
-              #[input(type="hidden" id="gId", value=genre.genreId)] #[button(type="submit" onclick="link(0,"+genre.genreId+");") #{genre.name}]
+      .dropdown
+        if genreShown != 0
+          .dropdown-header(onclick='toggleDropdown(this)') #{genres[genreShown-1].name}
+        else 
+          .dropdown-header(onclick='toggleDropdown(this)') Choose Genre
+        .dropdown-content
+          #[input(type="hidden" id="gId", value=0)] #[button(type="submit" onclick="link(0,0);") All Genres]
+          each genre in genres
+            #[input(type="hidden" id="gId", value=genre.genreId)] #[button(type="submit" onclick="link(0,"+genre.genreId+");") #{genre.name}]
 
       table
         thead
@@ -121,6 +115,8 @@ html
           document.getElementById('side-menu-2').classList.remove('notransition');
           document.getElementById('main-content').offsetHeight;
           document.getElementById('main-content').classList.remove('notransition');
+
+          swapGuide(module);
         }
       };
 
@@ -133,8 +129,29 @@ html
         window.location.href = '/data'+getQueries()+'&s='+search+'&i='+item+'&g='+gId;
       }
       function swapGuide(new_module) {
+        if (help == 1) {
+          let content = document.getElementById("attack-content");
+          if (new_module == 0) {
+            content.innerHTML = null;
+          } else if (new_module == 1) {
+            content.innerHTML = 'Most websites deal with a lot of data, all of which requires storage. This is generally done in a database so that a website can retrieve the information we ask for using SQL. For example on the /login page, our entry of a username and password would be filtered into a SQL query that compares them to a database of users to look for a match, similarly on /data, our search text is used as a parameter to inspect a database of movies and look for pattern matches against their title. <br><br>As our input interacts with the backend data so closely, weaponising our entry can allow us to cause some damage - this is part of a technique called SQL Injection. <br><br>The aim of SQL Injection is to, as the name suggests, inject our own SQL code into the websites existing query. For example, for this tutorial lets focus the /login page, where an SQL Query currently compares our username and password input to a list of existing users and aim to add our own code that forces the website to provide us access without entering valid credentials.';
+          } else if (new_module == 2) {
+            content.innerHTML = 'Viewable information on a website is usually written in HTML, a markup language that renders data on the front end. It can lay out paragraphs, load photos and organise tables, but something it cannot do is run code. Instead, HTML outsources its code to javascript, being written within script tags that allow it to run. This is what allows more complex behaviour, such as … <br><br>As an attacker, however, we can take advantage of the existence of these isolated script environments and make our own to run some code. The injection of code on to a HTML rendering is called Cross-Site Scripting, or XSS for short. This technique is blocked by a range of means, including blocking potentially malicious inputs with sanitation or by encoding our input so it can be rendered as a simple string. You can read about these in the Input Sanitisation and Input Encoding sections respectively in Defences. For this to work, therefore, both must be disabled.';
+          }
+        } else if (help == 2) {
+          let content = document.getElementById("defence-content");
+          if (new_module == 0) {
+            content.innerHTML = null;
+          } else if (new_module == 1) {
+            content.innerHTML = 'When we set up defences on our website, we do so in order to keep our data safe from reach to view, change or delete, but we can never be comprehensive. We can never reach a point of 100% security and therefore we must ask the question - what if our data is acquired? We need to ensure the data, if reached, is not usable - this generally comes through the last line of defence of encrypting information. <br><br>We saw in the SQL Injection tutorial that it is possible to retrieve the user-base and print it to screen. If this happens we can login with someone else’s data, however when we had Data Hashing turned on we instead retrieved much more obscure information. The user information could not be directly read and used as usernames and passwords could not be discerned. The aim, of course, is for this encrypted data to be as unusable as possible - different methods have varying levels of success…';
+          } else if (new_module == 2) {
+            content.innerHTML = 'Injection techniques can wreak havoc on a system and its data, retrieving things that should not be seen or touched, or assuming capabilities beyond what we designed our website to do. Nevertheless, in many cases there is a simple solution of managing the input more closely and blocking such attempted behaviour. This comes in a few forms. <br><br>First we reduce the amount of ways to enter data to a minimum, replacing potentially vulnerable text inputs with buttons, drop-downs and switches where possible. The step after this is managing the data that is inputted with input sanitisation, where we scrutinise and analyse inputted text to only use it if it is deemed safe.<br><br>The best way for this to work is to have a function or class that handles such things separately, which we can call upon to check a string before using it for a task. This class would be an Input Sanitiser.';
+          } else if (new_module == 3) {
+            content.innerHTML = 'In the Attack: XSS section you may have seen how inputs can act differently when embedded in tags, particularly scripts. This is because of the formatting of HTML that means these tags allow entered text to act in a particular way, rather than exist as simple plaintext. The difference between the two are that specific characters have specific meanings. These different uses can be rendered meaningless if we force the text to be interpreted as a raw string, and the process which can do this is Encoding.<br><br>Character Encoding assigns an input into specific codes that must be individually and independently interpreted as regular characters. Using this means if someone were to input some XSS, it will be read and used as is without running any code. Try inputting that as a search query on /data with Input Encoding on to try this out.';
+          }
+        }
         module = new_module;
-        window.location.href = '/login/'+getQueries();
+        refreshProtections();
       }
 
       function flip_help(h) {
@@ -169,30 +186,32 @@ html
         var menu2 = document.getElementById('side-menu-2');
         var mainContent = document.getElementById('main-content');
         if (help==0) {
-          menu1.style.left = '-250px';
-          menu2.style.left = '-250px';
+          menu1.style.left = '-300px';
+          menu2.style.left = '-300px';
           mainContent.style.marginLeft = '20px';
           document.getElementById('side-menu-toggle-1').style.border = 'none';
           document.getElementById('side-menu-toggle-2').style.border = 'none';
         } else if (help==1) {
           menu1.style.left = '0px';
-          menu2.style.left = '-250px';
-          mainContent.style.marginLeft = '270px';
+          menu2.style.left = '-300px';
+          mainContent.style.marginLeft = '320px';
           document.getElementById('side-menu-toggle-1').style.border = 'solid';
           document.getElementById('side-menu-toggle-2').style.border = 'none';
         } else if (help==2) {
-          menu1.style.left = '-250px';
+          menu1.style.left = '-300px';
           menu2.style.left = '0px';
-          mainContent.style.marginLeft = '270px';
+          mainContent.style.marginLeft = '320px';
           document.getElementById('side-menu-toggle-1').style.border = 'none';
           document.getElementById('side-menu-toggle-2').style.border = 'solid';
         }
       }
       document.getElementById('side-menu-toggle-1').addEventListener('click', function() {
+        swapGuide(0);
         flip_help(1);
         see_help();
       });
       document.getElementById('side-menu-toggle-2').addEventListener('click', function() {
+        swapGuide(0);
         flip_help(2);
         see_help();
       });

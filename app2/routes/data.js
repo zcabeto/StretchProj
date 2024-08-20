@@ -62,7 +62,7 @@ router.get('/', async function(req, res) {
     res.render('data', { title: 'Film Table Data', 
       data: movies, genres: genres, genreShown: genreId,
       allCols: fields.map(field => field.name),
-      searchQuery: searchQuery, itemNum: itemNum, p: req.query.p || '000', h: req.query.h || '00' });
+      searchQuery: searchQuery, itemNum: itemNum, p: req.query.p || '000', h: req.query.h || '000' });
   } catch (err) {
     console.error('Error from data/', err);
     res.render('error', { message: 'from data/', error: err});
