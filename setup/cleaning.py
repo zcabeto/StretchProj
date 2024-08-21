@@ -159,7 +159,7 @@ def getHashedUsers(users_file, hashedUsers_file):
             if firstLine:
                 firstLine = False
                 continue    # skip the field line
-            row['user'] = hashlib.sha256(row['user'].encode('utf-8')).hexdigest()
+            #row['user'] = hashlib.sha256(row['user'].encode('utf-8')).hexdigest()
             row['pass'] = hashlib.sha256(row['pass'].encode('utf-8')).hexdigest()
             writer.writerow(row)
 

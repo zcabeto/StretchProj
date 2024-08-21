@@ -64,11 +64,17 @@ html
       p Please Log In:
       p: #[input(type="text" id="username")] #[input(type="text" id="password")] #[input(type="submit" onclick="tryLogin();")]
       
-      if user != null && user != 'null'
-        if p.charAt(2)=='0' && user
-          p Tried logging in as !{user}. Logged in: #{ACCEPT}
-        else 
-          p Tried logging in as #{user}. Logged in: #{ACCEPT}
+      if user != null && user != 'null' && user != ''
+        if ACCEPT
+          if p.charAt(2)=='0' && user
+            p SUCCESSFULLY LOGGED IN AS !{user}.
+          else 
+            p SUCCESSFULLY LOGGED IN AS #{user}.
+        else
+          if p.charAt(2)=='0' && user
+            p ATTEMPTED TO LOG IN AS !{user}. FAILED
+          else 
+            p ATTEMPTED TO LOG IN AS #{user}. FAILED
     script.
       window.onload = function() {
         help = parseInt(#{h.charAt(0)});
@@ -110,14 +116,17 @@ html
       function autoLogin() {
         uCookie = null;
         refreshProtections();
-        window.location.href='/data'+getQueries()+'&s=&i=&g=';
+        if (SQLI) {
+          window.location.href='/data'+getQueries()+'&s=';//&i=&g=';
+        } else {
+          window.location.href='/data'+getQueries()+'&s=&i=&g=';
+        }
       }
       function tryLogin() {
         uCookie = encodeURIComponent(document.getElementById("username").value);
         refreshProtections();
-        var username = hash(uCookie);
         var password = hash(document.getElementById("password").value);
-        window.location.href = '/login/'+username+'/'+password+getQueries();
+        window.location.href = '/login/'+uCookie+'/'+password+getQueries();
       }
       function hash(plaintext) {
         if (Hash) {
@@ -152,8 +161,9 @@ html
         document.cookie = 'HelpOn=' + help.toString() + module.toString() + page.toString() + '; path=/';
         document.cookie = 'Protections=' + Hash.toString() + SQLI.toString() + XSS.toString() + '; path=/';
         document.cookie = 'User=' + uCookie + '; path=/';
+        document.cookie = 'GenreId=0; path=/';
+        document.cookie = 'ItemNum=0; path=/';
       }
-
       function getQueries() {
         return '?p=' + Hash.toString() + SQLI.toString() + XSS.toString() + '&h=' + help.toString() + module.toString() + page.toString();
       }
@@ -191,20 +201,7 @@ html
         swapGuide(0, 0);
         flip_help(2);
         see_help();
-      });
-      document.getElementById('reload').addEventListener('click', function() {
-        window.location.href="/login"+getQueries();
-      });  
-      function getCookie(cname) {
-        var startOfName = document.cookie.indexOf(cname);
-        if (startOfName == -1) return '';
-        var start = startOfName + cname.length + 1;
-        var end = start;
-        while (end < document.cookie.length && document.cookie.charAt(end) != ';') { 
-          end += 1; 
-        }
-        return document.cookie.substring(start, end);
-      }
+      }); 
 
       function swapGuide(new_module, page_swap) {
         if (new_module != -1) {

@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS UsersHashed (
 );
 
 INSERT INTO Users(user, pass) VALUES ("u1", "p1");
-INSERT INTO UsersHashed(user, pass) VALUES ("bb82030dbc2bcaba32a90bf2e207a84a856fc5f033b77c480836ab6f77f40f19", "f64551fcd6f07823cb87971cfb91446425da18286b3ab1ef935e0cbd7a69f68a");
+INSERT INTO UsersHashed(user, pass) VALUES ("u1", "f64551fcd6f07823cb87971cfb91446425da18286b3ab1ef935e0cbd7a69f68a");
 
 LOAD DATA INFILE '/var/lib/mysql-files/cleaned_movies.csv'
 INTO TABLE Movies

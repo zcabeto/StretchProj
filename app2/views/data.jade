@@ -104,10 +104,15 @@ html
     script.
       window.onload = function() {
         help = parseInt(#{h.charAt(0)});
-        module = parseInt(#{h.charAt(1)})
+        module = parseInt(#{h.charAt(1)});
+        page = parseInt(#{h.charAt(2)});
+        if (module == 0) { page = 0; }
         Hash = parseInt(#{p.charAt(0)});
         SQLI = parseInt(#{p.charAt(1)});
         XSS = parseInt(#{p.charAt(2)});
+        searchQuery = !{JSON.stringify(searchQuery)};
+        itemNum = parseInt(#{itemNum});
+        genreId = parseInt(#{genreShown});
         refreshProtections();
         document.getElementById("prev-button-atk").style.display = 'none';
         document.getElementById("next-button-atk").style.display = 'none';
@@ -131,12 +136,17 @@ html
       };
 
       function link(plusItem, gId) {
-        var search = document.getElementById("search").value || '%';
+        var search = document.getElementById("search").value || searchQuery || '%';
         var item = 0;
         if (plusItem != 0) {
           item = parseInt(document.getElementById('item').value || '0') + parseInt(plusItem);
         }
-        window.location.href = '/data'+getQueries()+'&s='+search+'&i='+item+'&g='+gId;
+        itemNum = item; genreId = gId; refreshProtections();
+        if (SQLI) {
+          window.location.href = '/data'+getQueries()+'&s='+search;//+'&i='+item+'&g='+gId;
+        } else {
+          window.location.href = '/data'+getQueries()+'&s='+search+'&i='+item+'&g='+gId;
+        }
       }
 
       function flip_help(h) {
@@ -160,7 +170,10 @@ html
       }
 
       function refreshProtections() {
-        document.cookie = 'HelpOn=' + help.toString()+module.toString() + ';Protections=' + Hash.toString()+SQLI.toString()+XSS.toString() + ';User=' + ';path=/;';
+        document.cookie = 'HelpOn=' + help.toString() + module.toString() + page.toString() + '; path=/';
+        document.cookie = 'Protections=' + Hash.toString() + SQLI.toString() + XSS.toString() + '; path=/';
+        document.cookie = 'GenreId=' + genreId.toString() + '; path=/';
+        document.cookie = 'ItemNum=' + itemNum.toString() + '; path=/';
       }
       function getQueries() {
         return '?p=' + Hash.toString() + SQLI.toString() + XSS.toString() + '&h=' + help.toString() + module.toString();
@@ -200,12 +213,6 @@ html
         flip_help(2);
         see_help();
       });
-      document.getElementById('reload').addEventListener('click', function() {
-        var sQ = !{JSON.stringify(searchQuery)};
-        var iQ = #{itemNum};
-        var gQ = #{genreShown};
-        window.location.href="/data"+getQueries()+'&s='+sQ+'&i='+iQ+'&g='+gQ;
-      }); 
 
       function swapGuide(new_module, page_swap) {
         if (new_module != -1) {

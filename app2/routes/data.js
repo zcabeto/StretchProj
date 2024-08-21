@@ -15,8 +15,8 @@ router.get('/', async function(req, res) {
     let searchQuery; let genreId; let itemNum;
     if (SQLI) {
       searchQuery = InputSanitizer.sanitizeString(req.query.s || '');
-      genreId = parseInt(InputSanitizer.sanitizeString(req.query.g || '0'));
-      itemNum = parseInt(InputSanitizer.sanitizeString(req.query.i || '0'));
+      genreId = parseInt(InputSanitizer.sanitizeString(req.cookies['GenreId'] || '0'));
+      itemNum = parseInt(InputSanitizer.sanitizeString(req.cookies['ItemNum'] || '0'));
     } else {
       searchQuery = req.query.s || '';
       genreId = req.query.g || '0';

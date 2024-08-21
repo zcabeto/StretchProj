@@ -6,7 +6,7 @@ var InputSanitizer = require('./inputsanitizer');
 var LoginProcessor = require('./login');
 
 router.get('/', async function(req, res) {
-  res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', user: req.cookies['User'] });
+  res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', user: LoginProcessor.user || req.cookies['User'] });
 });
 
 router.get('/:username/:password', async function(req, res) {
@@ -25,12 +25,12 @@ router.get('/:username/:password', async function(req, res) {
     let err = await LoginProcessor.login(username, password, isHashed);
     if (err != null) { res.render('error', { message: 'from login/', error: err}); }
   }
-  res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', user: req.cookies['User'] });
+  res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', user: LoginProcessor.user || req.cookies['User'] });
 });
 
 router.get('/out', async function(req, res) {
   LoginProcessor.logout();
-  res.render('index', { title: 'Stretch Project', ACCEPT: false, p: req.query.p || '000', h: req.query.h || '000', user: req.cookies['User'] });
+  res.render('index', { title: 'Stretch Project', ACCEPT: false, p: req.query.p || '000', h: req.query.h || '000', user: LoginProcessor.user || req.cookies['User'] });
 });
 
 module.exports = router;
