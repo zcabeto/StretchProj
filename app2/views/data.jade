@@ -9,20 +9,26 @@ html
       h1 #{title} #[button(type="submit" onclick="window.location.href='/login/out'+getQueries()") Log Out]
     nav#side-menu-1
       section#side-content
-        .dropdown 
-          .dropdown-header(onclick='toggleDropdown(this)') Choose Attack
-          .dropdown-content
-            #[button(type="submit" onclick="swapGuide(1);") SQL Injection]
-            #[button(type="submit" onclick="swapGuide(2);") Cross-Site Script]
+        .button_bar
+          .dropdown 
+            .dropdown-header(onclick='toggleDropdown(this)') Choose Attack
+            .dropdown-content
+              #[button(type="submit" onclick="swapGuide(1, 0);") SQL Injection]
+              #[button(type="submit" onclick="swapGuide(2, 0);") Cross-Site Script]
+          section#prev-button-atk #[button(type="submit" onclick="swapGuide(-1, -1);") Prev Page]
+          section#next-button-atk #[button(type="submit" onclick="swapGuide(-1, 1);") Next Page]
         p#attack-content Choose a potential Attack to get started.
     nav#side-menu-2
       section#side-content
-        .dropdown 
-          .dropdown-header(onclick='toggleDropdown(this)') Choose Defense
-          .dropdown-content
-            #[button(type="submit" onclick="swapGuide(1);") Data Hashing]
-            #[button(type="submit" onclick="swapGuide(2);") Input Sanitisation]
-            #[button(type="submit" onclick="swapGuide(3);") Input Encoding]
+        .button_bar
+          .dropdown 
+            .dropdown-header(onclick='toggleDropdown(this)') Choose Defense
+            .dropdown-content
+              #[button(type="submit" onclick="swapGuide(1, 0);") Data Hashing]
+              #[button(type="submit" onclick="swapGuide(2, 0);") Input Sanitisation]
+              #[button(type="submit" onclick="swapGuide(3, 0);") Input Encoding]
+          section#prev-button-def #[button(type="submit" onclick="swapGuide(-1, -1);") Prev Page]
+          section#next-button-def #[button(type="submit" onclick="swapGuide(-1, 1);") Next Page]
         p#defence-content Choose a Defensive Method to get started.
     
     section#main-content
@@ -103,6 +109,10 @@ html
         SQLI = parseInt(#{p.charAt(1)});
         XSS = parseInt(#{p.charAt(2)});
         refreshProtections();
+        document.getElementById("prev-button-atk").style.display = 'none';
+        document.getElementById("next-button-atk").style.display = 'none';
+        document.getElementById("prev-button-def").style.display = 'none';
+        document.getElementById("next-button-def").style.display = 'none';
         if (help) {
           // upon reload the help box stays open by updating it with this element
           document.getElementById('side-menu-1').classList.add('notransition');
@@ -116,7 +126,7 @@ html
           document.getElementById('main-content').offsetHeight;
           document.getElementById('main-content').classList.remove('notransition');
 
-          swapGuide(module);
+          swapGuide(module, 0);
         }
       };
 
@@ -127,31 +137,6 @@ html
           item = parseInt(document.getElementById('item').value || '0') + parseInt(plusItem);
         }
         window.location.href = '/data'+getQueries()+'&s='+search+'&i='+item+'&g='+gId;
-      }
-      function swapGuide(new_module) {
-        if (help == 1) {
-          let content = document.getElementById("attack-content");
-          if (new_module == 0) {
-            content.innerHTML = null;
-          } else if (new_module == 1) {
-            content.innerHTML = 'Most websites deal with a lot of data, all of which requires storage. This is generally done in a database so that a website can retrieve the information we ask for using SQL. For example on the /login page, our entry of a username and password would be filtered into a SQL query that compares them to a database of users to look for a match, similarly on /data, our search text is used as a parameter to inspect a database of movies and look for pattern matches against their title. <br><br>As our input interacts with the backend data so closely, weaponising our entry can allow us to cause some damage - this is part of a technique called SQL Injection. <br><br>The aim of SQL Injection is to, as the name suggests, inject our own SQL code into the websites existing query. For example, for this tutorial lets focus the /login page, where an SQL Query currently compares our username and password input to a list of existing users and aim to add our own code that forces the website to provide us access without entering valid credentials.';
-          } else if (new_module == 2) {
-            content.innerHTML = 'Viewable information on a website is usually written in HTML, a markup language that renders data on the front end. It can lay out paragraphs, load photos and organise tables, but something it cannot do is run code. Instead, HTML outsources its code to javascript, being written within script tags that allow it to run. This is what allows more complex behaviour, such as … <br><br>As an attacker, however, we can take advantage of the existence of these isolated script environments and make our own to run some code. The injection of code on to a HTML rendering is called Cross-Site Scripting, or XSS for short. This technique is blocked by a range of means, including blocking potentially malicious inputs with sanitation or by encoding our input so it can be rendered as a simple string. You can read about these in the Input Sanitisation and Input Encoding sections respectively in Defences. For this to work, therefore, both must be disabled.';
-          }
-        } else if (help == 2) {
-          let content = document.getElementById("defence-content");
-          if (new_module == 0) {
-            content.innerHTML = null;
-          } else if (new_module == 1) {
-            content.innerHTML = 'When we set up defences on our website, we do so in order to keep our data safe from reach to view, change or delete, but we can never be comprehensive. We can never reach a point of 100% security and therefore we must ask the question - what if our data is acquired? We need to ensure the data, if reached, is not usable - this generally comes through the last line of defence of encrypting information. <br><br>We saw in the SQL Injection tutorial that it is possible to retrieve the user-base and print it to screen. If this happens we can login with someone else’s data, however when we had Data Hashing turned on we instead retrieved much more obscure information. The user information could not be directly read and used as usernames and passwords could not be discerned. The aim, of course, is for this encrypted data to be as unusable as possible - different methods have varying levels of success…';
-          } else if (new_module == 2) {
-            content.innerHTML = 'Injection techniques can wreak havoc on a system and its data, retrieving things that should not be seen or touched, or assuming capabilities beyond what we designed our website to do. Nevertheless, in many cases there is a simple solution of managing the input more closely and blocking such attempted behaviour. This comes in a few forms. <br><br>First we reduce the amount of ways to enter data to a minimum, replacing potentially vulnerable text inputs with buttons, drop-downs and switches where possible. The step after this is managing the data that is inputted with input sanitisation, where we scrutinise and analyse inputted text to only use it if it is deemed safe.<br><br>The best way for this to work is to have a function or class that handles such things separately, which we can call upon to check a string before using it for a task. This class would be an Input Sanitiser.';
-          } else if (new_module == 3) {
-            content.innerHTML = 'In the Attack: XSS section you may have seen how inputs can act differently when embedded in tags, particularly scripts. This is because of the formatting of HTML that means these tags allow entered text to act in a particular way, rather than exist as simple plaintext. The difference between the two are that specific characters have specific meanings. These different uses can be rendered meaningless if we force the text to be interpreted as a raw string, and the process which can do this is Encoding.<br><br>Character Encoding assigns an input into specific codes that must be individually and independently interpreted as regular characters. Using this means if someone were to input some XSS, it will be read and used as is without running any code. Try inputting that as a search query on /data with Input Encoding on to try this out.';
-          }
-        }
-        module = new_module;
-        refreshProtections();
       }
 
       function flip_help(h) {
@@ -206,12 +191,12 @@ html
         }
       }
       document.getElementById('side-menu-toggle-1').addEventListener('click', function() {
-        swapGuide(0);
+        swapGuide(0, 0);
         flip_help(1);
         see_help();
       });
       document.getElementById('side-menu-toggle-2').addEventListener('click', function() {
-        swapGuide(0);
+        swapGuide(0, 0);
         flip_help(2);
         see_help();
       });
@@ -221,3 +206,127 @@ html
         var gQ = #{genreShown};
         window.location.href="/data"+getQueries()+'&s='+sQ+'&i='+iQ+'&g='+gQ;
       }); 
+
+      function swapGuide(new_module, page_swap) {
+        if (new_module != -1) {
+          module = new_module; 
+          page = 0;
+        } else {
+          page += page_swap;
+        }
+        if (help == 1) {
+          let content = document.getElementById("attack-content");
+          //content.innerHTML = module.toString() + page.toString();
+          if (module == 0) {
+            document.getElementById("prev-button-atk").style.display = 'none';
+            document.getElementById("next-button-atk").style.display = 'none';
+            content.innerHTML = 'Choose a potential Attack to get started.';
+          } else if (module == 1) {
+            if (page == 0) {
+              document.getElementById("prev-button-atk").style.display = 'none';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->SQL Injection 0<br><br>Most websites deal with a lot of data, all of which requires storage. This is generally done in a database so that a website can retrieve the information we ask for using SQL. For example on the /login page, our entry of a username and password would be filtered into a SQL query that compares them to a database of users to look for a match, similarly on /data, our search text is used as a parameter to inspect a database of movies and look for pattern matches against their title. <br><br>As our input interacts with the backend data so closely, weaponising our entry can allow us to cause some damage - this is part of a technique called SQL Injection. <br><br>The aim of SQL Injection is to, as the name suggests, inject our own SQL code into the websites existing query. For example, for this tutorial lets focus the /login page, where an SQL Query currently compares our username and password input to a list of existing users and aim to add our own code that forces the website to provide us access without entering valid credentials.';
+            } else if (page == 1) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->SQL Injection 1<br><br>';
+            } else if (page == 2) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->SQL Injection 2<br><br>';
+            } else if (page == 3) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->SQL Injection 3<br><br>';
+            } else if (page == 4) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->SQL Injection 4<br><br>';
+            } else if (page == 5) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->SQL Injection 5<br><br>';
+            } else if (page == 6) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->SQL Injection 6<br><br>';
+            } else if (page == 7) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'none';
+              content.innerHTML = '-->SQL Injection 7<br><br>';
+            }
+          } else if (module == 2) {
+            if (page == 0) {
+              document.getElementById("prev-button-atk").style.display = 'none';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->Cross-Site Scripting (XSS) 0<br><br>Viewable information on a website is usually written in HTML, a markup language that renders data on the front end. It can lay out paragraphs, load photos and organise tables, but something it cannot do is run code. Instead, HTML outsources its code to javascript, being written within script tags that allow it to run. This is what allows more complex behaviour, such as … <br><br>As an attacker, however, we can take advantage of the existence of these isolated script environments and make our own to run some code. The injection of code on to a HTML rendering is called Cross-Site Scripting, or XSS for short. This technique is blocked by a range of means, including blocking potentially malicious inputs with sanitation or by encoding our input so it can be rendered as a simple string. You can read about these in the Input Sanitisation and Input Encoding sections respectively in Defences. For this to work, therefore, both must be disabled.';
+            } else if (page == 1) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->Cross-Site Scripting (XSS) 1<br><br>';
+            } else if (page == 2) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->Cross-Site Scripting (XSS) 2<br><br>';
+            }  else if (page == 3) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'none';
+              content.innerHTML = '-->Cross-Site Scripting (XSS) 3<br><br>';
+            } 
+          }
+        } else if (help == 2) {
+          let content = document.getElementById("defence-content");
+          if (module == 0) {
+            document.getElementById("prev-button-def").style.display = 'none';
+            document.getElementById("next-button-def").style.display = 'none';
+            content.innerHTML = 'Choose a Defensive Method to get started.';
+          } else if (module == 1) {
+            if (page == 0) {
+              document.getElementById("prev-button-def").style.display = 'none';
+              document.getElementById("next-button-def").style.display = 'block';
+              content.innerHTML = '-->Data Hashing 0<br><br>When we set up defences on our website, we do so in order to keep our data safe from reach to view, change or delete, but we can never be comprehensive. We can never reach a point of 100% security and therefore we must ask the question - what if our data is acquired? We need to ensure the data, if reached, is not usable - this generally comes through the last line of defence of encrypting information. <br><br>We saw in the SQL Injection tutorial that it is possible to retrieve the user-base and print it to screen. If this happens we can login with someone else’s data, however when we had Data Hashing turned on we instead retrieved much more obscure information. The user information could not be directly read and used as usernames and passwords could not be discerned. The aim, of course, is for this encrypted data to be as unusable as possible - different methods have varying levels of success…';
+            } else if (page == 1) {
+              document.getElementById("prev-button-def").style.display = 'block';
+              document.getElementById("next-button-def").style.display = 'block';
+              content.innerHTML = '-->Data Hashing 1<br><br>';
+            } else if (page == 2) {
+              document.getElementById("prev-button-def").style.display = 'block';
+              document.getElementById("next-button-def").style.display = 'none';
+              content.innerHTML = '-->Data Hashing 2<br><br>';
+            }
+          } else if (module == 2) {
+            if (page == 0) {
+              document.getElementById("prev-button-def").style.display = 'none';
+              document.getElementById("next-button-def").style.display = 'block';
+              content.innerHTML = '-->Input Sanitisation 0<br><br>Injection techniques can wreak havoc on a system and its data, retrieving things that should not be seen or touched, or assuming capabilities beyond what we designed our website to do. Nevertheless, in many cases there is a simple solution of managing the input more closely and blocking such attempted behaviour. This comes in a few forms. <br><br>First we reduce the amount of ways to enter data to a minimum, replacing potentially vulnerable text inputs with buttons, drop-downs and switches where possible. The step after this is managing the data that is inputted with input sanitisation, where we scrutinise and analyse inputted text to only use it if it is deemed safe.<br><br>The best way for this to work is to have a function or class that handles such things separately, which we can call upon to check a string before using it for a task. This class would be an Input Sanitiser.';
+            } else if (page == 1) {
+              document.getElementById("prev-button-def").style.display = 'block';
+              document.getElementById("next-button-def").style.display = 'block';
+              content.innerHTML = '-->Input Sanitisation 1<br><br>';
+            } else if (page == 2) {
+              document.getElementById("prev-button-def").style.display = 'block';
+              document.getElementById("next-button-def").style.display = 'block';
+              content.innerHTML = '-->Input Sanitisation 2<br><br>';
+            } else if (page == 3) {
+              document.getElementById("prev-button-def").style.display = 'block';
+              document.getElementById("next-button-def").style.display = 'none';
+              content.innerHTML = '-->Input Sanitisation 3<br><br>';
+            }
+          } else if (module == 3) {
+            if (page == 0) {
+              document.getElementById("prev-button-def").style.display = 'none';
+              document.getElementById("next-button-def").style.display = 'block';
+              content.innerHTML = '-->Input Encoding 0<br><br>In the Attack: XSS section you may have seen how inputs can act differently when embedded in tags, particularly scripts. This is because of the formatting of HTML that means these tags allow entered text to act in a particular way, rather than exist as simple plaintext. The difference between the two are that specific characters have specific meanings. These different uses can be rendered meaningless if we force the text to be interpreted as a raw string, and the process which can do this is Encoding.<br><br>Character Encoding assigns an input into specific codes that must be individually and independently interpreted as regular characters. Using this means if someone were to input some XSS, it will be read and used as is without running any code. Try inputting that as a search query on /data with Input Encoding on to try this out.';
+            } else if (page == 1) {
+              document.getElementById("prev-button-def").style.display = 'block';
+              document.getElementById("next-button-def").style.display = 'block';
+              content.innerHTML = '-->Input Encoding 1<br><br>';
+            } else if (page == 2) {
+              document.getElementById("prev-button-def").style.display = 'block';
+              document.getElementById("next-button-def").style.display = 'none';
+              content.innerHTML = '-->Input Encoding 2<br><br>';
+            }
+          }
+        }
+        refreshProtections();
+      }
