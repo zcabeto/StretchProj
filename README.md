@@ -22,7 +22,6 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### CLOSEUP TODO
-- 20/08 - add collected info to iterable steps shown on the site
 - 21/08 - SQLI on = send via cookies, redo login text shown,
 - 22/08 - fix sanitiser
 - 23-24/08 - XSS completion to do damage, write up for XSS attack
