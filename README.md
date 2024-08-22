@@ -5,6 +5,9 @@ Defenses Include
 - A02: Data Hashing
 - A03: Input Sanitisation
 - A03: Input Encoding
+-   Input Safety (none -> sanitise -> encode)
+-   Network Safety (url text -> cookie text -> https)
+-   Encryption (plain -> weak hash -> strong hash)
 
 Attacks Include
 - A03: SQL Injection
@@ -12,7 +15,7 @@ Attacks Include
 
 ### TODO Planning
 - 19-24/08: finish and clean up details of initial functionality with 
-- 24-26/08: OWASP A01 Access Control & CORS
+- 25-26/08: OWASP A01 Access Control & CORS
 - 27-30/08: another OWASP vulnerability - A02 spy on unencrypted data sent?
 - PRESENTATIONS 04-06/09
 
@@ -22,4 +25,8 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### CLOSEUP TODO
-- 23-24/08 - XSS completion to do damage, write up for XSS attack
+- 23/08 - run XSS across sessions if possible. run link to website with cookies
+- 24/08 - write up for XSS attack (short explanations).
+- 25-6/08 - add copy to clipboard. rewrite defences (+hash crack website). redo button controls.
+- next week - Set up a url listener. Writeup A02 monitor urls MitM.
+- next week - CORS access surrounding files w/o authentication, send urls found in A02 MitM. Writeup as A01.
