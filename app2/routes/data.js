@@ -24,23 +24,17 @@ router.get('/', async function(req, res) {
     }
     if (itemNum < 0) itemNum = 0;
       
-    let movies; let fields;
+    let movies; let fields; let getMovies;
     if (genreId == 0){
-      let getMovies = `(SELECT DISTINCT Movies.title, Crew.* FROM Movies INNER JOIN Crew ON Movies.movieId=Crew.movieId WHERE Movies.title LIKE '%${searchQuery}%' OR Crew.Director LIKE '%${searchQuery}%' OR Crew.TopTwoActors LIKE '%${searchQuery}%' LIMIT ${itemNum},30);`;
-      if (isHashed) { getMovies = getMovies.replace('Users', 'UsersHashed'); }
-      [movies, fields] = await connection.execute(getMovies);
-      if (movies.length == 0) {
-        itemNum -= 30;
-        [movies, fields] = await connection.execute(getMovies);
-      }
+      getMovies = `(SELECT DISTINCT Movies.title, Crew.* FROM Movies INNER JOIN Crew ON Movies.movieId=Crew.movieId WHERE Movies.title LIKE '%${searchQuery}%' OR Crew.Director LIKE '%${searchQuery}%' OR Crew.TopTwoActors LIKE '%${searchQuery}%' LIMIT ${itemNum},30);`;
     } else {
-      let getMovies = `(SELECT DISTINCT MoviesInGenre.title, Crew.* FROM (SELECT Movies.* FROM Movies INNER JOIN MovieGenres ON Movies.movieId=MovieGenres.movieId WHERE MovieGenres.genreId=${genreId}) AS MoviesInGenre INNER JOIN Crew ON MoviesInGenre.movieId=Crew.movieId WHERE MoviesInGenre.title LIKE '%${searchQuery}%' OR Crew.Director LIKE '%${searchQuery}%' OR Crew.TopTwoActors LIKE '%${searchQuery}%' LIMIT ${itemNum},30);`;
-      if (isHashed) { getMovies = getMovies.replace('Users', 'UsersHashed'); }
-      [movies, fields] = await connection.execute(getMovies);
-      if (movies.length == 0) {
-        itemNum -= 30;
-        [movies, fields] = await connection.execute(getMovies);
-      }
+      getMovies = `(SELECT DISTINCT MoviesInGenre.title, Crew.* FROM (SELECT Movies.* FROM Movies INNER JOIN MovieGenres ON Movies.movieId=MovieGenres.movieId WHERE MovieGenres.genreId=${genreId}) AS MoviesInGenre INNER JOIN Crew ON MoviesInGenre.movieId=Crew.movieId WHERE MoviesInGenre.title LIKE '%${searchQuery}%' OR Crew.Director LIKE '%${searchQuery}%' OR Crew.TopTwoActors LIKE '%${searchQuery}%' LIMIT ${itemNum},30);`;
+    }
+    if (isHashed) { getMovies = getMovies.replace('Users', 'UsersHashed'); }
+    const getMoviesPromise =  connection.execute(getMovies);
+    [movies, fields] = await Promise.race([getMoviesPromise, new Promise((resolve, reject) => setTimeout(() => reject(new Error("Query timeout")), 1000))]);
+    if (movies.length == 0) {
+      itemNum -= 30;
     }
 
     movies.forEach(movie => {
@@ -56,7 +50,8 @@ router.get('/', async function(req, res) {
       FROM Genres
       ORDER BY genreId;
     `;
-    const [genres, fieldsG] = await connection.execute(getGenre);
+    const getGenresPromise = connection.execute(getGenre);
+    const [genres, fieldsG] = await Promise.race([getGenresPromise, new Promise((resolve, reject) => setTimeout(() => reject(new Error("Query timeout")), 1000))]);
 
       // render the data
     res.render('data', { title: 'Film Table Data', 

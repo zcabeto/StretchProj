@@ -20,17 +20,19 @@ router.get('/', async function(req, res) {
       username = acceptedCookie[0];
       password = acceptedCookie[1];
     }
-    let err = await LoginProcessor.login(username, password, isHashed);
+    const loginPromise = LoginProcessor.login(username, password, isHashed);
+    const timeoutPromise = new Promise(resolve => { setTimeout(resolve, 5000); });
+    const err = await Promise.race([loginPromise, timeoutPromise]);
     if (err != null) { res.render('error', { message: 'from login/', error: err}); }
     res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', user: LoginProcessor.user || username });
   } else {
-    res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', user: LoginProcessor.user });
+    res.render('index', { title: 'Stretch Project', ACCEPT: false, p: req.query.p || '000', h: req.query.h || '000', user: '' });
   }
 });
 
 router.get('/out', async function(req, res) {
   LoginProcessor.logout();
-  res.render('index', { title: 'Stretch Project', ACCEPT: false, p: req.query.p || '000', h: req.query.h || '000', user: LoginProcessor.user || req.cookies['User'] });
+  res.render('index', { title: 'Stretch Project', ACCEPT: false, p: req.query.p || '000', h: req.query.h || '000', user: '' });
 });
 
 module.exports = router;
