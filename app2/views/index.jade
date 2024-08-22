@@ -84,12 +84,12 @@ html
         Hash = parseInt(#{p.charAt(0)});
         SQLI = parseInt(#{p.charAt(1)});
         XSS = parseInt(#{p.charAt(2)});
-        uCookie = null;
-        if (!window.location.href.includes('login?') && !window.location.href.endsWith('login') && !window.location.href.includes('/out')) {
-          uCookie = window.location.href.substring(window.location.href.indexOf('login')+6, window.location.href.lastIndexOf('/'));
+        uCookie = !{JSON.stringify(user)};
+        if (window.location.href.includes('/out')) {
+          uCookie = '';
+          refreshProtections();
           window.location.href = '/login'+getQueries();
         }
-        refreshProtections();
         document.getElementById("prev-button-atk").style.display = 'none';
         document.getElementById("next-button-atk").style.display = 'none';
         document.getElementById("prev-button-def").style.display = 'none';
@@ -116,16 +116,15 @@ html
         uCookie = null;
         refreshProtections();
         if (SQLI) {
-          window.location.href='/data'+getQueries()+'&s=';//&i=&g=';
+          window.location.href='/data'+getQueries()+'&s=';
         } else {
           window.location.href='/data'+getQueries()+'&s=&i=&g=';
         }
       }
       function tryLogin() {
-        uCookie = encodeURIComponent(document.getElementById("username").value) || '';
+        uCookie = (encodeURIComponent(document.getElementById("username").value) || '') + ':' + (hash(document.getElementById("password").value) || 'null');
         refreshProtections();
-        var password = hash(document.getElementById("password").value) || 'null';
-        window.location.href = '/login/'+uCookie+'/'+password+getQueries();
+        window.location.href = '/login'+getQueries();
       }
       function hash(plaintext) {
         if (Hash) {
@@ -192,12 +191,16 @@ html
         }
       }
       document.getElementById('side-menu-toggle-1').addEventListener('click', function() {
-        swapGuide(0, 0);
+        tempHelp = help;
+        help = 2; swapGuide(0, 0);  // clear defence page iff was open
+        help = tempHelp;
         flip_help(1);
         see_help();
       });
       document.getElementById('side-menu-toggle-2').addEventListener('click', function() {
-        swapGuide(0, 0);
+        tempHelp = help;
+        help = 1; swapGuide(0, 0);  // clear attack page iff was open
+        help = tempHelp;
         flip_help(2);
         see_help();
       }); 
