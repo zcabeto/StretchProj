@@ -22,6 +22,5 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### CLOSEUP TODO
-- 21/08 - fix sanitiser for steps
 - 22/08 - shorten descriptions
 - 23-24/08 - XSS completion to do damage, write up for XSS attack
