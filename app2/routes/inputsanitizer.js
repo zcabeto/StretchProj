@@ -15,6 +15,13 @@ class InputSanitizer {
         const regex = new RegExp(keywords.join('|'), 'gi');
         return input.replace(regex, '');
     }
+    /*
+   static sanitizeString(input) {
+       // set this.safeString to a cleaned version of the input string
+       // return the validity of this string
+       // all characters get url encoded iff Input Encoding on, otherwise delete them.
+       // 
+   }*/
 }
 
 module.exports = InputSanitizer;

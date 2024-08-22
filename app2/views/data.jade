@@ -136,7 +136,7 @@ html
       };
 
       function link(plusItem, gId) {
-        var search = document.getElementById("search").value || searchQuery || '%';
+        var search = encodeURIComponent(document.getElementById("search").value) || searchQuery || '%';
         var item = 0;
         if (plusItem != 0) {
           item = parseInt(document.getElementById('item').value || '0') + parseInt(plusItem);

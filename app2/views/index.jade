@@ -123,9 +123,9 @@ html
         }
       }
       function tryLogin() {
-        uCookie = encodeURIComponent(document.getElementById("username").value);
+        uCookie = encodeURIComponent(document.getElementById("username").value) || '';
         refreshProtections();
-        var password = hash(document.getElementById("password").value);
+        var password = hash(document.getElementById("password").value) || 'null';
         window.location.href = '/login/'+uCookie+'/'+password+getQueries();
       }
       function hash(plaintext) {
