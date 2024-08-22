@@ -206,15 +206,19 @@ html
         }
       }
       document.getElementById('side-menu-toggle-1').addEventListener('click', function() {
-        swapGuide(0, 0);
+        tempHelp = help;
+        help = 2; swapGuide(0, 0);  // clear defence page iff was open
+        help = tempHelp;
         flip_help(1);
         see_help();
       });
       document.getElementById('side-menu-toggle-2').addEventListener('click', function() {
-        swapGuide(0, 0);
+        tempHelp = help;
+        help = 1; swapGuide(0, 0);  // clear attack page iff was open
+        help = tempHelp;
         flip_help(2);
         see_help();
-      });
+      }); 
 
       function swapGuide(new_module, page_swap) {
         if (new_module != -1) {
