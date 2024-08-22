@@ -27,6 +27,6 @@ If one wishes to run this locally to their own device, from the root folder (whe
 ### CLOSEUP TODO
 - 23/08 - run XSS across sessions if possible. run link to website with cookies
 - 24/08 - write up for XSS attack (short explanations).
-- 25-6/08 - add copy to clipboard. rewrite defences (+hash crack website). redo button controls.
+- 25-26/08 - add copy to clipboard. rewrite defences (+hash crack website). redo button controls. index page.
 - next week - Set up a url listener. Writeup A02 monitor urls MitM.
 - next week - CORS access surrounding files w/o authentication, send urls found in A02 MitM. Writeup as A01.
