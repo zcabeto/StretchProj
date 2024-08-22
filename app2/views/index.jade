@@ -96,21 +96,20 @@ html
         document.getElementById("next-button-def").style.display = 'none';
         if (help) {
           // upon reload the help box stays open by updating it with this element
-          menu1 = document.getElementById('side-menu-1');
-          menu2 = document.getElementById('side-menu-2');
-          mainContent = document.getElementById('main-content');
-          menu1.classList.add('notransition');
-          menu2.classList.add('notransition');
-          mainContent.classList.add('notransition');
+          document.getElementById('side-menu-1').classList.add('notransition');
+          document.getElementById('side-menu-2').classList.add('notransition');
+          document.getElementById('main-content').classList.add('notransition');
           see_help(help);
-          menu1.offsetHeight;
-          menu1.classList.remove('notransition');
-          menu2.offsetHeight;
-          menu2.classList.remove('notransition');
-          mainContent.offsetHeight;
-          mainContent.classList.remove('notransition');
+          document.getElementById('side-menu-1').offsetHeight;
+          document.getElementById('side-menu-1').classList.remove('notransition');
+          document.getElementById('side-menu-2').offsetHeight;
+          document.getElementById('side-menu-2').classList.remove('notransition');
+          document.getElementById('main-content').offsetHeight;
+          document.getElementById('main-content').classList.remove('notransition');
 
+          var openPage = page;
           swapGuide(module, 0);
+          swapGuide(-1, openPage);
         }
       };
       function autoLogin() {
@@ -205,7 +204,7 @@ html
 
       function swapGuide(new_module, page_swap) {
         if (new_module != -1) {
-          module = new_module; 
+          module = new_module;
           page = 0;
         } else {
           page += page_swap;
@@ -225,31 +224,31 @@ html
             } else if (page == 1) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->SQL Injection 1<br><br>';
+              content.innerHTML = "-->SQL Injection 1<br><br>As SQL Injection can cause such catastrophic damage to a website, any good website has robust protections against it - luckily it’s not too hard to prevent so for this task we will have to turn Input Sanitisation off (see its section in Defence for more). The first step, therefore, is figuring out if SQL Injection possible to begin with. Our input is used in SQL by formatting into a quotation marks in a string in a particular fashion, being something like <br><br>SELECT * FROM table WHERE column1=' *our input* ';<br><br>So in order to figure out if this technique is possible, we need to see how the system reacts to us entering erroneous inputs - if we can cause the website to act in a way that it likely should not then it is likely our input has not been sanitised! The most common technique is entry of a quotation mark, causing there to be three quotation marks in a row that forces an error. Different queries will be written differently so entering any of ' or “ or ` could work, alternatively in case of our inputs being handled with encodings, we might instead try %27 or %22 or %60 respectively. Try some of these out, if any cause error, we know we can use SQL Injection.";
             } else if (page == 2) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->SQL Injection 2<br><br>';
+              content.innerHTML = "-->SQL Injection 2<br><br>Now that we know we can use this technique, we need to understand how to safely inject our code, if there is error with the query it will not run. We learnt our input is being entered in quotation marks into the SQL query, so in order to write our own SQL code, we first need to escape the quotation marks. In the username box, therefore, try entering a quotation mark followed by some text - we will see the text become part of the query itself. <br><br>Just as before, we still have the issue of the query’s second quotation mark that will lead to error if we don’t deal with it. For this we can either open a new quote that it will close, or we can comment out the rest of the line - both have their difficulties and uses. To open a new quote we would have to enter something like<br><br>' OR variable='<br><br>As this would add the condition (variable='') to the query, however this can only work if we pick a variable that exists, meaning we have to appropriately guess a name. In this case we have some clue of what the query is dealing with so we might guess the name username, user, password, or pass - try each of these out to see which does not cause error.<br><br>The second method, commenting, also has its ups and downs. For this we do not need to enter anything at all, where starting a comment dismisses the second quotation mark. However, this does truly comment out all of the rest of the query, so commenting could cause error or odd behaviour. Try it out by entering<br><br>' ; # <br><br>where the start of a SQL comment is marked by # which may also have to be entered as %23 if encoded. ";
             } else if (page == 3) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->SQL Injection 3<br><br>';
+              content.innerHTML = "-->SQL Injection 3<br><br>Now we have a safe space for us to enter the SQL we would like. For /login to provide us access, we want the SQL Query to return a ‘match’ with the username and password pair we entered, but we can guarantee that the matching condition returns true using our own SQL injected code, utilising the notion that if any clause in a disjunction is true then the whole statement returns true. Therefore we can quite simply try either of the following<br><br>' OR TRUE #<br><br>' OR TRUE OR user=' ";
             } else if (page == 4) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->SQL Injection 4<br><br>';
+              content.innerHTML = "-->SQL Injection 4<br><br>Now with a good grasp of SQL Injection, let’s move over to the /data page which shows a table of data. Entering a quotation mark into the search bar reveals once again that our input is filtered directly into a query, but this also tells us that the data in the table is taken from a database. Try entering<br><br>' #<br><br>to give us a sense of the formatting requirements of the query. This should reveal that the query is nested inside brackets that must be closed, so lets instead try<br><br>' ) #<br><br>which should work. Now we know a format that means we can enter our code safely.";
             } else if (page == 5) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->SQL Injection 5<br><br>';
+              content.innerHTML = "-->SQL Injection 5<br><br>For this one, as a table is shown, we can see data that is returned from the database and therefore use SQL Injection to change what data we see. A misconfigured website will allow us to instead retrieve data from the table of users instead from the table of movies as it is supposed to be. To do this we need to join the two tables together. Similar to before we can assume the approximate format.<br><br>SELECT * FROM table WHERE column LIKE ' *our input* ';<br><br>So let’s try doing a union with the table of users for which with some trial and error, as we have before, we can learn the table name is Users. Before we try doing this union, we can also limit the data we are doing this union with to try <br><br>' LIMIT 0) UNION ALL (SELECT * FROM Users); #<br><br>If this does not work, continue to the next page.";
             } else if (page == 6) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->SQL Injection 6<br><br>';
+              content.innerHTML = "-->SQL Injection 6<br><br>Oh no, it did not work! The movies and users data don’t match appropriately to do this union. Luckily we can get around this without too much difficulty but with a bit of sleuthing. We found earlier that the Users table has two notable columns user and pass, and we can also get the column names of the movie data straight from the table shown. With this in mind we can reformat our input to match the Movies and Users tables together using<br><br>' LIMIT 0) UNION ALL (SELECT user AS title, '' AS Director, pass AS TopTwoActors, '' AS releaseDate, '' AS movieId FROM Users) #<br><br>Try running this with and without the data hashing on - notice that when the hash is off we can see the raw data, something we could use to log in as an authenticated user directly. When the hashing is on, however, the data we receive is not nearly so easily used. The SHA256 hashing process returns an output that cannot be used to retrieve its input so one cannot use this data to directly. So even though SQL Injection retrieved sensitive information, it cannot be immediately used due to the protections put in place.";
             } else if (page == 7) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'none';
-              content.innerHTML = '-->SQL Injection 7<br><br>';
+              content.innerHTML = '-->SQL Injection 7<br><br>Congratulations! You made it through the SQL Injection tutorial. Did you see how easy it was to gain access to the system, or how simple a command could reveal so much important data? This attacking technique has a well documented ability to enact great power, which is why it is all the more important to protect against it. As commonly as people make this mistake, there is no reason not to put up protections against attackers doing this very thing - especially with such a clear method of defence in Input Sanitisation. Now you know how important it is to stop it.<br><br>Try out any of the previous commands again, but this time with Input Sanitisation on; they don’t work at all as the website safely stays up without revealing sensitive information. If you haven’t already, go check out the respective section in Defences to learn why.';
             }
           } else if (module == 2) {
             if (page == 0) {

@@ -12,16 +12,18 @@ router.get('/', async function(req, res) {
 router.get('/:username/:password', async function(req, res) {
   let isHashed = parseInt((req.query.p || '000').charAt(0));
   let SQLI = parseInt((req.query.p || '000').charAt(1));
+  let encode = parseInt((req.query.p || '000').charAt(2));
   if (req.params.username && req.params.password) {
     let username;
     let password;
     if (SQLI) {
-      username = InputSanitizer.sanitizeString(req.params.username);
-      password = InputSanitizer.sanitizeString(req.params.password);
+      username = InputSanitizer.sanitizeString(req.params.username, encode);
+      password = InputSanitizer.sanitizeString(req.params.password, encode);
     } else {
       username = req.params.username;
       password = req.params.password;
     }
+    console.log("User: " + username + ". Entered: "+req.params.username)
     let err = await LoginProcessor.login(username, password, isHashed);
     if (err != null) { res.render('error', { message: 'from login/', error: err}); }
   }
