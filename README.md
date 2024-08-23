@@ -25,7 +25,7 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### CLOSEUP TODO
-- 23/08 - run XSS across sessions if possible. run link to website with cookies
+- 23/08 - run XSS across sessions if possible.
 - 24/08 - write up for XSS attack (short explanations).
 - 25-26/08 - add copy to clipboard. rewrite defences (+hash crack website). redo button controls. index page.
 - next week - Set up a url listener. Writeup A02 monitor urls MitM.
