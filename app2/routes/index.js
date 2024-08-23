@@ -10,7 +10,7 @@ router.get('/', async function(req, res) {
     let isHashed = parseInt((req.query.p || '000').charAt(0));
     let SQLI = parseInt((req.query.p || '000').charAt(1));
     let encode = parseInt((req.query.p || '000').charAt(2));
-    let acceptedCookie = req.cookies['User'].split(':');
+    let acceptedCookie = req.cookies['User'].split('::');
     let username;
     let password;
     if (SQLI) {

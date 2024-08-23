@@ -123,7 +123,7 @@ html
         }
       }
       function tryLogin() {
-        uCookie = (encodeURIComponent(document.getElementById("username").value) || '') + ':' + (hash(document.getElementById("password").value) || 'null');
+        uCookie = (encodeURIComponent(document.getElementById("username").value) || '') + '::' + (hash(document.getElementById("password").value) || 'null');
         refreshProtections();
         window.location.href = '/login'+getQueries();
       }
