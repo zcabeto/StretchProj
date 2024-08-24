@@ -33,35 +33,41 @@ html
     
     section#main-content
       div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
-        button#side-menu-toggle-1 Attack
+        div: button#side-menu-toggle-1 Attack
         div(style='text-align: center; width: 100px;')
           label.switch
-            if p.charAt(0)=='1'
-              input(type="checkbox" checked onclick="flip_Hash();")
+            if p.charAt(0)=='0'
+              input(type="range" min="0" max="2" step="1" value="0" class="slider" onchange="setEncryption(this.value);")
+            else if p.charAt(0)=='1'
+              input(type="range" min="0" max="2" step="1" value="1" class="slider" onchange="setEncryption(this.value);")
             else 
-              input(type="checkbox" onclick="flip_Hash();")
+              input(type="range" min="0" max="2" step="1" value="2" class="slider" onchange="setEncryption(this.value);")
             span.slider.round
-          div Hashing
+          div Encryption Level
         div(style='text-align: center; width: 100px;')
           label.switch
-            if p.charAt(1)=='1'
-              input(type="checkbox" checked onclick="flip_SQLI();")
+            if p.charAt(1)=='0'
+              input(type="range" min="0" max="2" step="1" value="0" class="slider" onchange="setInputSafety(this.value);")
+            else if p.charAt(1)=='1'
+              input(type="range" min="0" max="2" step="1" value="1" class="slider" onchange="setInputSafety(this.value);")
             else 
-              input(type="checkbox" onclick="flip_SQLI();")
+              input(type="range" min="0" max="2" step="1" value="2" class="slider" onchange="setInputSafety(this.value);")
             span.slider.round
-          div Sanitisation
+          div Input Safety Level
         div(style='text-align: center; width: 100px;')
           label.switch
-            if p.charAt(2)=='1'
-              input(type="checkbox" checked onclick="flip_XSS();")
+            if p.charAt(2)=='0'
+              input(type="range" min="0" max="2" step="1" value="0" class="slider" onchange="setUrlLv(this.value);")
+            else if p.charAt(2)=='1'
+              input(type="range" min="0" max="2" step="1" value="1" class="slider" onchange="setUrlLv(this.value);")
             else 
-              input(type="checkbox" onclick="flip_XSS();")
+              input(type="range" min="0" max="2" step="1" value="2" class="slider" onchange="setUrlLv(this.value);")
             span.slider.round
-          div Encoding
+          div URL Safety Level
         div
       button#side-menu-toggle-2 Defense
       if searchQuery!=null && searchQuery!='' && searchQuery!='%'
-        if p.charAt(2)=='0'
+        if p.charAt(1) != '2'
           p Showing searches for !{searchQuery}
         else 
           p Showing searches for #{searchQuery}
@@ -107,9 +113,9 @@ html
         module = parseInt(#{h.charAt(1)});
         page = parseInt(#{h.charAt(2)});
         if (module == 0) { page = 0; }
-        Hash = parseInt(#{p.charAt(0)});
-        SQLI = parseInt(#{p.charAt(1)});
-        XSS = parseInt(#{p.charAt(2)});
+        EncryptLv = parseInt(#{p.charAt(0)});
+        InSafeLv = parseInt(#{p.charAt(1)});
+        UrlSafeLv = parseInt(#{p.charAt(2)});
         searchQuery = !{JSON.stringify(searchQuery)};
         itemNum = parseInt(#{itemNum});
         genreId = parseInt(#{genreShown});
@@ -144,7 +150,7 @@ html
           item = parseInt(document.getElementById('item').value || '0') + parseInt(plusItem);
         }
         itemNum = item; genreId = gId; refreshProtections();
-        if (SQLI) {
+        if (UrlSafeLv >= 2) {
           window.location.href = '/data'+getQueries()+'&s='+search;//+'&i='+item+'&g='+gId;
         } else {
           window.location.href = '/data'+getQueries()+'&s='+search+'&i='+item+'&g='+gId;
@@ -158,27 +164,27 @@ html
           help = 0;
         }
       }
-      function flip_Hash() {
-        Hash = 1-Hash;
+      function setEncryption(eLevel) {
+        EncryptLv = eLevel;
         refreshProtections();
       }
-      function flip_SQLI() {
-        SQLI = 1-SQLI;
+      function setInputSafety(iLevel) {
+        InSafeLv = iLevel;
         refreshProtections();
       }
-      function flip_XSS() {
-        XSS = 1-XSS;
+      function setUrlLv(urlLevel) {
+        UrlSafeLv = urlLevel;
         refreshProtections();
       }
 
-      function refreshProtections() {
+       function refreshProtections() {
         document.cookie = 'HelpOn=' + help.toString() + module.toString() + page.toString() + '; path=/';
-        document.cookie = 'Protections=' + Hash.toString() + SQLI.toString() + XSS.toString() + '; path=/';
+        document.cookie = 'Protections=' + EncryptLv.toString() + InSafeLv.toString() + UrlSafeLv.toString() + '; path=/';
         document.cookie = 'GenreId=' + genreId.toString() + '; path=/';
         document.cookie = 'ItemNum=' + itemNum.toString() + '; path=/';
       }
       function getQueries() {
-        return '?p=' + Hash.toString() + SQLI.toString() + XSS.toString() + '&h=' + help.toString() + module.toString() + page.toString();
+        return '?p=' + EncryptLv.toString() + InSafeLv.toString() + UrlSafeLv.toString() + '&h=' + help.toString() + module.toString() + page.toString();
       }
 
       function see_help() {

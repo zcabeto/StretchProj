@@ -6,21 +6,21 @@ var pool = require('./db');
 var InputSanitizer = require('./inputsanitizer');
 
 router.get('/', async function(req, res) {
-  let isHashed = parseInt((req.query.p || '000').charAt(0));
-  let SQLI = parseInt((req.query.p || '000').charAt(1));
+  let EncryptLv = parseInt((req.query.p || '000').charAt(0));
+  let InSafeLv = parseInt((req.query.p || '000').charAt(1));
+  let UrlSafe = parseInt((req.query.p || '000').charAt(2));
   let connection;
   try {
     connection = await pool.getConnection();
 
-    let searchQuery; let genreId; let itemNum;
-    if (SQLI) {
-      searchQuery = InputSanitizer.sanitizeString(req.query.s || '');
-      genreId = parseInt(InputSanitizer.sanitizeString(req.cookies['GenreId'] || '0'));
-      itemNum = parseInt(InputSanitizer.sanitizeString(req.cookies['ItemNum'] || '0'));
+    let genreId; let itemNum;
+    let searchQuery = InputSanitizer.sanitizeString(req.query.s || '', InSafeLv);
+    if (UrlSafe >= 2) {
+      genreId = parseInt(InputSanitizer.sanitizeString(req.cookies['GenreId'] || '0'), InSafeLv);
+      itemNum = parseInt(InputSanitizer.sanitizeString(req.cookies['ItemNum'] || '0'), InSafeLv);
     } else {
-      searchQuery = req.query.s || '';
-      genreId = req.query.g || '0';
-      itemNum = req.query.i || '0';
+      genreId = parseInt(InputSanitizer.sanitizeString(req.query.g || '0'), InSafeLv);
+      itemNum = parseInt(InputSanitizer.sanitizeString(req.query.i || '0'), InSafeLv);
     }
     if (itemNum < 0) itemNum = 0;
       
@@ -30,7 +30,7 @@ router.get('/', async function(req, res) {
     } else {
       getMovies = `(SELECT DISTINCT MoviesInGenre.title, Crew.* FROM (SELECT Movies.* FROM Movies INNER JOIN MovieGenres ON Movies.movieId=MovieGenres.movieId WHERE MovieGenres.genreId=${genreId}) AS MoviesInGenre INNER JOIN Crew ON MoviesInGenre.movieId=Crew.movieId WHERE MoviesInGenre.title LIKE '%${searchQuery}%' OR Crew.Director LIKE '%${searchQuery}%' OR Crew.TopTwoActors LIKE '%${searchQuery}%' LIMIT ${itemNum},30);`;
     }
-    if (isHashed) { getMovies = getMovies.replace('Users', 'UsersHashed'); }
+    if (EncryptLv >= 1) { getMovies = getMovies.replace('Users', 'UsersHashed'); }
     const getMoviesPromise =  connection.execute(getMovies);
     [movies, fields] = await Promise.race([getMoviesPromise, new Promise((resolve, reject) => setTimeout(() => reject(new Error("Query timeout")), 1000))]);
     if (movies.length == 0) {

@@ -6,21 +6,15 @@ var InputSanitizer = require('./inputsanitizer');
 var LoginProcessor = require('./login');
 
 router.get('/', async function(req, res) {
-  if (req.cookies['User'] != '' && req.cookies['User'] != null) {
-    let isHashed = parseInt((req.query.p || '000').charAt(0));
-    let SQLI = parseInt((req.query.p || '000').charAt(1));
-    let encode = parseInt((req.query.p || '000').charAt(2));
+  let UrlSafeLv = parseInt((req.query.p || '000').charAt(2));
+  if (req.cookies['User'] != '' && req.cookies['User'] != null && UrlSafeLv>=2) {
+    let EncryptLv = parseInt((req.query.p || '000').charAt(0));
+    let InSafeLv = parseInt((req.query.p || '000').charAt(1));
     let acceptedCookie = req.cookies['User'].split('::');
-    let username;
-    let password;
-    if (SQLI) {
-      username = InputSanitizer.sanitizeString(acceptedCookie[0], encode);
-      password = InputSanitizer.sanitizeString(acceptedCookie[1], encode);
-    } else {
-      username = acceptedCookie[0];
-      password = acceptedCookie[1];
-    }
-    const loginPromise = LoginProcessor.login(username, password, isHashed);
+    
+    let username = InputSanitizer.sanitizeString(acceptedCookie[0], InSafeLv);
+    let password = InputSanitizer.sanitizeString(acceptedCookie[1], InSafeLv);
+    const loginPromise = LoginProcessor.login(username, password, EncryptLv >= 1);
     const timeoutPromise = new Promise(resolve => { setTimeout(resolve, 5000); });
     const err = await Promise.race([loginPromise, timeoutPromise]);
     if (err != null) { res.render('error', { message: 'from login/', error: err}); }
@@ -28,6 +22,21 @@ router.get('/', async function(req, res) {
   } else {
     res.render('index', { title: 'Stretch Project', ACCEPT: false, p: req.query.p || '000', h: req.query.h || '000', user: '' });
   }
+});
+
+router.get('/:username/:password', async function(req, res) {
+  let UrlSafe = parseInt((req.query.p || '000').charAt(2));
+  if (UrlSafe > 1) { res.render('error', { message: 'from login/', error: 'URL safety mismatch'}); return; }
+  let EncryptLv = parseInt((req.query.p || '000').charAt(0));
+  let InSafeLv = parseInt((req.query.p || '000').charAt(1));
+
+  let username = InputSanitizer.sanitizeString(req.params.username, InSafeLv);
+  let password = InputSanitizer.sanitizeString(req.params.password, InSafeLv);
+  const loginPromise = LoginProcessor.login(username, password, EncryptLv >= 1);
+  const timeoutPromise = new Promise(resolve => { setTimeout(resolve, 5000); });
+  const err = await Promise.race([loginPromise, timeoutPromise]);
+  if (err != null) { res.render('error', { message: 'from login/', error: err}); }
+  res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', user: LoginProcessor.user || username });
 });
 
 router.get('/out', async function(req, res) {
