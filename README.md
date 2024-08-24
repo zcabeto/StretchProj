@@ -13,10 +13,8 @@ Attacks Include
 - A03: Cross-Site Scripting
 
 ### TODO Planning
-- 19-24/08: finish and clean up details of initial functionality.
 - 25-26/08: Reformat some frontend.
-- 27-30/08: OWASP A02 url listener.
-- 01-03/09: OWAPS A01 CORS illegal access.
+- 27-30/08: Writeups for all of the sections.
 - PRESENTATIONS 04-06/09
 
 ### SETUP AND RUN INSTRUCTIONS
@@ -25,7 +23,9 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### CLOSEUP TODO
-- 23/08 - run XSS across sessions if possible.
-- 25-26/08 - add copy to clipboard. rewrite defences (+hash crack website). redo button controls. index page.
-- next week - Set up a url listener. Writeup A02 monitor urls MitM (log window.location.hrefs) stopped w https (can send can't receive).
-- next week - CORS access surrounding files w/o authentication, send urls found in A02 MitM. Writeup as A01.
+- 25-26/08 - run XSS across sessions if possible. get CORS to access & how to block. extra page listing hrefs log with times + crackstation.net link.
+- 27-29/08 - use CORS to run commands. set up https.
+- 30/08 - (re)writeup Encryption Defence, Input Safety Defence, URL Safety Defence. writeup A01 & A02. writeup index. finish up any previous stuff.
+
+- A02 - Set up a url listener. Writeup A02 monitor urls MitM (log window.location.hrefs) stopped w https (can send can't receive). 
+- A01 - CORS access surrounding files w/o authentication, send urls found in A02 MitM. Writeup as A01. need reconnaissance, run commands somehow?
