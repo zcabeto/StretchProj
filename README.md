@@ -3,8 +3,8 @@ This website acts as a platform to understand different techniques used to attac
 
 Defenses Include
 - Input Safety (none -> sanitise -> encode)
-- Network Safety (any url text -> restricted url text -> basic url text)
-- Encryption (plain -> weak hash -> strong hash -> https?)
+- URL Safety (any url text -> restricted CORS -> limited url text)
+- Encryption (plain -> hash -> https)
 
 Attacks Include
 - A01: CORS illegal access
@@ -26,7 +26,6 @@ If one wishes to run this locally to their own device, from the root folder (whe
 
 ### CLOSEUP TODO
 - 23/08 - run XSS across sessions if possible.
-- 24/08 - write up for XSS attack (short explanations).
 - 25-26/08 - add copy to clipboard. rewrite defences (+hash crack website). redo button controls. index page.
 - next week - Set up a url listener. Writeup A02 monitor urls MitM (log window.location.hrefs) stopped w https (can send can't receive).
 - next week - CORS access surrounding files w/o authentication, send urls found in A02 MitM. Writeup as A01.
