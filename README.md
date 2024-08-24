@@ -2,9 +2,9 @@
 This website acts as a platform to understand different techniques used to attack websites and how we can guard against them. One can try to break the website and alter method of attack based on the defenses put in place (as chosen by buttons at the top of the page). The user can read on the side bar about potential attacks for them to try out, demonstrating further why these protections are necessary. 
 
 Defenses Include
+- Encryption (plain -> hash -> https)
 - Input Safety (none -> sanitise -> encode)
 - URL Safety (any url text -> restricted CORS -> limited url text)
-- Encryption (plain -> hash -> https)
 
 Attacks Include
 - A01: CORS illegal access
