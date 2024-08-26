@@ -18,7 +18,7 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### TODO Planning
-- 26/08 - extra page listing hrefs log with times + crackstation.net link. index save protections.
+- 26/08 - extra page listing hrefs log with times + crackstation.net link.
 - 27-29/08 - set up https. rewrite XSS guide on comments. make CORS vulnerability query - pass username to comment page to comment as user.
 - 30/08 - (re)writeup Encryption Defence, Input Safety Defence, URL Safety Defence. writeup A01 & A02. writeup index. finish up any previous stuff.
 
