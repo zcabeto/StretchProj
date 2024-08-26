@@ -5,7 +5,7 @@ class InputSanitizer {
         }
         // replace potentially dangerous characters with empty string
         if (InSafeLv < 2 && InSafeLv >= 1) {
-            input = input.replace(/[^a-zA-Z0-9-_.~ ]/g, '').replace(/'/g, '')
+            input = input.replace(/[^a-zA-Z0-9-_.~ ]/g, '').replace(/'/g, '');
         } 
         /*else if (InSafeLv >= 2) {
             input = input.replace(/[^a-zA-Z0-9-_.~ ]/g, function(match) {
