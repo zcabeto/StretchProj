@@ -16,14 +16,14 @@ router.get('/', async function(req, res) {
     
     let username = InputSanitizer.sanitizeString(acceptedCookie[0], InSafeLv);
     let password = InputSanitizer.sanitizeString(acceptedCookie[1], InSafeLv);
-    const loginPromise = LoginProcessor.login(username, password, EncryptLv >= 1);
+    const loginPromise = LoginProcessor.login(username, password, EncryptLv >= 1, InSafeLv >= 2);
     const timeoutPromise = new Promise(resolve => { setTimeout(resolve, 5000); });
     const err = await Promise.race([loginPromise, timeoutPromise]);
     if (err != null) { res.render('error', { message: 'from login/', error: err}); }
-    res.render('login', { title: 'Login Page', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', user: LoginProcessor.user || username });
+    res.render('login', { title: 'Login Page', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', setUser: LoginProcessor.user || username });
   } else {
     UrlSafeHolder.setCORS(UrlSafeLv>=1);
-    res.render('login', { title: 'Login Page', ACCEPT: false, p: req.query.p || '000', h: req.query.h || '000', user: '' });
+    res.render('login', { title: 'Login Page', ACCEPT: false, p: req.query.p || '000', h: req.query.h || '000', setUser: '' });
   }
 });
 
@@ -36,16 +36,16 @@ router.get('/:username/:password', async function(req, res) {
 
   let username = InputSanitizer.sanitizeString(req.params.username, InSafeLv);
   let password = InputSanitizer.sanitizeString(req.params.password, InSafeLv);
-  const loginPromise = LoginProcessor.login(username, password, EncryptLv >= 1);
+  const loginPromise = LoginProcessor.login(username, password, EncryptLv >= 1, InSafeLv >= 2);
   const timeoutPromise = new Promise(resolve => { setTimeout(resolve, 5000); });
   const err = await Promise.race([loginPromise, timeoutPromise]);
   if (err != null) { res.render('error', { message: 'from login/', error: err}); }
-  res.render('login', { title: 'Login Page', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', user: LoginProcessor.user || username });
+  res.render('login', { title: 'Login Page', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', setUser: LoginProcessor.user || username });
 });
 
 router.get('/out', async function(req, res) {
   LoginProcessor.logout();
-  res.render('login', { title: 'Login Page', ACCEPT: false, p: req.query.p || '000', h: req.query.h || '000', user: '' });
+  res.render('login', { title: 'Login Page', ACCEPT: false, p: req.query.p || '000', h: req.query.h || '000', setUser: '' });
 });
 
 module.exports = router;

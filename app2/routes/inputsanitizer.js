@@ -4,13 +4,14 @@ class InputSanitizer {
             throw new Error('Input must be a string.');
         }
         // replace potentially dangerous characters with empty string
-        if (InSafeLv >= 2) {
-            input = input.replace(/[^a-zA-Z0-9-_.~]/g, function(match) {
-                return encodeURIComponent(match).replace(/'/g, "%27");
+        if (InSafeLv < 2 && InSafeLv >= 1) {
+            input = input.replace(/[^a-zA-Z0-9-_.~ ]/g, '').replace(/'/g, '')
+        } 
+        /*else if (InSafeLv >= 2) {
+            input = input.replace(/[^a-zA-Z0-9-_.~ ]/g, function(match) {
+                return encodeURIComponent(match).replace(/'/g, "%27")
             });
-        } else if (InSafeLv >= 1) {
-            input = input.replace(/[^a-zA-Z0-9-_.~]/g, '').replace(/'/g, '');
-        }
+        }*/
         
         return input;
     }

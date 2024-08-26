@@ -11,14 +11,18 @@ var CORSRouter = require('./routes/CORS');
 var commentsRouter = require('./routes/commentPage');
 var UrlSaftyHandler = require('./routes/urlSafety');
 
+var UrlLogger = require('./routes/urlLogger');
+const { time } = require('console');
+const urlLog = new UrlLogger();
+var NetListenHandler = require('./routes/urlListPage')(urlLog);
+
 var app = express();
 
 const disallowedReferrers = ['http://localhost:3000/CORS'];
 
 app.use((req, res, next) => {
-  const referer = req.get('Referer');
-  console.log("Referer: " + referer + " with CORS allowance: "+UrlSaftyHandler.configCORS)
   if (UrlSaftyHandler.configCORS) {   // if CORS configured then check referer
+    const referer = req.get('Referer');
     if (referer && !disallowedReferrers.some(disallowed => !referer.startsWith(disallowed))) {
       res.status(403).send('ERROR 403: Access Forbidden');
     } else {
@@ -40,12 +44,22 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('indexFolder'))
 
+app.use((req, res, next) => {
+  console.log("REQUEST FROM "+req.url);
+  let time = new Date();
+  let formattedDate = time.getFullYear()+"/"+time.getMonth()+"/"+time.getDate();
+  let formattedTime = time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()
+  urlLog.addURL("http://localhost:3000"+req.url+" on "+formattedDate+" at "+formattedTime)
+  next();
+});
+
 // Define routes
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/data', dataRouter);
 app.use('/comments', commentsRouter);
 app.use('/CORS', CORSRouter);
+app.use('/NetListen', NetListenHandler);
 
 app.get('*', (req, res) => {
   res.redirect('/');

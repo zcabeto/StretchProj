@@ -9,18 +9,20 @@ class LoginProcessor {
         this.user = null;
     }
     // ideally there would be an ACCEPT var for each user, with them decided by cookies
-    static async login(username, password, isHashed) {
+    static async login(username, password, isHashed, isEncoded) {
         let connection;
         try {
             connection = await pool.getConnection();
-            let getUsers;
-            if (isHashed) {
-                getUsers = `SELECT * FROM UsersHashed WHERE user='${username}' AND pass='${password}' LIMIT 1;`;
+            let getUsers; let users; let fields;
+            if (isEncoded) {
+                getUsers = `SELECT * FROM Users WHERE user=? AND pass=? LIMIT 1;`;
+                if (isHashed) { getMovies = getMovies.replace('Users', 'UsersHashed'); }
+                [users, fields] = await connection.execute(getUsers, [`${username}`, `${password}`]);
             } else {
                 getUsers = `SELECT * FROM Users WHERE user='${username}' AND pass='${password}' LIMIT 1;`;
+                if (isHashed) { getMovies = getMovies.replace('Users', 'UsersHashed'); }
+                [users, fields] = await connection.execute(getUsers);
             }
-            console.log(username, password);
-            let [users, fields] = await connection.execute(getUsers);
             if (users.length > 0) {
                 this.ACCEPT = true;
                 this.user = users[0].user;
