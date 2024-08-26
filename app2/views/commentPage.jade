@@ -66,46 +66,17 @@ html
           div URL Safety Level
         div
       button#side-menu-toggle-2 Defense
-      if searchQuery!=null && searchQuery!='' && searchQuery!='%'
-        if p.charAt(1) != '2'
-          p Showing searches for !{searchQuery}
-        else 
-          p Showing searches for #{searchQuery}
-      else 
-        p
-      #[input(type="text" id="search" placeholder='search keywords')] #[button(type="submit" onclick="link(0,"+genreShown+");") Search]
-      #[input(type="hidden" id="item", value=itemNum)] #[button(type="submit" onclick="link(-30,"+genreShown+");") Previous Page]
-      #[input(type="hidden" id="item", value=itemNum)] #[button(type="submit" onclick="link(30,"+genreShown+");") Next Page]
-      .dropdown
-        if genreShown != 0
-          .dropdown-header(onclick='toggleDropdown(this)') #{genres[genreShown-1].name}
-        else 
-          .dropdown-header(onclick='toggleDropdown(this)') Choose Genre
-        .dropdown-content
-          #[input(type="hidden" id="gId", value=0)] #[button(type="submit" onclick="link(0,0);") All Genres]
-          each genre in genres
-            #[input(type="hidden" id="gId", value=genre.genreId)] #[button(type="submit" onclick="link(0,"+genre.genreId+");") #{genre.name}]
+      
+      <br><br>
+      #[input(type="text" id="writer" placeholder='set name')] #[input(type="text" id="comment" placeholder='leave comment')] 
+      #[button(type="submit" onclick="addComment();") Add Comment]
 
-      table
-        thead
-          tr
-            each title in allCols
-              if title != 'movieId'
-                th= title
-        tbody
-          each row in data
-            tr
-              each title in allCols
-                if title != 'movieId'
-                  if title == 'TopTwoActors'
-                    td #{row.TopTwoActors.slice(1,row.TopTwoActors.length-1).split(', ').map(actor => actor.slice(1,actor.length-1))}
-                  else if title == 'rating'
-                    td #{parseFloat(row.rating).toPrecision(3)}
-                  else
-                    td= row[title]
-
-      #[input(type="hidden" id="item", value=itemNum)] #[button(type="submit" onclick="link(-30,"+genreShown+");") Previous Page]
-      #[input(type="hidden" id="item", value=itemNum)] #[button(type="submit" onclick="link(30,"+genreShown+");") Next Page]
+      <br><br><br>
+      each row in comments
+        if p.charAt(1) == '2'
+          p Name: #{row.writer} <br> Comment: #{row.comment} <br><br>
+        else
+          p Name: !{row.writer} <br> Comment: !{row.comment} <br><br>
 
     <input type="hidden" value="Default Text" id="textToCopy">
     script.
@@ -117,9 +88,6 @@ html
         EncryptLv = parseInt(#{p.charAt(0)});
         InSafeLv = parseInt(#{p.charAt(1)});
         UrlSafeLv = parseInt(#{p.charAt(2)});
-        searchQuery = !{JSON.stringify(searchQuery)};
-        itemNum = parseInt(#{itemNum});
-        genreId = parseInt(#{genreShown});
         refreshProtections();
         document.getElementById("prev-button-atk").style.display = 'none';
         document.getElementById("next-button-atk").style.display = 'none';
@@ -144,17 +112,11 @@ html
         }
       };
 
-      function link(plusItem, gId) {
-        var search = encodeURIComponent(document.getElementById("search").value) || searchQuery || '%';
-        var item = 0;
-        if (plusItem != 0) {
-          item = parseInt(document.getElementById('item').value || '0') + parseInt(plusItem);
-        }
-        itemNum = item; genreId = gId; refreshProtections();
-        if (UrlSafeLv >= 1) {
-          window.location.href = '/data'+getQueries()+'&s='+search;
-        } else {
-          window.location.href = '/data'+getQueries()+'&s='+search+'&i='+item+'&g='+gId;
+      function addComment() {
+        var writer = encodeURIComponent(document.getElementById("writer").value);
+        var comment = encodeURIComponent(document.getElementById("comment").value);
+        if (writer && writer != '' && comment && comment != '') {
+          window.location.href = '/comments'+getQueries()+'&addComment='+writer+'::'+comment;
         }
       }
 
@@ -181,8 +143,6 @@ html
        function refreshProtections() {
         document.cookie = 'HelpOn=' + help.toString() + module.toString() + page.toString() + '; path=/';
         document.cookie = 'Protections=' + EncryptLv.toString() + InSafeLv.toString() + UrlSafeLv.toString() + '; path=/';
-        document.cookie = 'GenreId=' + genreId.toString() + '; path=/';
-        document.cookie = 'ItemNum=' + itemNum.toString() + '; path=/';
       }
       function getQueries() {
         return '?p=' + EncryptLv.toString() + InSafeLv.toString() + UrlSafeLv.toString() + '&h=' + help.toString() + module.toString() + page.toString();

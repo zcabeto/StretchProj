@@ -2,46 +2,14 @@
 
 var express = require('express');
 var router = express.Router();
-var InputSanitizer = require('./inputsanitizer');
-var LoginProcessor = require('./login');
+var UrlSafeHolder = require('./urlSafety');
+
 
 router.get('/', async function(req, res) {
-  let UrlSafeLv = parseInt((req.query.p || '000').charAt(2));
-  if (req.cookies['User'] != '' && req.cookies['User'] != null && UrlSafeLv>=2) {
-    let EncryptLv = parseInt((req.query.p || '000').charAt(0));
-    let InSafeLv = parseInt((req.query.p || '000').charAt(1));
-    let acceptedCookie = req.cookies['User'].split('::');
-    
-    let username = InputSanitizer.sanitizeString(acceptedCookie[0], InSafeLv);
-    let password = InputSanitizer.sanitizeString(acceptedCookie[1], InSafeLv);
-    const loginPromise = LoginProcessor.login(username, password, EncryptLv >= 1);
-    const timeoutPromise = new Promise(resolve => { setTimeout(resolve, 5000); });
-    const err = await Promise.race([loginPromise, timeoutPromise]);
-    if (err != null) { res.render('error', { message: 'from login/', error: err}); }
-    res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', user: LoginProcessor.user || username });
-  } else {
-    res.render('index', { title: 'Stretch Project', ACCEPT: false, p: req.query.p || '000', h: req.query.h || '000', user: '' });
-  }
-});
-
-router.get('/:username/:password', async function(req, res) {
-  let UrlSafe = parseInt((req.query.p || '000').charAt(2));
-  if (UrlSafe > 1) { res.render('error', { message: 'from login/', error: 'URL safety mismatch'}); return; }
   let EncryptLv = parseInt((req.query.p || '000').charAt(0));
-  let InSafeLv = parseInt((req.query.p || '000').charAt(1));
-
-  let username = InputSanitizer.sanitizeString(req.params.username, InSafeLv);
-  let password = InputSanitizer.sanitizeString(req.params.password, InSafeLv);
-  const loginPromise = LoginProcessor.login(username, password, EncryptLv >= 1);
-  const timeoutPromise = new Promise(resolve => { setTimeout(resolve, 5000); });
-  const err = await Promise.race([loginPromise, timeoutPromise]);
-  if (err != null) { res.render('error', { message: 'from login/', error: err}); }
-  res.render('index', { title: 'Stretch Project', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', user: LoginProcessor.user || username });
-});
-
-router.get('/out', async function(req, res) {
-  LoginProcessor.logout();
-  res.render('index', { title: 'Stretch Project', ACCEPT: false, p: req.query.p || '000', h: req.query.h || '000', user: '' });
+  let UrlSafeLv = parseInt((req.query.p || '000').charAt(2));
+  UrlSafeHolder.setCORS(UrlSafeLv>=1); UrlSafeHolder.setHTTPS(EncryptLv>=2);
+  res.render('index', { title: 'Stretch Project', p: req.query.p || '000' });
 });
 
 module.exports = router;

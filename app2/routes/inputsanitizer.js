@@ -9,7 +9,7 @@ class InputSanitizer {
                 return encodeURIComponent(match).replace(/'/g, "%27");
             });
         } else if (InSafeLv >= 1) {
-            input = input.replace(/[^a-zA-Z0-9-_.~]/g, '');
+            input = input.replace(/[^a-zA-Z0-9-_.~]/g, '').replace(/'/g, '');
         }
         
         return input;

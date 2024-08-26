@@ -5,12 +5,31 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
+var loginRouter = require('./routes/login');
 var dataRouter = require('./routes/data');
-
+var CORSRouter = require('./routes/CORS');
+var commentsRouter = require('./routes/commentPage');
+var UrlSaftyHandler = require('./routes/urlSafety');
 
 var app = express();
 
-// view engine setup
+const disallowedReferrers = ['http://localhost:3000/CORS'];
+
+app.use((req, res, next) => {
+  const referer = req.get('Referer');
+  console.log("Referer: " + referer + " with CORS allowance: "+UrlSaftyHandler.configCORS)
+  if (UrlSaftyHandler.configCORS) {   // if CORS configured then check referer
+    if (referer && !disallowedReferrers.some(disallowed => !referer.startsWith(disallowed))) {
+      res.status(403).send('ERROR 403: Access Forbidden');
+    } else {
+      next();
+    }
+  } else {                            // if CORS not configured then allow all
+    next();
+  }
+});
+
+// View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -21,26 +40,29 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('indexFolder'))
 
-app.use('/login', indexRouter);
+// Define routes
+app.use('/', indexRouter);
+app.use('/login', loginRouter);
 app.use('/data', dataRouter);
+app.use('/comments', commentsRouter);
+app.use('/CORS', CORSRouter);
 
-app.get('*', function(req, res) {
-  res.redirect('/login');
+app.get('*', (req, res) => {
+  res.redirect('/');
 });
 
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
+// Catch 404 and forward to error handler
+app.use((req, res, next) => {
   next(createError(404));
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
+// Error handler
+app.use((err, req, res, next) => {
+  // Set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+  // Render the error page
   res.status(err.status || 500);
   res.render('error');
 });

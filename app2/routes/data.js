@@ -4,18 +4,20 @@ var express = require('express');
 var router = express.Router();
 var pool = require('./db');
 var InputSanitizer = require('./inputsanitizer');
+var UrlSafeHolder = require('./urlSafety');
 
 router.get('/', async function(req, res) {
   let EncryptLv = parseInt((req.query.p || '000').charAt(0));
   let InSafeLv = parseInt((req.query.p || '000').charAt(1));
   let UrlSafe = parseInt((req.query.p || '000').charAt(2));
+  UrlSafeHolder.setCORS(UrlSafe>=2); UrlSafeHolder.setHTTPS(EncryptLv>=2);
   let connection;
   try {
     connection = await pool.getConnection();
 
     let genreId; let itemNum;
     let searchQuery = InputSanitizer.sanitizeString(req.query.s || '', InSafeLv);
-    if (UrlSafe >= 2) {
+    if (UrlSafe >= 1) {
       genreId = parseInt(InputSanitizer.sanitizeString(req.cookies['GenreId'] || '0'), InSafeLv);
       itemNum = parseInt(InputSanitizer.sanitizeString(req.cookies['ItemNum'] || '0'), InSafeLv);
     } else {
@@ -52,7 +54,6 @@ router.get('/', async function(req, res) {
     `;
     const getGenresPromise = connection.execute(getGenre);
     const [genres, fieldsG] = await Promise.race([getGenresPromise, new Promise((resolve, reject) => setTimeout(() => reject(new Error("Query timeout")), 1000))]);
-
       // render the data
     res.render('data', { title: 'Film Table Data', 
       data: movies, genres: genres, genreShown: genreId,

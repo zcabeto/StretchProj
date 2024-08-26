@@ -38,6 +38,12 @@ CREATE TABLE IF NOT EXISTS UsersHashed (
     pass VARCHAR(100)
 );
 
+CREATE TABLE IF NOT EXISTS Comments (
+    commentId INT AUTO_INCREMENT PRIMARY KEY,
+    writer VARCHAR(100),
+    comment VARCHAR(255)
+);
+
 INSERT INTO Users(user, pass) VALUES ("u1", "p1");
 INSERT INTO UsersHashed(user, pass) VALUES ("u1", "f64551fcd6f07823cb87971cfb91446425da18286b3ab1ef935e0cbd7a69f68a");
 
