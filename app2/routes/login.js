@@ -23,7 +23,7 @@ router.get('/', async function(req, res) {
     res.render('login', { title: 'Login Page', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', setUser: LoginProcessor.user || username });
   } else {
     UrlSafeHolder.setCORS(UrlSafeLv>=1);
-    res.render('login', { title: 'Login Page', ACCEPT: false, p: req.query.p || '000', h: req.query.h || '000', setUser: '' });
+    res.render('login', { title: 'Login Page', ACCEPT: LoginProcessor.ACCEPT, p: req.query.p || '000', h: req.query.h || '000', setUser: LoginProcessor.user });
   }
 });
 

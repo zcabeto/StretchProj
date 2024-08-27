@@ -6,7 +6,7 @@ html
       link(rel='stylesheet', href='/stylesheets/style.css')
   body
     .menu
-      h1 #{title} #[button(type="submit" onclick="window.location.href='/login/out'+getQueries()") Log Out]
+      h1 #{title} #[button(type="submit" onclick="window.location.href='/login'+getQueries()") Log In Page]
     nav#side-menu-1
       section#side-content
         .button_bar
@@ -68,8 +68,7 @@ html
       button#side-menu-toggle-2 Defense
       
       <br><br>
-      #[input(type="text" id="writer" placeholder='set name')] #[input(type="text" id="comment" placeholder='leave comment')] 
-      #[button(type="submit" onclick="addComment();") Add Comment]
+      #[input(type="text" id="comment" placeholder='leave comment')] #[button(type="submit" onclick="addComment();") Add Comment]
 
       <br><br><br>
       each row in comments
@@ -113,11 +112,25 @@ html
       };
 
       function addComment() {
-        var writer = encodeURIComponent(document.getElementById("writer").value);
         var comment = encodeURIComponent(document.getElementById("comment").value);
-        if (writer && writer != '' && comment && comment != '') {
-          window.location.href = '/comments'+getQueries()+'&addComment='+writer+'::'+comment;
+        if (getCookie('User') && getCookie('User') != '' && comment && comment != '') {
+          window.location.href = '/comments'+getQueries()+'&c='+comment;
         }
+      }
+      function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
       }
 
       function flip_help(h) {

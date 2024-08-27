@@ -11,14 +11,13 @@ router.get('/', async function(req, res) {
   let InSafeLv = parseInt((req.query.p || '000').charAt(1));
   let UrlSafeLv = parseInt((req.query.p || '000').charAt(2));
   UrlSafeHolder.setCORS(UrlSafeLv>=2); UrlSafeHolder.setHTTPS(EncryptLv>=2);
-  
+
   let connection;
   try {
     connection = await pool.getConnection();
-    if (req.query.addComment) {
-      let commentArr = req.query.addComment.split("::");
-      let name = InputSanitizer.sanitizeString(commentArr[0], InSafeLv);
-      let comment = InputSanitizer.sanitizeString(commentArr[1], InSafeLv);
+    if (req.query.c && req.cookies['User'] && req.cookies['User']!='') {
+      let name = InputSanitizer.sanitizeString(req.cookies['User'], InSafeLv);
+      let comment = InputSanitizer.sanitizeString(req.query.c, InSafeLv);
 
       const timeoutPromise1 = new Promise(resolve => { setTimeout(resolve, 1000); });
       if (InSafeLv >= 2) {
