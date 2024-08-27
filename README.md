@@ -18,10 +18,7 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### TODO Planning
-- 28/08 - show defences on button better. rewrite XSS guide on comments. make space for other guides. menu bar for links.
+- 28/08 - show defences on button better. rewrite XSS guide on comments.
 - 29/08 - writeup index. outline pages for A01 & A02 (crackstation.net) guides. outline pages for Defence pages.
 - 30/08 - writeup Encryption Defence, Input Safety Defence, URL Safety Defence. writeup A01 & A02.
 - 31/08 - add https if i can. add the pictures.
-
-- A02 - Set up a url listener. Writeup A02 monitor urls MitM (log window.location.hrefs) stopped w https (can send can't receive). 
-- A01 - CORS access surrounding files w/o authentication, send urls found in A02 MitM. Writeup as A01. need reconnaissance, run commands somehow?
