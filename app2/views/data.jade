@@ -6,7 +6,17 @@ html
       link(rel='stylesheet', href='/stylesheets/style.css')
   body
     .menu
-      h1 #{title} #[button(type="submit" onclick="window.location.href='/login/out'+getQueries()") Log Out]
+      h1 #{title}
+      .menu-content
+        div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
+          div(style='text-align: center; width: 200px;')
+            button#navigate(type="submit" onclick="window.location.href='/'+getQueries();") Index
+          div(style='text-align: center; width: 200px;')
+            button#navigate(type="submit" onclick="window.location.href='/login'+getQueries();") Log In
+          div(style='text-align: center; width: 200px;')
+            button#navigate(type="submit" onclick="autoLogin();") Data 
+          div(style='text-align: center; width: 200px;')
+            button#navigate(type="submit" onclick="window.location.href='/comments'+getQueries()") Comments
     nav#side-menu-1
       section#side-content
         .button_bar
@@ -155,6 +165,14 @@ html
           window.location.href = '/data'+getQueries()+'&s='+search;
         } else {
           window.location.href = '/data'+getQueries()+'&s='+search+'&i='+item+'&g='+gId;
+        }
+      }
+
+      function autoLogin() {
+        if (UrlSafeLv >= 1) {
+          window.location.href='/data'+getQueries()+'&s=';
+        } else {
+          window.location.href='/data'+getQueries()+'&s=&i=&g=';
         }
       }
 

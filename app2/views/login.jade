@@ -7,7 +7,17 @@ html
       script(src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js")
   body
     .menu
-      h1 #{title} #[button(type="submit" onclick="autoLogin();") See Data] #[button(type="submit" onclick="window.location.href='/comments'+getQueries()") See Comments]
+      h1 #{title}
+      .menu-content
+        div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
+          div(style='text-align: center; width: 200px;')
+            button#navigate(type="submit" onclick="window.location.href='/'+getQueries();") Index
+          div(style='text-align: center; width: 200px;')
+            button#navigate(type="submit" onclick="window.location.href='/login'+getQueries();") Log In
+          div(style='text-align: center; width: 200px;')
+            button#navigate(type="submit" onclick="autoLogin();") Data 
+          div(style='text-align: center; width: 200px;')
+            button#navigate(type="submit" onclick="window.location.href='/comments'+getQueries()") Comments
     nav#side-menu-1
       section#side-content
         .button_bar
@@ -127,8 +137,6 @@ html
       };
 
       function autoLogin() {
-        uCookie = null;
-        refreshProtections();
         if (UrlSafeLv >= 1) {
           window.location.href='/data'+getQueries()+'&s=';
         } else {

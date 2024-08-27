@@ -7,6 +7,16 @@ html
   body
     .menu
       h1= title
+      .menu-content
+        div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
+          div(style='text-align: center; width: 200px;')
+            button#navigate(type="submit" onclick="window.location.href='/'+getQueries();") Index
+          div(style='text-align: center; width: 200px;')
+            button#navigate(type="submit" onclick="window.location.href='/login'+getQueries();") Log In
+          div(style='text-align: center; width: 200px;')
+            button#navigate(type="submit" onclick="autoLogin();") Data 
+          div(style='text-align: center; width: 200px;')
+            button#navigate(type="submit" onclick="window.location.href='/comments'+getQueries()") Comments    
     nav#side-menu-1
       section#side-content
         p Here is the side bar content
@@ -46,7 +56,7 @@ html
           div URL Safety Level
         div
   
-      p THIS IS THE INDEX PAGE #[button(type="submit" onclick="enterSite();") Go to Site]
+      p THIS IS THE INDEX PAGE
     script.
       window.onload = function() {
         help = 0;
@@ -55,9 +65,13 @@ html
         UrlSafeLv = parseInt(#{p.charAt(2)});
         refreshProtections();
       };
-      
-      function enterSite() {
-        window.location.href='/login'+getQueries();
+
+      function autoLogin() {
+        if (UrlSafeLv >= 1) {
+          window.location.href='/data'+getQueries()+'&s=';
+        } else {
+          window.location.href='/data'+getQueries()+'&s=&i=&g=';
+        }
       }
       function flip_help(h) {
         if (help == 0 || help != h){
