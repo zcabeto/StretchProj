@@ -20,11 +20,11 @@ html
     nav#side-menu-1
       section#side-content
         p Here is the side bar content
-    
+    <br>
     section#main-content
       div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
-        div: button#side-menu-toggle-1 HELP
-        div(style='text-align: center; width: 100px;')
+        div: button#side-menu-toggle-1 Attack
+        div(style='text-align: center; width: 150px;')
           label.switch
             if p.charAt(0)=='0'
               input(type="range" min="0" max="2" step="1" value="0" class="slider" onchange="setEncryption(this.value);")
@@ -32,9 +32,8 @@ html
               input(type="range" min="0" max="2" step="1" value="1" class="slider" onchange="setEncryption(this.value);")
             else 
               input(type="range" min="0" max="2" step="1" value="2" class="slider" onchange="setEncryption(this.value);")
-            span.slider.round
-          div Encryption Level
-        div(style='text-align: center; width: 100px;')
+            span.slider.round Encryption
+        div(style='text-align: center; width: 150px;')
           label.switch
             if p.charAt(1)=='0'
               input(type="range" min="0" max="2" step="1" value="0" class="slider" onchange="setInputSafety(this.value);")
@@ -42,9 +41,8 @@ html
               input(type="range" min="0" max="2" step="1" value="1" class="slider" onchange="setInputSafety(this.value);")
             else 
               input(type="range" min="0" max="2" step="1" value="2" class="slider" onchange="setInputSafety(this.value);")
-            span.slider.round
-          div Input Safety Level
-        div(style='text-align: center; width: 100px;')
+            span.slider.round Input Safety
+        div(style='text-align: center; width: 150px;')
           label.switch
             if p.charAt(2)=='0'
               input(type="range" min="0" max="2" step="1" value="0" class="slider" onchange="setUrlLv(this.value);")
@@ -52,8 +50,7 @@ html
               input(type="range" min="0" max="2" step="1" value="1" class="slider" onchange="setUrlLv(this.value);")
             else 
               input(type="range" min="0" max="2" step="1" value="2" class="slider" onchange="setUrlLv(this.value);")
-            span.slider.round
-          div URL Safety Level
+            span.slider.round Referal Safety
         div
   
       p THIS IS THE INDEX PAGE

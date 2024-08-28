@@ -26,6 +26,8 @@ html
             .dropdown-content
               #[button(type="submit" onclick="swapGuide(1, 0);") SQL Injection]
               #[button(type="submit" onclick="swapGuide(2, 0);") Cross-Site Scripting]
+              #[button(type="submit" onclick="swapGuide(3, 0);") Network Sniffing]
+              #[button(type="submit" onclick="swapGuide(4, 0);") Cross-Origin Request]
           section#prev-button-atk #[button(type="submit" onclick="swapGuide(-1, -1);") Prev Page]
           section#next-button-atk #[button(type="submit" onclick="swapGuide(-1, 1);") Next Page]
         p#attack-content Choose a potential Attack to get started.
@@ -35,17 +37,17 @@ html
           .dropdown 
             .dropdown-header(onclick='toggleDropdown(this)') Choose Defense
             .dropdown-content
-              #[button(type="submit" onclick="swapGuide(1, 0);") Data Hashing]
-              #[button(type="submit" onclick="swapGuide(2, 0);") Input Sanitisation]
-              #[button(type="submit" onclick="swapGuide(3, 0);") Input Encoding]
+              #[button(type="submit" onclick="swapGuide(1, 0);") Encryption]
+              #[button(type="submit" onclick="swapGuide(2, 0);") Input Safety]
+              #[button(type="submit" onclick="swapGuide(3, 0);") Referal Safety]
           section#prev-button-def #[button(type="submit" onclick="swapGuide(-1, -1);") Prev Page]
           section#next-button-def #[button(type="submit" onclick="swapGuide(-1, 1);") Next Page]
         p#defence-content Choose a Defensive Method to get started.
-    
+    <br>
     section#main-content
       div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
         div: button#side-menu-toggle-1 Attack
-        div(style='text-align: center; width: 100px;')
+        div(style='text-align: center; width: 150px;')
           label.switch
             if p.charAt(0)=='0'
               input(type="range" min="0" max="2" step="1" value="0" class="slider" onchange="setEncryption(this.value);")
@@ -53,9 +55,8 @@ html
               input(type="range" min="0" max="2" step="1" value="1" class="slider" onchange="setEncryption(this.value);")
             else 
               input(type="range" min="0" max="2" step="1" value="2" class="slider" onchange="setEncryption(this.value);")
-            span.slider.round
-          div Encryption Level
-        div(style='text-align: center; width: 100px;')
+            span.slider.round Encryption
+        div(style='text-align: center; width: 150px;')
           label.switch
             if p.charAt(1)=='0'
               input(type="range" min="0" max="2" step="1" value="0" class="slider" onchange="setInputSafety(this.value);")
@@ -63,9 +64,8 @@ html
               input(type="range" min="0" max="2" step="1" value="1" class="slider" onchange="setInputSafety(this.value);")
             else 
               input(type="range" min="0" max="2" step="1" value="2" class="slider" onchange="setInputSafety(this.value);")
-            span.slider.round
-          div Input Safety Level
-        div(style='text-align: center; width: 100px;')
+            span.slider.round Input Safety
+        div(style='text-align: center; width: 150px;')
           label.switch
             if p.charAt(2)=='0'
               input(type="range" min="0" max="2" step="1" value="0" class="slider" onchange="setUrlLv(this.value);")
@@ -73,8 +73,7 @@ html
               input(type="range" min="0" max="2" step="1" value="1" class="slider" onchange="setUrlLv(this.value);")
             else 
               input(type="range" min="0" max="2" step="1" value="2" class="slider" onchange="setUrlLv(this.value);")
-            span.slider.round
-          div URL Safety Level
+            span.slider.round Referal Safety
         div
       button#side-menu-toggle-2 Defense 
       p Please Log In:
@@ -315,6 +314,42 @@ html
               document.getElementById("next-button-atk").style.display = 'none';
               content.innerHTML = '-->Cross-Site Scripting (XSS) 3<br><br>By setting up their own website that listens to the received cookies, an attacker will be given this data. Distribute this to all users at the same time? <br><br>This clearly has some large implications for a wide user base with just a single simple input. It is therefore of great importance that this is protected against, and can be done with ease with some basic input safety such as via sanitisation or encoding.';
             } 
+          } else if (module == 3) {
+            if (page == 0) {
+              document.getElementById("prev-button-atk").style.display = 'none';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->Network Sniffing 0<br><br>';
+            } else if (page == 1) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->Network Sniffing 1<br><br>';
+            } else if (page == 2) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->Network Sniffing 2<br><br>';
+            }  else if (page == 3) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'none';
+              content.innerHTML = '-->Network Sniffing 3<br><br>';
+            } 
+          } else if (module == 4) {
+            if (page == 0) {
+              document.getElementById("prev-button-atk").style.display = 'none';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->Cross-Origin Referencing 0<br><br>';
+            } else if (page == 1) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->Cross-Origin Referencing 1<br><br>';
+            } else if (page == 2) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->Cross-Origin Referencing 2<br><br>';
+            }  else if (page == 3) {
+              document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'none';
+              content.innerHTML = '-->Cross-Origin Referencing 3<br><br>';
+            } 
           }
         } else if (help == 2) {
           let content = document.getElementById("defence-content");
@@ -326,47 +361,31 @@ html
             if (page == 0) {
               document.getElementById("prev-button-def").style.display = 'none';
               document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Data Hashing 0<br><br>When we set up defences on our website, we do so in order to keep our data safe from reach to view, change or delete, but we can never be comprehensive. We can never reach a point of 100% security and therefore we must ask the question - what if our data is acquired? We need to ensure the data, if reached, is not usable - this generally comes through the last line of defence of encrypting information. <br><br>We saw in the SQL Injection tutorial that it is possible to retrieve the user-base and print it to screen. If this happens we can login with someone else’s data, however when we had Data Hashing turned on we instead retrieved much more obscure information. The user information could not be directly read and used as usernames and passwords could not be discerned. The aim, of course, is for this encrypted data to be as unusable as possible - different methods have varying levels of success…';
+              content.innerHTML = '-->Encryption - Hashing<br><br>';
             } else if (page == 1) {
               document.getElementById("prev-button-def").style.display = 'block';
-              document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Data Hashing 1<br><br>';
-            } else if (page == 2) {
-              document.getElementById("prev-button-def").style.display = 'block';
               document.getElementById("next-button-def").style.display = 'none';
-              content.innerHTML = '-->Data Hashing 2<br><br>';
+              content.innerHTML = '-->Encryption - HTTPS<br><br>';
             }
           } else if (module == 2) {
             if (page == 0) {
               document.getElementById("prev-button-def").style.display = 'none';
               document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Input Sanitisation 0<br><br>Injection techniques can wreak havoc on a system and its data, retrieving things that should not be seen or touched, or assuming capabilities beyond what we designed our website to do. Nevertheless, in many cases there is a simple solution of managing the input more closely and blocking such attempted behaviour. This comes in a few forms. <br><br>First we reduce the amount of ways to enter data to a minimum, replacing potentially vulnerable text inputs with buttons, drop-downs and switches where possible. The step after this is managing the data that is inputted with input sanitisation, where we scrutinise and analyse inputted text to only use it if it is deemed safe.<br><br>The best way for this to work is to have a function or class that handles such things separately, which we can call upon to check a string before using it for a task. This class would be an Input Sanitiser.';
+              content.innerHTML = '-->Input Safety - Sanitisation<br><br>';
             } else if (page == 1) {
               document.getElementById("prev-button-def").style.display = 'block';
-              document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Input Sanitisation 1<br><br>';
-            } else if (page == 2) {
-              document.getElementById("prev-button-def").style.display = 'block';
-              document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Input Sanitisation 2<br><br>';
-            } else if (page == 3) {
-              document.getElementById("prev-button-def").style.display = 'block';
               document.getElementById("next-button-def").style.display = 'none';
-              content.innerHTML = '-->Input Sanitisation 3<br><br>';
+              content.innerHTML = '-->Input Safety - Encoding<br><br>';
             }
           } else if (module == 3) {
             if (page == 0) {
               document.getElementById("prev-button-def").style.display = 'none';
               document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Input Encoding 0<br><br>In the Attack: XSS section you may have seen how inputs can act differently when embedded in tags, particularly scripts. This is because of the formatting of HTML that means these tags allow entered text to act in a particular way, rather than exist as simple plaintext. The difference between the two are that specific characters have specific meanings. These different uses can be rendered meaningless if we force the text to be interpreted as a raw string, and the process which can do this is Encoding.<br><br>Character Encoding assigns an input into specific codes that must be individually and independently interpreted as regular characters. Using this means if someone were to input some XSS, it will be read and used as is without running any code. Try inputting that as a search query on /data with Input Encoding on to try this out.';
+              content.innerHTML = '-->Referal Safety - Limiting URLs<br><br>';
             } else if (page == 1) {
               document.getElementById("prev-button-def").style.display = 'block';
-              document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Input Encoding 1<br><br>';
-            } else if (page == 2) {
-              document.getElementById("prev-button-def").style.display = 'block';
               document.getElementById("next-button-def").style.display = 'none';
-              content.innerHTML = '-->Input Encoding 2<br><br>';
+              content.innerHTML = '-->Referal Safety - CORS<br><br>';
             }
           }
         }
