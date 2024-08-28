@@ -18,7 +18,6 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### TODO Planning
-- 28/08 - rewrite XSS guide on comments.
-- 29/08 - writeup index. outline pages for A01 & A02 (crackstation.net) guides. outline pages for Defence pages.
+- 29/08 - writeup index. rewrite XSS guide on comments.
 - 30/08 - writeup Encryption Defence, Input Safety Defence, URL Safety Defence. writeup A01 & A02.
 - 31/08 - add https if i can. add the pictures.
