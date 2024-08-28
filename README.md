@@ -18,6 +18,5 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - ./run.sh
 
 ### TODO Planning
-- 29/08 - writeup index. rewrite XSS guide on comments.
-- 30/08 - writeup Encryption Defence, Input Safety Defence, URL Safety Defence. writeup A01 & A02.
-- 31/08 - add https if i can. add the pictures. rebuild database.
+- necessary - writeup index. rewrite XSS guide on comments. writeup A01 & A02 attacks. writeup Encryption Defence, Input Safety Defence, URL Safety Defence.
+- extra - add https if possible. add the pictures. rebuild database.
