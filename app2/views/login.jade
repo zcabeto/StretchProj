@@ -22,26 +22,26 @@ html
       section#side-content
         .button_bar
           .dropdown 
-            .dropdown-header(onclick='toggleDropdown(this)') Choose Attack
+            .dropdown-header(onclick='toggleDropdown(this)') Attack ▼
             .dropdown-content
               #[button(type="submit" onclick="swapGuide(1, 0);") SQL Injection]
               #[button(type="submit" onclick="swapGuide(2, 0);") Cross-Site Scripting]
               #[button(type="submit" onclick="swapGuide(3, 0);") Network Sniffing]
               #[button(type="submit" onclick="swapGuide(4, 0);") Cross-Origin Request]
-          section#prev-button-atk #[button(type="submit" onclick="swapGuide(-1, -1);") Prev Page]
-          section#next-button-atk #[button(type="submit" onclick="swapGuide(-1, 1);") Next Page]
+          section#prev-button-atk #[button(type="submit" onclick="swapGuide(-1, -1);") Prev]
+          section#next-button-atk #[button(type="submit" onclick="swapGuide(-1, 1);") Next]
         p#attack-content Choose a potential Attack to get started.
     nav#side-menu-2
       section#side-content
         .button_bar
           .dropdown 
-            .dropdown-header(onclick='toggleDropdown(this)') Choose Defense
+            .dropdown-header(onclick='toggleDropdown(this)') Defence ▼
             .dropdown-content
               #[button(type="submit" onclick="swapGuide(1, 0);") Encryption]
               #[button(type="submit" onclick="swapGuide(2, 0);") Input Safety]
               #[button(type="submit" onclick="swapGuide(3, 0);") Referal Safety]
-          section#prev-button-def #[button(type="submit" onclick="swapGuide(-1, -1);") Prev Page]
-          section#next-button-def #[button(type="submit" onclick="swapGuide(-1, 1);") Next Page]
+          section#prev-button-def #[button(type="submit" onclick="swapGuide(-1, -1);") Prev]
+          section#next-button-def #[button(type="submit" onclick="swapGuide(-1, 1);") Next]
         p#defence-content Choose a Defensive Method to get started.
     <br>
     section#main-content
@@ -264,7 +264,7 @@ html
             } else if (page == 1) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = "-->SQL Injection 1<br><br>In order to do SQL Injection, a website has to be specifically vulnerable and cannot do Input Sanitisation or Input Encoding (go check out their sections in Defence for why). On this step, we are going to be testing the website to see if it is vulnerable to an attack.<br><br>Recall that the entered username and password are placed into a SQL query, in particular if you entered Jane then the SQL Query would ask if user='Jane'. Note that Jane is put into <u>quotation marks</u> - this will always be the case in an SQL Query.<br><br>This begs the question - if we entered our own quotation mark ('), what would occur, as the query would now include user='''? As it happens, if there are protections like Input Sanitisation then nothing will happen, but if there are not then we will receive an error!! Try it out, turning on and off Sanitisation, to prove this.";
+              content.innerHTML = "-->SQL Injection 1<br><br>In order to do SQL Injection, a website has to be specifically vulnerable and cannot do Input Sanitisation or Input Encoding (go check out their sections in Defence for why). On this step, we are going to be testing the website to see if it is vulnerable to an attack.<br><br>Recall that the entered username and password are placed into a SQL query, in particular if you entered Jane then the SQL Query would ask if user='Jane'. Note that Jane is put into <u>quotation marks</u> - this will always be the case in an SQL Query.<br><br>This begs the question - if we entered our own quotation mark ('), what would occur, as the query would now include user=' ' '? As it happens, if there are protections like Input Sanitisation then nothing will happen, but if there are not then we will receive an error!! Try it out, turning on and off Sanitisation, to prove this.";
             } else if (page == 2) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
@@ -298,10 +298,12 @@ html
             if (page == 0) {
               document.getElementById("prev-button-atk").style.display = 'none';
               document.getElementById("next-button-atk").style.display = 'block';
+              // mention not possible if sanitised or encoded.
               content.innerHTML = '-->Cross-Site Scripting (XSS) 0<br><button type="submit" onclick="window.location.href=`/CORS`">CORS Site</button><br>Website frontend pages have their data rendered using HTML. This allows formatting of text, tables and photos, however it cannot run code - instead HTML uses script tags to embed javascript to execute. For example, the /login page can use embedded code to hash the inputted password for more safe sending. <br><br>An attacker can take advantage of this isolated script environments in order to add their own code. Doing so is called Cross-Site Scripting, or XSS for short. With this, one can steal valuable data from users by injecting malicious code for them to run.<br><br>For this exercise, certain data will be changed, for which you need to relocate to /login/out to undo each step before moving on.';
             } else if (page == 1) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
+              // post on place to be accessed by all to stay there permanently
               document.getElementById("textToCopy").value = decodeURIComponent('%3Cscript%3Ealert("helloworld")%3C/script%3E');
               content.innerHTML = '-->Cross-Site Scripting (XSS) 1<br><br>First we need to know if a website is XSS exploitable. This technique can only work on websites that do not employ some basic defences, such as <u>Input Encoding</u> which you can read more about in its respective Defence section. To verify this, try entering the following text to either page with Encoding on and off. <br><br> &lt;script&gt;alert("helloworld")&lt;/script&gt; <button onclick="copyElementToClipboard()">Copy text</button> <br><br>How this works is that our input is assigned to a variable as normal, which the website attempts to reprint back to us. However, as our text uses the script tags, in trying to print it instead runs the inputted code. In this case, a pop-up is shown. <br><br>Now we know, with Encoding off, we can inject code that the website is forced to run.';
             } else if (page == 2) {
@@ -312,43 +314,48 @@ html
             }  else if (page == 3) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'none';
+              // mention not possible if sanitised or encoded again.
               content.innerHTML = '-->Cross-Site Scripting (XSS) 3<br><br>By setting up their own website that listens to the received cookies, an attacker will be given this data. Distribute this to all users at the same time? <br><br>This clearly has some large implications for a wide user base with just a single simple input. It is therefore of great importance that this is protected against, and can be done with ease with some basic input safety such as via sanitisation or encoding.';
             } 
           } else if (module == 3) {
             if (page == 0) {
               document.getElementById("prev-button-atk").style.display = 'none';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Network Sniffing 0<br><br>';
+              content.innerHTML = '-->Network Sniffing 0<br><br>take a look at the site and what things are transmitted in the url, for example username & password organised as such';
             } else if (page == 1) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Network Sniffing 1<br><br>';
+              content.innerHTML = '-->Network Sniffing 1<br><br>find a network accessing data, get on and listen to network traffic. If https off can read clearly on NetSniff page - try a few with different settings (u1/p1).';
             } else if (page == 2) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Network Sniffing 2<br><br>';
+              content.innerHTML = '-->Network Sniffing 2<br><br>plaintext read to enter data immediately, thats why need to hash';
             }  else if (page == 3) {
               document.getElementById("prev-button-atk").style.display = 'block';
+              document.getElementById("next-button-atk").style.display = 'block';
+              content.innerHTML = '-->Network Sniffing 3<br><br>if hashed can try cracking using https://emn178.github.io/online-tools/sha256.html to hash, crackstation.net to crack. need strong password';
+            } else if (page == 4) {
+              document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'none';
-              content.innerHTML = '-->Network Sniffing 3<br><br>';
+              content.innerHTML = '-->Network Sniffing 4<br><br>even if hashed, can pass-the-hash if it is in the url and requires no else, fixed with Referal Safety';
             } 
           } else if (module == 4) {
             if (page == 0) {
               document.getElementById("prev-button-atk").style.display = 'none';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Cross-Origin Referencing 0<br><br>';
+              content.innerHTML = '-->Cross-Origin Referencing 0<br><br>try out commenting and note it only works if logged in (u1/p1). This privilege is only for users and is casted specifically to them.';
             } else if (page == 1) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Cross-Origin Referencing 1<br><br>';
+              content.innerHTML = '-->Cross-Origin Referencing 1<br><br>log in and then comment, noting the url. Repost it and it occurs again. this is because of cookie storage.';
             } else if (page == 2) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Cross-Origin Referencing 2<br><br>';
+              content.innerHTML = '-->Cross-Origin Referencing 2<br><br>create a website that links - look at CORS & check source code that does this link. Try clicking button when logged in or not (u1/p1) as before. ';
             }  else if (page == 3) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'none';
-              content.innerHTML = '-->Cross-Origin Referencing 3<br><br>';
+              content.innerHTML = '-->Cross-Origin Referencing 3<br><br>configure origins such that this link can only be made from accepted pages, not externally for example. Try running with CORS configured to get error.';
             } 
           }
         } else if (help == 2) {
@@ -356,36 +363,64 @@ html
           if (module == 0) {
             document.getElementById("prev-button-def").style.display = 'none';
             document.getElementById("next-button-def").style.display = 'none';
-            content.innerHTML = 'Choose a Defensive Method to get started.';
+            content.innerHTML = 'Choose a Defensive Method to get started.<br><br>The following are the possible defences:<br><br>Encryption<br>>> 1. Hashing<br>>> 2. HTTPS<br><br>Input Safety<br>>> 1. Sanitisation<br>>> 2. Encoding<br><br>Referal Safety<br>>> 1. Limited URLs<br>>> 2. Configured CORS';
           } else if (module == 1) {
             if (page == 0) {
               document.getElementById("prev-button-def").style.display = 'none';
               document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Encryption - Hashing<br><br>';
+              content.innerHTML = '-->Encryption<br><br>need to encrypt to keep safe. read plaintext vs ciphertext, confidentiality. Do before sending.';
             } else if (page == 1) {
               document.getElementById("prev-button-def").style.display = 'block';
+              document.getElementById("next-button-def").style.display = 'block';
+              content.innerHTML = '-->Encryption - Hashing 1<br><br>encryption vs hash - how to store keys? need to decrypt?';
+            } else if (page == 2) {
+              document.getElementById("prev-button-def").style.display = 'block';
+              document.getElementById("next-button-def").style.display = 'block';
+              content.innerHTML = '-->Encryption - Hashing 2<br><br>brute forcing and good passwords - https://emn178.github.io/online-tools/sha256.html to hash, crackstation.net to crack';
+            } else if (page == 3) {
+              document.getElementById("prev-button-def").style.display = 'block';
               document.getElementById("next-button-def").style.display = 'none';
-              content.innerHTML = '-->Encryption - HTTPS<br><br>';
+              content.innerHTML = '-->Encryption - HTTPS<br><br> ?? ';
             }
           } else if (module == 2) {
             if (page == 0) {
               document.getElementById("prev-button-def").style.display = 'none';
               document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Input Safety - Sanitisation<br><br>';
+              content.innerHTML = '-->Input Safety<br><br>saw in XSS & SQLI people can input strings that lead to alternative action. Need inputted text to remain as just text. Limit text sent using buttons (more in referal safety) but need some text input still';
             } else if (page == 1) {
               document.getElementById("prev-button-def").style.display = 'block';
+              document.getElementById("next-button-def").style.display = 'block';
+              content.innerHTML = '-->Input Safety - Sanitsation 1<br><br>there are illegal characters such as arrows for scripts, quotation marks for text escaping, slashes for file movement. Sanitisation identifies and gets rid of them.';
+            } else if (page == 2) {
+              document.getElementById("prev-button-def").style.display = 'block';
+              document.getElementById("next-button-def").style.display = 'block';
+              content.innerHTML = '-->Input Safety - Sanitsation 2<br><br>nuance to which ones we get rid of. could also get rid of bad words but that limits use (e.g. face/)';
+            } else if (page == 3) {
+              document.getElementById("prev-button-def").style.display = 'block';
+              document.getElementById("next-button-def").style.display = 'block';
+              content.innerHTML = '-->Input Safety - Encoding 1<br><br>instead of getting rid of them, we can upgrade our methods and allow all to be parsed in with encoding. force it to be text only.';
+            } else if (page == 4) {
+              document.getElementById("prev-button-def").style.display = 'block';
               document.getElementById("next-button-def").style.display = 'none';
-              content.innerHTML = '-->Input Safety - Encoding<br><br>';
+              content.innerHTML = '-->Input Safety - Encoding 2<br><br>different encoding for different objectives. HTML stop scripts running, MySql allows safe string input w/o SQLI, URL returns params safely';
             }
           } else if (module == 3) {
             if (page == 0) {
               document.getElementById("prev-button-def").style.display = 'none';
               document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Referal Safety - Limiting URLs<br><br>';
+              content.innerHTML = '-->Referal Safety - Limiting URLs 1<br><br>when navigating, information about our use sent to backend. Multiple ways to do this, if in URL can be manually changed. extra way to input SQLI or XSS';
             } else if (page == 1) {
               document.getElementById("prev-button-def").style.display = 'block';
+              document.getElementById("next-button-def").style.display = 'block';
+              content.innerHTML = '-->Referal Safety - Limiting URLs 2<br><br>other ways to send data instead. store and sending with cookies.';
+            } else if (page == 2) {
+              document.getElementById("prev-button-def").style.display = 'block';
+              document.getElementById("next-button-def").style.display = 'block';
+              content.innerHTML = '-->Referal Safety - CORS 1<br><br>cookies stored often for sessions. storage of them locally can be taken advantage for attacks like shown that reach into the used session. stop this with configured CORS';
+            } else if (page == 3) {
+              document.getElementById("prev-button-def").style.display = 'block';
               document.getElementById("next-button-def").style.display = 'none';
-              content.innerHTML = '-->Referal Safety - CORS<br><br>';
+              content.innerHTML = '-->Referal Safety - CORS 2<br><br>origin header access control allow only certain hosts to make requests. easy to set up by checking referer and having allowlist of safe hosts or blocklist of known attackers.';
             }
           }
         }
