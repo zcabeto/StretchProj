@@ -7,10 +7,10 @@ Defenses Include
 - URL Safety (pass all data -> limited url -> restrict CORS)
 
 Attacks Include
-- A01: CORS illegal access (comment as user w/o reauthentication)
-- A02: Network Sniffing (see, crack, pass-the-hash if in url)
+- A01: CORS illegal access
+- A02: Network Sniffing
 - A03: SQL Injection
-- A03: Cross-Site Scripting (XSS)
+- A03: Cross-Site Scripting
 
 ### SETUP AND RUN INSTRUCTIONS
 If one wishes to run this locally to their own device, from the root folder (where this README.md lies) run with the following commands. View from http://localhost:3000.
