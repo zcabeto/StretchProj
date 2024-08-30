@@ -19,4 +19,4 @@ If one wishes to run this locally to their own device, from the root folder (whe
 
 ### TODO Planning
 - necessary - writeup index. rewrite XSS guide on comments. writeup A01 & A02 attacks. writeup Encryption Defence, Input Safety Defence, URL Safety Defence.
-- extra - add https if possible. add the pictures. rebuild database. log out button.
+- extra - add https if possible. add the pictures. rebuild database. log out button. delete comment button.
