@@ -82,9 +82,9 @@ html
       if setUser != null && setUser != 'null' && setUser != ''
         if ACCEPT
           if p.charAt(1) != '2' && setUser
-            p SUCCESSFULLY LOGGED IN AS !{setUser}.
+            p SUCCESSFULLY LOGGED IN AS !{setUser}. #[button(type="submit" onclick="logout();") Log Out]
           else 
-            p SUCCESSFULLY LOGGED IN AS #{setUser}.
+            p SUCCESSFULLY LOGGED IN AS #{setUser}. #[button(type="submit" onclick="logout();") Log Out]
         else
           if p.charAt(1) != '2' && setUser
             p ATTEMPTED TO LOG IN AS !{setUser}. FAILED
