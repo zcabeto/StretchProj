@@ -16,11 +16,11 @@ class LoginProcessor {
             let getUsers; let users; let fields;
             if (isEncoded) {
                 getUsers = `SELECT * FROM Users WHERE user=? AND pass=? LIMIT 1;`;
-                if (isHashed) { getMovies = getMovies.replace('Users', 'UsersHashed'); }
+                if (isHashed) { getUsers = getUsers.replace('Users', 'UsersHashed'); }
                 [users, fields] = await connection.execute(getUsers, [`${username}`, `${password}`]);
             } else {
                 getUsers = `SELECT * FROM Users WHERE user='${username}' AND pass='${password}' LIMIT 1;`;
-                if (isHashed) { getMovies = getMovies.replace('Users', 'UsersHashed'); }
+                if (isHashed) { getUsers = getUsers.replace('Users', 'UsersHashed'); }
                 [users, fields] = await connection.execute(getUsers);
             }
             if (users.length > 0) {
