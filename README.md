@@ -16,7 +16,3 @@ Attacks Include
 If one wishes to run this locally to their own device, from the root folder (where this README.md lies) run with the following commands. View from http://localhost:3000.
 - chmod +x run.sh
 - ./run.sh
-
-### TODO Planning
-- necessary - writeup index.
-- extra - add the pictures. rebuild database.
