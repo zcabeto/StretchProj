@@ -17,8 +17,14 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - chmod +x run.sh
 - ./run.sh
 
-![plot] (https://github.com/zcabeto/StretchProj/blob/main/pictures/login-page.png)
-https://github.com/zcabeto/StretchProj/blob/main/pictures/data-page.png
-https://github.com/zcabeto/StretchProj/blob/main/pictures/com-page.png
-https://github.com/zcabeto/StretchProj/blob/main/pictures/SQLI.png
-https://github.com/zcabeto/StretchProj/blob/main/pictures/encoding.png
+### Screenshots
+#### Login Page
+![Login Page](https://github.com/zcabeto/StretchProj/blob/main/pictures/login-page.png)
+#### Data Page
+![Data Page](https://github.com/zcabeto/StretchProj/blob/main/pictures/data-page.png)
+#### Communication Page
+![Communication Page](https://github.com/zcabeto/StretchProj/blob/main/pictures/com-page.png)
+#### SQL Injection
+![SQL Injection](https://github.com/zcabeto/StretchProj/blob/main/pictures/SQLI.png)
+#### Data Encoding
+![Data Encoding](https://github.com/zcabeto/StretchProj/blob/main/pictures/encoding.png)
