@@ -82,9 +82,9 @@ html
       <br><br><br>
       each row in comments
         if p.charAt(1) == '2'
-          p Name: #{row.writer} <br> Comment: #{row.comment} <br><br>
+          p Name: #{row.writer} #[button(type="submit" onclick="deleteComment("+row.commentId+");") Delete] <br> Comment: #{row.comment} <br><br>
         else
-          p Name: !{row.writer} <br> Comment: !{row.comment} <br><br>
+          p Name: !{row.writer} #[button(type="submit" onclick="deleteComment("+row.commentId+");") Delete] <br> Comment: !{row.comment} <br><br>
 
     <input type="hidden" value="Default Text" id="textToCopy">
     script.
@@ -125,6 +125,9 @@ html
         if (getCookie('User') && getCookie('User') != '' && comment && comment != '') {
           window.location.href = '/comments'+getQueries()+'&c='+comment;
         }
+      }
+      function deleteComment(commentId) {
+        window.location.href = '/comments'+getQueries()+'&d='+commentId;
       }
       function getCookie(cname) {
         let name = cname + "=";

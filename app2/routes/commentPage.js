@@ -28,6 +28,19 @@ router.get('/', async function(req, res) {
         await Promise.race([connection.execute(setComment), timeoutPromise1]);
       }
     }
+    if (req.query.d && req.cookies['User'] && req.cookies['User']!='') {
+      let user = InputSanitizer.sanitizeString(req.cookies['User'], InSafeLv);
+      let commentId = InputSanitizer.sanitizeString(req.query.d, InSafeLv);
+
+      const timeoutPromise1 = new Promise(resolve => { setTimeout(resolve, 1000); });
+      if (InSafeLv >= 2) {
+        let deleteComment = `DELETE FROM Comments WHERE commentId=? AND writer=?;`;
+        await Promise.race([connection.execute(deleteComment, [`${commentId}`, `${user}`]), timeoutPromise1]);
+      } else {
+        let deleteComment = `DELETE FROM Comments WHERE commentId='${commentId}' AND writer='${user}';`;
+        await Promise.race([connection.execute(deleteComment), timeoutPromise1]);
+      }
+    }
 
     const timeoutPromise2 = new Promise(resolve => { setTimeout(resolve, 1000); });
     let getComments = `SELECT * FROM Comments LIMIT 20;`;
