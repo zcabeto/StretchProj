@@ -18,12 +18,12 @@ var NetListenHandler = require('./routes/urlListPage')(urlLog);
 
 var app = express();
 
-const disallowedReferrers = ['http://localhost:3000/CORS'];
+const disallowedReferrers = ['/CORS'];
 
 app.use((req, res, next) => {
   if (UrlSaftyHandler.configCORS) {   // if CORS configured then check referer
     const referer = req.get('Referer');
-    if (referer && !disallowedReferrers.some(disallowed => !referer.startsWith(disallowed))) {
+    if (referer && !disallowedReferrers.some(disallowed => !referer.includes(disallowed))) {
       res.status(403).send('ERROR 403: Access Forbidden');
     } else {
       next();
