@@ -4,4 +4,25 @@ html
     title= title
   body
     <h1>External Page w/CORS Button</h1>
-    <button class="button" onclick="window.location.href=`http://localhost:3000/comments?c=You%20got%20hacked!!`;">Go to Site</button>
+    <button class="button" onclick="window.location.href=`http://localhost:3000/comments?c=You%20got%20hacked!!` + getQueries();">Go to Site</button>
+    script.
+      window.onload = function() {
+        help = parseInt(#{h.charAt(0)});
+        module = parseInt(#{h.charAt(1)});
+        page = parseInt(#{h.charAt(2)});
+        if (module == 0) { page = 0; }
+        EncryptLv = parseInt(#{p.charAt(0)});
+        InSafeLv = parseInt(#{p.charAt(1)});
+        UrlSafeLv = parseInt(#{p.charAt(2)});
+        refreshProtections();
+      }
+      
+      function refreshProtections() {
+        document.cookie = 'HelpOn=' + help.toString() + module.toString() + page.toString() + '; path=/';
+        document.cookie = 'Protections=' + EncryptLv.toString() + InSafeLv.toString() + UrlSafeLv.toString() + '; path=/';
+        document.cookie = 'GenreId=0; path=/';
+        document.cookie = 'ItemNum=0; path=/';
+      }
+      function getQueries() {
+        return '?p=' + EncryptLv.toString() + InSafeLv.toString() + UrlSafeLv.toString() + '&h=' + help.toString() + module.toString() + page.toString();
+      }
