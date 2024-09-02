@@ -217,7 +217,7 @@ input:checked + .slider:before {
   left: -300px;
   top: 0;
   bottom: 0;
-  background-color: #333;
+  background-color: rgb(70, 70, 70);
   overflow-x: hidden;
   color: white;
   padding: 10px;
@@ -229,7 +229,7 @@ input:checked + .slider:before {
   left: -300px;
   top: 0;
   bottom: 0;
-  background-color: #333;
+  background-color: rgb(70, 70, 70);
   overflow-x: hidden;
   color: white;
   padding: 10px;

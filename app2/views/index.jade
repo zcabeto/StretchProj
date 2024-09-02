@@ -86,6 +86,7 @@ html
       p
       p 
       p If any breakages occur to the data, click #[button#navigate(type="submit" onclick="window.location.href='/rebuild'+getQueries();") here] to rebuild the database.
+    <input type="hidden" value="Default Text" id="textToCopy">
     script.
       window.onload = function() {
         help = parseInt(#{h.charAt(0)});
@@ -126,6 +127,7 @@ html
           window.location.href='/data'+getQueries()+'&s=&i=&g=';
         }
       }
+
       function flip_help(h) {
         if (help == 0 || help != h){
           help = h;
@@ -150,8 +152,6 @@ html
       function refreshProtections() {
         document.cookie = 'HelpOn=' + help.toString() + module.toString() + page.toString() + '; path=/';
         document.cookie = 'Protections=' + EncryptLv.toString() + InSafeLv.toString() + UrlSafeLv.toString() + '; path=/';
-        document.cookie = 'GenreId=0; path=/';
-        document.cookie = 'ItemNum=0; path=/';
       }
       function getQueries() {
         return '?p=' + EncryptLv.toString() + InSafeLv.toString() + UrlSafeLv.toString() + '&h=' + help.toString() + module.toString() + page.toString();
