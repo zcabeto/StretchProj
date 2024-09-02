@@ -1,4 +1,3 @@
-var InputSanitizer = require('./inputsanitizer');
 var pool = require('./db');     // retrieve pool from db.js
 
 class LoginProcessor {

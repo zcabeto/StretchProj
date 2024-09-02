@@ -30,7 +30,7 @@ router.get('/', async function(req, res) {
     }
     if (req.query.d && req.cookies['User'] && req.cookies['User']!='') {
       let user = InputSanitizer.sanitizeString(req.cookies['User'], InSafeLv);
-      let commentId = InputSanitizer.sanitizeString(req.query.d, InSafeLv);
+      let commentId = InputSanitizer.sanitizeString(req.query.d.toString(), InSafeLv);
 
       const timeoutPromise1 = new Promise(resolve => { setTimeout(resolve, 1000); });
       if (InSafeLv >= 2) {

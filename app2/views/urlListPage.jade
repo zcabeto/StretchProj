@@ -29,7 +29,7 @@ html
               #[button(type="submit" onclick="swapGuide(2, 0);") Cross-Site Scripting]
           section#prev-button-atk #[button(type="submit" onclick="swapGuide(-1, -1);") Prev]
           section#next-button-atk #[button(type="submit" onclick="swapGuide(-1, 1);") Next]
-        p#attack-content Choose a potential Attack to get started.<br><br>The following OWASP vulnerabilities are compromised with attacks as listed:<br><br>-- A01 Broken Access-Control is compromised using <u>Cross-Object Access</u> Attack that takes advantage of misconfigured CORS.<br><br>-- A02 Cryptographic Failures is compromised by <u>Network Sniffing</u> for sensitive unencrypted information.<br><br>-- A03 Injection vulnerabilities can be leveraged to do <u>SQL Injection</u> or <u>Cross-Site Scripting (XSS)</u>.
+        p#attack-content Choose a potential Attack to get started.<br><br>The following OWASP vulnerabilities are compromised with attacks as listed:<br><br>-- A01 Broken Access-Control is compromised using <u>Cross-Origin Access</u> Attack that takes advantage of misconfigured CORS.<br><br>-- A02 Cryptographic Failures is compromised by <u>Network Sniffing</u> for sensitive unencrypted information.<br><br>-- A03 Injection vulnerabilities can be leveraged to do <u>SQL Injection</u> or <u>Cross-Site Scripting (XSS)</u>.
     nav#side-menu-2
       section#side-content
         .button_bar
@@ -114,6 +114,13 @@ html
         }
       };
 
+      function autoLogin() {
+        if (UrlSafeLv >= 1) {
+          window.location.href='/data'+getQueries()+'&s=';
+        } else {
+          window.location.href='/data'+getQueries()+'&s=&i=&g=';
+        }
+      }
       function flip_help(h) {
         if (help == 0 || help != h){
           help = h;
@@ -205,7 +212,7 @@ html
           if (module == 0) {
             document.getElementById("prev-button-atk").style.display = 'none';
             document.getElementById("next-button-atk").style.display = 'none';
-            content.innerHTML = 'Choose a potential Attack to get started.<br><br>The following OWASP vulnerabilities are compromised with attacks as listed:<br><br>-- A01 Broken Access-Control is compromised using <u>Cross-Object Access</u> Attack that takes advantage of misconfigured CORS.<br><br>-- A02 Cryptographic Failures is compromised by <u>Network Sniffing</u> for sensitive unencrypted information.<br><br>-- A03 Injection vulnerabilities can be leveraged to do <u>SQL Injection</u> or <u>Cross-Site Scripting (XSS)</u>.';
+            content.innerHTML = 'Choose a potential Attack to get started.<br><br>The following OWASP vulnerabilities are compromised with attacks as listed:<br><br>-- A01 Broken Access-Control is compromised using <u>Cross-Origin Access</u> Attack that takes advantage of misconfigured CORS.<br><br>-- A02 Cryptographic Failures is compromised by <u>Network Sniffing</u> for sensitive unencrypted information.<br><br>-- A03 Injection vulnerabilities can be leveraged to do <u>SQL Injection</u> or <u>Cross-Site Scripting (XSS)</u>.';
           } else if (module == 1) {
             if (page == 0) {
               document.getElementById("prev-button-atk").style.display = 'none';

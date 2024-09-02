@@ -15,13 +15,13 @@ router.get('/', async function(req, res) {
   try {
     connection = await pool.getConnection();
     let genreId; let itemNum;
-    let searchQuery = InputSanitizer.sanitizeString(req.query.s || '', InSafeLv);
+    let searchQuery = InputSanitizer.sanitizeString((req.query.s || ''), InSafeLv);
     if (UrlSafe >= 1) {
-      genreId = parseInt(InputSanitizer.sanitizeString((req.cookies['GenreId'] || '0'), InSafeLv));
-      itemNum = parseInt(InputSanitizer.sanitizeString((req.cookies['ItemNum'] || '0'), InSafeLv));
+      genreId = parseInt(InputSanitizer.sanitizeString((req.cookies['GenreId'].toString() || '0'), InSafeLv));
+      itemNum = parseInt(InputSanitizer.sanitizeString((req.cookies['ItemNum'].toString() || '0'), InSafeLv));
     } else {
-      genreId = parseInt(InputSanitizer.sanitizeString((req.query.g || '0'), InSafeLv));
-      itemNum = parseInt(InputSanitizer.sanitizeString((req.query.i || '0'), InSafeLv));
+      genreId = parseInt(InputSanitizer.sanitizeString((req.query.g.toString() || '0'), InSafeLv));
+      itemNum = parseInt(InputSanitizer.sanitizeString((req.query.i.toString() || '0'), InSafeLv));
     }
     if (itemNum < 0) itemNum = 0;
     let movies; let fields; let getMovies; let getMoviesPromise;
