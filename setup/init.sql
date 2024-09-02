@@ -46,6 +46,14 @@ CREATE TABLE IF NOT EXISTS Comments (
 
 INSERT INTO Users(user, pass) VALUES ("u1", "p1");
 INSERT INTO UsersHashed(user, pass) VALUES ("u1", "f64551fcd6f07823cb87971cfb91446425da18286b3ab1ef935e0cbd7a69f68a");
+INSERT INTO Users(user, pass) VALUES ("versalord", "p1");
+INSERT INTO UsersHashed(user, pass) VALUES ("versalord", "f64551fcd6f07823cb87971cfb91446425da18286b3ab1ef935e0cbd7a69f68a");
+INSERT INTO Users(user, pass) VALUES ("naturen", "p1");
+INSERT INTO UsersHashed(user, pass) VALUES ("naturen", "f64551fcd6f07823cb87971cfb91446425da18286b3ab1ef935e0cbd7a69f68a");
+INSERT INTO Users(user, pass) VALUES ("rebecca black", "p1");
+INSERT INTO UsersHashed(user, pass) VALUES ("rebecca black", "f64551fcd6f07823cb87971cfb91446425da18286b3ab1ef935e0cbd7a69f68a");
+INSERT INTO Users(user, pass) VALUES ("jefferey goldineson", "p1");
+INSERT INTO UsersHashed(user, pass) VALUES ("jefferey goldineson", "f64551fcd6f07823cb87971cfb91446425da18286b3ab1ef935e0cbd7a69f68a");
 
 LOAD DATA INFILE '/var/lib/mysql-files/cleaned_movies.csv'
 INTO TABLE Movies

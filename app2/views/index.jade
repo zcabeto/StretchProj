@@ -78,10 +78,14 @@ html
       p Welcome to Flo's Stretch Project. Here we study the vulnerabilities of websites and how to mitigate them.
       p When making web applications, we can expose ourselves to many vulnerabilities that an attacker can exploit. Attackers might wish to leverage such a weak spot in order to see sensitive user information, manipulate stored data, or break our system - we need to prevent this. It's <u>common mistakes</u> that lead to such exploit opportunities, so by being aware of these falters <b>you</b> can make sure your website is safe!
       p The OWASP Top 10 is a well researched and applied consensus of the common issues. On this site we focus on the Top 3 on the OWASP list. Included are guides to demonstrate how an attacker might act, and how defences against such attacks should be employed.
-      <p> -- A01: Broken Access Control --<br>&nbsp;&nbsp;&nbsp; info about what this means<br>&nbsp;&nbsp;&nbsp; attacks to compromise<br>&nbsp;&nbsp;&nbsp; defence against </p>
-      <p> -- A02: Cryptographic Failure --<br>&nbsp;&nbsp;&nbsp; info about what this means<br>&nbsp;&nbsp;&nbsp; attacks to compromise<br>&nbsp;&nbsp;&nbsp; defence against </p>
-      <p> -- A03: Injection --<br>&nbsp;&nbsp;&nbsp; info about what this means<br>&nbsp;&nbsp;&nbsp; attacks to compromise<br>&nbsp;&nbsp;&nbsp; defence against </p>
+      <p> -- A01: Broken Access Control --<br>&nbsp; Permission policies decide who can access what. If misconfigured then attackers can gain access they should not have.<br>&nbsp;&nbsp;&nbsp; + CORS misconfiguration can allow access from untrusted origin to force alternative user action<br>&nbsp;&nbsp;&nbsp; + Modified URL can tamper with Access Control checks</p>
+      <p> -- A02: Cryptographic Failure --<br>&nbsp; Data that falls under GDPR privacy law must be protected from being seen or maliciously changed, especially in transit.<br>&nbsp;&nbsp;&nbsp; + Passwords require the safest of transmission, particularly cryptographic hashes that cannot be reversed<br>&nbsp;&nbsp;&nbsp; + Data should only be traded between authenticated sources, and encrypted with TLS in between</p>
+      <p> -- A03: Injection --<br>&nbsp; Hostile inputs that are used directly without validation can be used to extract or damage data.<br>&nbsp;&nbsp;&nbsp; + Inputs used in SQL queries can, if not validated, context-escape to inject their own code<br>&nbsp;&nbsp;&nbsp; + HTML can have scripts injected into it to act on the front end, these must be checked</p>
 
+      p
+      p
+      p 
+      p If any breakages occur to the data, click #[button#navigate(type="submit" onclick="window.location.href='/rebuild'+getQueries();") here] to rebuild the database.
     script.
       window.onload = function() {
         help = parseInt(#{h.charAt(0)});
@@ -354,7 +358,7 @@ html
             } else if (page == 4) {
               document.getElementById("prev-button-def").style.display = 'block';
               document.getElementById("next-button-def").style.display = 'none';
-              content.innerHTML = '-->Input Safety - Encoding 2<br><br>To be safe using inputted text at all subsequent stages, it has to be encoded as early as possible. If we can encode it on the frontend upon input, we ensure that its subsequent use on the webpage will not run a script, while also stopping it from being able to be used for SQL Injection when passed to the backend. However, for these methods, different encodings must be applied.<br><br>—For the mentioned tasks, HTML encoding stops &lt;script&gt; from running a script<br>—MySQL includes functionality to encode text on the backend before inserting into a query<br>—URL encoding allows safe passing of queries and non-erroneous referencing policies.';
+              content.innerHTML = '-->Input Safety - Encoding 2<br><br>To be safe using inputted text at all subsequent stages, it has to be encoded as early as possible. If we can encode it on the frontend upon input, we ensure that its subsequent use on the webpage will not run a script, while also stopping it from being able to be used for SQL Injection when passed to the backend. However, for these methods, different encodings must be applied.<br><br>- For the mentioned tasks, HTML encoding stops &lt;script&gt; from running a script<br>- MySQL includes functionality to encode text on the backend before inserting into a query<br>- URL encoding allows safe passing of queries and non-erroneous referencing policies.';
             }
           } else if (module == 3) {
             if (page == 0) {

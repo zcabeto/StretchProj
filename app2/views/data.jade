@@ -407,7 +407,7 @@ html
             } else if (page == 4) {
               document.getElementById("prev-button-def").style.display = 'block';
               document.getElementById("next-button-def").style.display = 'none';
-              content.innerHTML = '-->Input Safety - Encoding 2<br><br>To be safe using inputted text at all subsequent stages, it has to be encoded as early as possible. If we can encode it on the frontend upon input, we ensure that its subsequent use on the webpage will not run a script, while also stopping it from being able to be used for SQL Injection when passed to the backend. However, for these methods, different encodings must be applied.<br><br>—For the mentioned tasks, HTML encoding stops &lt;script&gt; from running a script<br>—MySQL includes functionality to encode text on the backend before inserting into a query<br>—URL encoding allows safe passing of queries and non-erroneous referencing policies.';
+              content.innerHTML = '-->Input Safety - Encoding 2<br><br>To be safe using inputted text at all subsequent stages, it has to be encoded as early as possible. If we can encode it on the frontend upon input, we ensure that its subsequent use on the webpage will not run a script, while also stopping it from being able to be used for SQL Injection when passed to the backend. However, for these methods, different encodings must be applied.<br><br>- For the mentioned tasks, HTML encoding stops &lt;script&gt; from running a script<br>- MySQL includes functionality to encode text on the backend before inserting into a query<br>- URL encoding allows safe passing of queries and non-erroneous referencing policies.';
             }
           } else if (module == 3) {
             if (page == 0) {

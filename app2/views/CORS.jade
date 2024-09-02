@@ -4,7 +4,7 @@ html
     title= title
   body
     <h1>External Page w/CORS Button</h1>
-    <button class="button" onclick="window.location.href=`http://localhost:3000/comments?c=You%20got%20hacked!!` + getQueries();">Go to Site</button>
+    <button class="button" onclick="window.location.href=`http://localhost:3000/comments` + getQueries() + `&c=You%20got%20hacked!!`;">Go to Site</button>
     script.
       window.onload = function() {
         help = parseInt(#{h.charAt(0)});
