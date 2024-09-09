@@ -29,7 +29,7 @@ html
               #[button(type="submit" onclick="swapGuide(2, 0);") Cross-Site Scripting]
           section#prev-button-atk #[button(type="submit" onclick="swapGuide(-1, -1);") Prev]
           section#next-button-atk #[button(type="submit" onclick="swapGuide(-1, 1);") Next]
-        p#attack-content Choose a potential Attack to get started.<br><br>The following OWASP vulnerabilities are compromised with attacks as listed:<br><br>-- A01 Broken Access-Control is compromised using <u>Cross-Origin Access</u> Attack that takes advantage of misconfigured CORS.<br><br>-- A02 Cryptographic Failures is compromised by <u>Network Sniffing</u> for sensitive unencrypted information.<br><br>-- A03 Injection vulnerabilities can be leveraged to do <u>SQL Injection</u> or <u>Cross-Site Scripting (XSS)</u>.<br><img src="https://i.ibb.co/Px1hX1P/su-spect-point.png" style="position: absolute; bottom: 0; left: 5; width: 240px; height: auto;" alt="Susan Spect"/>
+        p#attack-content Choose a potential Attack to get started.<br><br>The following OWASP vulnerabilities are compromised with attacks as listed:<br><br>-- A01 Broken Access-Control is compromised using <u>Cross-Origin Access</u> Attack that takes advantage of misconfigured CORS.<br><br>-- A02 Cryptographic Failures is compromised by <u>Network Sniffing</u> for sensitive unencrypted information.<br><br>-- A03 Injection vulnerabilities can be leveraged to do <u>SQL Injection</u> or <u>Cross-Site Scripting (XSS)</u>.<br><br>Below is Susan Spect, a hacker who will guide you in each of the above.<br><img src="https://i.ibb.co/Px1hX1P/su-spect-point.png" style="position: absolute; bottom: 0; left: 5; width: 240px; height: auto;" alt="Susan Spect"/>
     nav#side-menu-2
       section#side-content
         .button_bar
@@ -41,7 +41,7 @@ html
               #[button(type="submit" onclick="swapGuide(3, 0);") Referral Safety]
           section#prev-button-def #[button(type="submit" onclick="swapGuide(-1, -1);") Prev]
           section#next-button-def #[button(type="submit" onclick="swapGuide(-1, 1);") Next]
-        p#defence-content Choose a Defensive Method to get started.<br><br>The following are the possible defences:<br><br>Encryption<br>-- 1. Hashing<br>-- 2. HTTPS<br><br>Input Safety<br>-- 1. Sanitisation<br>-- 2. Encoding<br><br>Referral Safety<br>-- 1. Limited URLs<br>-- 2. Configured CORS<br><img src="https://i.ibb.co/s5jXypv/defender-hips.png" style="position: absolute; bottom: 0; left: 5; width: 160px; height: auto;" alt="Polly Ice"/>
+        p#defence-content Choose a Defensive Method to get started.<br><br>The following are the possible defences:<br><br>Encryption<br>-- 1. Hashing<br>-- 2. HTTPS<br><br>Input Safety<br>-- 1. Sanitisation<br>-- 2. Encoding<br><br>Referral Safety<br>-- 1. Limited URLs<br>-- 2. Configured CORS<br><br>Below is Polly Ice, a policewoman who will guide you in each of the above.<br><img src="https://i.ibb.co/s5jXypv/defender-hips.png" style="position: absolute; bottom: 0; left: 5; width: 160px; height: auto;" alt="Polly Ice"/>
     <br>
     section#main-content
       div(style='display: flex; justify-content: space-between; flex-wrap: wrap;')
@@ -75,7 +75,7 @@ html
             span.slider.round Referral Safety
         div
       button#side-menu-toggle-2 Defense 
-      p Welcome to Flo's Stretch Project. Here we study the vulnerabilities of websites and how to mitigate them.
+      p On this website we study the vulnerabilities of websites and how to mitigate them.
       p When making web applications, we can expose ourselves to many vulnerabilities that an attacker can exploit. Attackers might wish to leverage such a weak spot in order to see sensitive user information, manipulate stored data, or break our system - we need to prevent this. It's <u>common mistakes</u> that lead to such exploit opportunities, so by being aware of these falters <b>you</b> can make sure your website is safe!
       p The OWASP Top 10 is a well researched and applied consensus of the common issues. On this site we focus on the Top 3 on the OWASP list. Included are guides to demonstrate how an attacker might act, and how defences against such attacks should be employed.
       <p> -- A01: Broken Access Control --<br>&nbsp; Permission policies decide who can access what. If misconfigured then attackers can gain access they should not have.<br>&nbsp;&nbsp;&nbsp; + CORS misconfiguration can allow access from untrusted origin to force alternative user action<br>&nbsp;&nbsp;&nbsp; + Modified URL can tamper with Access Control checks</p>
@@ -218,7 +218,7 @@ html
           if (module == 0) {
             document.getElementById("prev-button-atk").style.display = 'none';
             document.getElementById("next-button-atk").style.display = 'none';
-            content.innerHTML = 'Choose a potential Attack to get started.<br><br>The following OWASP vulnerabilities are compromised with attacks as listed:<br><br>-- A01 Broken Access-Control is compromised using <u>Cross-Origin Access</u> Attack that takes advantage of misconfigured CORS.<br><br>-- A02 Cryptographic Failures is compromised by <u>Network Sniffing</u> for sensitive unencrypted information.<br><br>-- A03 Injection vulnerabilities can be leveraged to do <u>SQL Injection</u> or <u>Cross-Site Scripting (XSS)</u>.<br><img src="https://i.ibb.co/Px1hX1P/su-spect-point.png" style="position: absolute; bottom: 0; left: 5; width: 240px; height: auto;" alt="Susan Spect"/>';
+            content.innerHTML = 'Choose a potential Attack to get started.<br><br>The following OWASP vulnerabilities are compromised with attacks as listed:<br><br>-- A01 Broken Access-Control is compromised using <u>Cross-Origin Access</u> Attack that takes advantage of misconfigured CORS.<br><br>-- A02 Cryptographic Failures is compromised by <u>Network Sniffing</u> for sensitive unencrypted information.<br><br>-- A03 Injection vulnerabilities can be leveraged to do <u>SQL Injection</u> or <u>Cross-Site Scripting (XSS)</u>.<br><br>Below is Susan Spect, a hacker who will guide you in each of the above.<br><img src="https://i.ibb.co/Px1hX1P/su-spect-point.png" style="position: absolute; bottom: 0; left: 5; width: 240px; height: auto;" alt="Susan Spect"/>';
           } else if (module == 1) {
             if (page == 0) {
               document.getElementById("prev-button-atk").style.display = 'none';
@@ -315,7 +315,7 @@ html
           if (module == 0) {
             document.getElementById("prev-button-def").style.display = 'none';
             document.getElementById("next-button-def").style.display = 'none';
-            content.innerHTML = 'Choose a Defensive Method to get started.<br><br>The following are the possible defences:<br><br>Encryption<br>-- 1. Hashing<br>-- 2. HTTPS<br><br>Input Safety<br>-- 1. Sanitisation<br>-- 2. Encoding<br><br>Referral Safety<br>-- 1. Limited URLs<br>-- 2. Configured CORS<br><img src="https://i.ibb.co/s5jXypv/defender-hips.png" style="position: absolute; bottom: 0; left: 5; width: 160px; height: auto;" alt="Polly Ice"/>';
+            content.innerHTML = 'Choose a Defensive Method to get started.<br><br>The following are the possible defences:<br><br>Encryption<br>-- 1. Hashing<br>-- 2. HTTPS<br><br>Input Safety<br>-- 1. Sanitisation<br>-- 2. Encoding<br><br>Referral Safety<br>-- 1. Limited URLs<br>-- 2. Configured CORS<br><br>Below is Polly Ice, a policewoman who will guide you in each of the above.<br><img src="https://i.ibb.co/s5jXypv/defender-hips.png" style="position: absolute; bottom: 0; left: 5; width: 160px; height: auto;" alt="Polly Ice"/>';
           } else if (module == 1) {
             if (page == 0) {
               document.getElementById("prev-button-def").style.display = 'none';
