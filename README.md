@@ -19,7 +19,6 @@ If one wishes to run this locally to their own device, from the root folder (whe
 
 ### TODO:
 - https button configuration
-- Database rebuild button
 
 ### Screenshots
 #### Login Page
