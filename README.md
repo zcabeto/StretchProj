@@ -17,9 +17,6 @@ If one wishes to run this locally to their own device, from the root folder (whe
 - chmod +x run.sh
 - ./run.sh
 
-### TODO:
-- https button configuration
-
 ### Screenshots
 #### Login Page
 ![Login Page](https://github.com/zcabeto/StretchProj/blob/main/pictures/login-page.png)
